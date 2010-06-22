@@ -13,120 +13,71 @@ namespace AutoMapper2Lib {
 	#endregion
 
 	internal static class PropertyMapper {
-
-		public static U CopyProperties<T, U>( T Source, SmallerObject SmallerObject, bool ExcludeLinqAssociationProperties )
-			where T : class
-			where U : class, new() {
-
-			if ( Source == null ) {
-				return null;
-			}
-
-			U destination = null;
-			CopyProperties<T, U>( Source, ref destination, SmallerObject, ExcludeLinqAssociationProperties );
-			return destination;
-		}
-
-		public static List<PropertyChanged> CopyProperties<T, U>( T Source, ref U Destination, SmallerObject SmallerObject, bool ExcludeLinqAssociationProperties )
-			where T : class
-			where U : class, new() {
+		
+		// Pass in FromType and ToType in case Source or Destination are null or a derived type
+		public static List<PropertyChanged> CopyProperties( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
 
 			List<PropertyChanged> changes = new List<PropertyChanged>();
 
-			if ( Destination == null ) {
-				// Create one
-				Destination = (U)Activator.CreateInstance( typeof( U ) );
+			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType, MapDirection );
+			if ( map == null ) {
+				throw new MissingMapException( FromType, ToType );
 			}
+
 
 			if ( Source == null ) {
+				Destination = null;
 				return changes; // You asked for nothing and I agree
 			}
-
-			// typeof(T) means we only get T's properties, and not properties from objects derived from T
-			// Source.GetType() means we get derived properties too
-
-			List<PropertyInfo> sourceProperties = ReflectionHelper.GetProperties( typeof( T ) );
-			List<PropertyInfo> destinationProperties = ReflectionHelper.GetProperties( typeof( U ) );
-
-			List<PropertyInfo> loopProperties = null;
-			switch ( SmallerObject ) {
-				case SmallerObject.Source:
-					loopProperties = sourceProperties;
-					break;
-				case SmallerObject.Destination:
-					loopProperties = destinationProperties;
-					break;
-				default:
-					throw new ArgumentOutOfRangeException( "SmallerObject" );
-			}
-
-			if ( loopProperties == null || loopProperties.Count == 0 ) {
-				// That's fine, there's just nothing to do
-			}
-
-			foreach ( PropertyInfo smallerProperty in loopProperties ) {
-
-				if ( smallerProperty.IsMapIgnored() ) {
-					continue; // Ignore it
-				}
-
-				PropertyInfo sourceProperty = sourceProperties.GetPropertyByName( smallerProperty.Name );
-				PropertyInfo destinationProperty = destinationProperties.GetPropertyByName( smallerProperty.Name );
-
-				PropertyInfo largerProperty = null;
-				#region is either property not found?
-				switch ( SmallerObject ) {
-					case SmallerObject.Source:
-						if ( sourceProperty == null ) {
-							continue;
-						}
-						if ( destinationProperty == null ) {
-							// TODO: Just fail silently? continue;
-							throw new MissingPropertyException<T>( smallerProperty );
-						}
-						largerProperty = destinationProperty;
+			
+			if ( Destination == null ) {
+				// Create one
+				switch ( MapDirection ) {
+					case MapDirection.SourceToDestination:
+						Destination = Activator.CreateInstance( ToType );
 						break;
-					case SmallerObject.Destination:
-						if ( destinationProperty == null ) {
-							continue;
-						}
-						if ( sourceProperty == null ) {
-							// TODO: Just fail silently? continue;
-							throw new MissingPropertyException<U>( smallerProperty );
-						}
-						largerProperty = sourceProperty;
+					case MapDirection.DestinationToSource:
+						Destination = Activator.CreateInstance( FromType );
 						break;
 					default:
-						throw new ArgumentOutOfRangeException( "SmallerObject" );
+						throw new ArgumentOutOfRangeException( "MapDirection" );
 				}
-				#endregion
+			}
+			
 
-				if ( largerProperty.IsMapIgnored() ) {
-					continue; // Ignore it, TODO: throw? do it anyway?
-				}
+			if ( FromType.IsGenericType && !FromType.IsNullable() ) {
+				// Because we previously filtered for List<>, we'll assume this isn't a collection
+				//throw new NotSupportedException(
+				//    string.Format(
+				//        "How to convert from T<U> to V<W>?: {0}<{1}> to {2}<{3}>",
+				//        FromType.Name, FromType.GetGenericBaseType().Name, ToType.Name, ToType.GetGenericBaseType().Name
+				//        ) );
+			}
+			
+			foreach ( var mapEntry in map.Properties ) {
 
-				// TODO: If property can't read/write, does this property "not exist"?
-				if ( !sourceProperty.CanRead ) {
-					throw new InvalidPropertyException<T>( sourceProperty, InvalidPropertyReason.CantRead );
-				}
-				if ( !destinationProperty.CanWrite ) {
-					throw new InvalidPropertyException<U>( destinationProperty, InvalidPropertyReason.CantWrite );
-				}
-				if ( !destinationProperty.CanRead ) {
-					throw new InvalidPropertyException<U>( destinationProperty, InvalidPropertyReason.CantWrite );
-				}
-
-				if ( ExcludeLinqAssociationProperties ) {
-					if ( sourceProperty.IsLinqProperty()
-						|| destinationProperty.IsLinqProperty() ) {
-						continue;
-					}
+				PropertyInfo sourceProperty = mapEntry.Source;
+				PropertyInfo destinationProperty = mapEntry.Destination;
+				if ( MapDirection == MapDirection.DestinationToSource ) {
+					sourceProperty = mapEntry.Destination;
+					destinationProperty = mapEntry.Source;
 				}
 
 
-				object sourcePropertyValue = sourceProperty.GetValue( Source, null );
-				object destinationPropertyValueOriginal = destinationProperty.GetValue( Destination, null );
+				object sourcePropertyValue = null;
+				object destinationPropertyValueOriginal = null;
 				object destinationPropertyValue = null;
+
+				try {
+					sourcePropertyValue = sourceProperty.GetValue( Source, null );
+				} catch (Exception ex) {
+					throw new MapFailureException( sourceProperty, Source, null, MapFailureReason.GetSourceFailure, ex );
+				}
+				try {
+					destinationPropertyValueOriginal = destinationProperty.GetValue( Destination, null );
+				} catch (Exception ex) {
+					throw new MapFailureException( destinationProperty, Destination, null, MapFailureReason.GetDestinationFailure, ex );
+				}
 
 				if ( sourceProperty.IsListOfT() || destinationProperty.IsListOfT() ) {
 					#region Copy property as List<>
@@ -138,8 +89,8 @@ namespace AutoMapper2Lib {
 					}
 					destinationPropertyValue = destinationPropertyValueOriginal;
 
-					Type destListType = destinationProperty.PropertyType.GetGenericTypeDefinition();
-					Type sourceListType = sourceProperty.PropertyType.GetGenericTypeDefinition();
+					Type destListType = destinationProperty.PropertyType.GetGenericBaseType();
+					Type sourceListType = sourceProperty.PropertyType.GetGenericBaseType();
 					if ( destListType.IsClassType() != sourceListType.IsClassType() ) {
 						if ( !sourceProperty.PropertyType.IsClassType() ) {
 							throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ListNonClassTypeToListClassType, destinationProperty );
@@ -155,7 +106,7 @@ namespace AutoMapper2Lib {
 					// the below won't change what destination points to out from under Destination because Destination isn't null
 					// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
 					if ( sourceProperty.PropertyType.GetGenericBaseType().IsClassType() ) {
-						changesStep = ListMapper.CopyListOfClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, SmallerObject, ExcludeLinqAssociationProperties );
+						changesStep = ListMapper.CopyListOfClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection );
 					} else {
 						changesStep = ListMapper.CopyListOfNonClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList );
 					}
@@ -164,14 +115,18 @@ namespace AutoMapper2Lib {
 					if ( destinationPropertyValueOriginal != destinationPropertyValueList ) {
 						changes.Add(
 							new PropertyChanged {
-								ObjectType = typeof( U ),
+								ObjectType = ToType,
 								Object = Destination,
 								PropertyType = destinationProperty.PropertyType,
 								PropertyName = destinationProperty.Name,
 								OldValue = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType ),
 								NewValue = TypeConvert.ConvertToString( destinationPropertyValueList, destinationProperty.PropertyType )
 							} );
-						destinationProperty.SetValue( Destination, destinationPropertyValueList, null );
+						try {
+							destinationProperty.SetValue( Destination, destinationPropertyValueList, null );
+						} catch ( Exception ex ) {
+							throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+						}
 					}
 					if ( changesStep != null && changesStep.Count > 0 ) {
 						changes.AddRange( changesStep );
@@ -189,19 +144,23 @@ namespace AutoMapper2Lib {
 						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, ToPropertyInfo: destinationProperty );
 					}
 					destinationPropertyValue = destinationPropertyValueOriginal;
-					List<PropertyChanged> changesStep = PropertyMapper.CopyProperties( sourcePropertyValue, ref destinationPropertyValue, SmallerObject, ExcludeLinqAssociationProperties ); // Recurse
+					List<PropertyChanged> changesStep = PropertyMapper.CopyProperties( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection ); // Recurse
 					// if references aren't to the same object, note that
-					if ( destinationPropertyValueOriginal != destinationPropertyValue ) {
+					if ( destinationPropertyValue != destinationPropertyValueOriginal ) {
 						changes.Add(
 							new PropertyChanged {
-								ObjectType = typeof( U ),
+								ObjectType = ToType,
 								Object = Destination,
 								PropertyType = destinationProperty.PropertyType,
 								PropertyName = destinationProperty.Name,
-								OldValue = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType ),
-								NewValue = TypeConvert.ConvertToString( destinationPropertyValue, destinationProperty.PropertyType )
+								OldValue = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType, true ),
+								NewValue = TypeConvert.ConvertToString( destinationPropertyValue, destinationProperty.PropertyType, true )
 							} );
-						destinationProperty.SetValue( Destination, destinationPropertyValue, null );
+						try {
+							destinationProperty.SetValue( Destination, destinationPropertyValue, null );
+						} catch ( Exception ex ) {
+							throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+						}
 					}
 					if ( changesStep != null && changesStep.Count > 0 ) {
 						changes.AddRange( changesStep );
@@ -238,14 +197,18 @@ namespace AutoMapper2Lib {
 					// It changed
 					changes.Add(
 						new PropertyChanged {
-							ObjectType = typeof(U),
+							ObjectType = ToType,
 							Object = Destination,
 							PropertyType = destinationProperty.PropertyType,
 							PropertyName = destinationProperty.Name,
 							OldValue = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType ),
 							NewValue = TypeConvert.ConvertToString( destinationPropertyValue, destinationProperty.PropertyType )
 						} );
-					destinationProperty.SetValue( Destination, destinationPropertyValue, null );
+					try {
+						destinationProperty.SetValue( Destination, destinationPropertyValue, null );
+					} catch ( Exception ex ) {
+						throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+					}
 				}
 				#endregion
 

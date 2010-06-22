@@ -7,9 +7,9 @@ namespace AutoMapper2Lib {
 	using System.Text;
 	#endregion
 
-	internal enum SmallerObject {
-		Source,
-		Destination
+	internal enum MapDirection {
+		SourceToDestination,
+		DestinationToSource
 	}
 
 }

@@ -12,35 +12,12 @@ namespace AutoMapper2Lib {
 
 	internal static class PropertyInfoExtensions {
 
-		public static MethodInfo GetMethodByName( this List<MethodInfo> List, string PropertyName, int ParameterCount ) {
-			return (
-				from m in List
-				where m.Name == PropertyName
-					&& m.GetParameters().Length == ParameterCount
-				select m
-				).FirstOrDefault();
-		}
-
 		public static PropertyInfo GetPropertyByName( this List<PropertyInfo> List, string PropertyName ) {
 			return (
 				from p in List
-				where p.Name == PropertyName
+				where string.Compare( p.Name, PropertyName, StringComparison.InvariantCultureIgnoreCase ) == 0
 				select p
 				).FirstOrDefault();
-		}
-
-		public static bool IsGenericAndNotNullable( this PropertyInfo Property ) {
-			bool results = false;
-			if ( Property.PropertyType.IsGenericType ) {
-				if ( Property.PropertyType.IsNullable() ) {
-					// It's Nullable<T> or written better T? so it's fine
-					results = false;
-				} else {
-					// This is a V<T> which may be a List<T> or an EntitySet<T>
-					results = true;
-				}
-			}
-			return results;
 		}
 
 		public static bool IsListOfT( this PropertyInfo Property ) {
@@ -49,14 +26,12 @@ namespace AutoMapper2Lib {
 
 		public static bool IsLinqProperty( this PropertyInfo Property ) {
 			bool results = false;
-			if ( Property.PropertyType.Name.StartsWith( "EntityRef" )
-				|| Property.PropertyType.Name.StartsWith( "EntitySet" )
-					|| Property.PropertyType.Name.StartsWith( "EntityObject" ) ) {
+			if ( Property.PropertyType.IsLinqProperty() ) {
 				results = true;
 			}
 			// LinqToSql
 			AssociationAttribute association = (AssociationAttribute)Attribute.GetCustomAttribute( Property, typeof( AssociationAttribute ) );
-			if ( association != null && !string.IsNullOrEmpty( association.ThisKey ) ) {
+			if ( association != null ) {
 				results = true;
 			}
 			// LinqToEntities
@@ -64,48 +39,80 @@ namespace AutoMapper2Lib {
 			if ( entity != null ) {
 				results = true;
 			}
-			// TODO: Determine if this is a value type that's linked to an association and exclude that too
-			return results;
-		}
-
-		public static bool IsPrimaryKey( this PropertyInfo Property ) {
-			bool results = false;
-
-			// LinqToSql primary key
-			ColumnAttribute linqToSql = (ColumnAttribute)Attribute.GetCustomAttribute( Property, typeof(ColumnAttribute) );
-			if ( linqToSql != null && linqToSql.IsPrimaryKey ) {
+			EdmRelationshipNavigationPropertyAttribute dataMember = (EdmRelationshipNavigationPropertyAttribute)Attribute.GetCustomAttribute( Property, typeof( EdmRelationshipNavigationPropertyAttribute ) );
+			if ( dataMember != null ) {
 				results = true;
 			}
-			// LinqToEntities primary key
-			EdmScalarPropertyAttribute linqToEntities = (EdmScalarPropertyAttribute)Attribute.GetCustomAttribute( Property, typeof(EdmScalarPropertyAttribute) );
-			if ( linqToEntities != null && linqToEntities.EntityKeyProperty ) {
-				results = true;
-			}
-			// AutoMapper2 PrimaryKey
-			MapPrimaryKeyAttribute mapPrimaryKeyAttribute = (MapPrimaryKeyAttribute)Attribute.GetCustomAttribute( Property, typeof(MapPrimaryKeyAttribute) );
-			if ( mapPrimaryKeyAttribute != null ) {
-				results = true;
-			}
-
 			return results;
 		}
 
 		public static bool IsMapIgnored( this PropertyInfo Property ) {
 			bool results = false;
-			MapIgnoreAttribute ignore = (MapIgnoreAttribute)Attribute.GetCustomAttribute( Property, typeof(MapIgnoreAttribute) );
+			IgnoreMapAttribute ignore = (IgnoreMapAttribute)Attribute.GetCustomAttribute( Property, typeof(IgnoreMapAttribute) );
+			if ( ignore != null ) {
+				results = true;
+			}
+			if ( !results ) {
+				// Is the type ignored?
+				results = Property.PropertyType.IsMapIgnored();
+			}
+			return results;
+		}
+
+		public static bool IsPrimaryKeyPropertyViaMapAttribute( this PropertyInfo Property ) {
+			bool results = false;
+			PrimaryKeyAttribute ignore = (PrimaryKeyAttribute)Attribute.GetCustomAttribute( Property, typeof( PrimaryKeyAttribute ) );
 			if ( ignore != null ) {
 				results = true;
 			}
 			return results;
 		}
 
-		// TODO: What if there's multiple primary key fields on the object?  What if the source and destination primary keys are different properties?
-		public static PropertyInfo GetPrimaryKey( this List<PropertyInfo> Properties ) {
-			return (
-				from p in Properties ?? new List<PropertyInfo>()
-				where p.IsPrimaryKey()
-				select p
-				).FirstOrDefault();
+		public static bool IsPrimaryKeyPropertyViaLinq( this PropertyInfo Property ) {
+			bool results = false;
+			// ColumnAttribute primary key
+			ColumnAttribute linqToSql = (ColumnAttribute)Attribute.GetCustomAttribute( Property, typeof( ColumnAttribute ) );
+			if ( linqToSql != null && linqToSql.IsPrimaryKey ) {
+				results = true;
+			}
+			// EdmScalarPropertyAttribute primary key
+			EdmScalarPropertyAttribute linqToEntities = (EdmScalarPropertyAttribute)Attribute.GetCustomAttribute( Property, typeof( EdmScalarPropertyAttribute ) );
+			if ( linqToEntities != null && linqToEntities.EntityKeyProperty ) {
+				results = true;
+			}
+			// AutoMapper2 PrimaryKey
+			PrimaryKeyAttribute primaryKeyAttribute = (PrimaryKeyAttribute)Attribute.GetCustomAttribute( Property, typeof( PrimaryKeyAttribute ) );
+			if ( primaryKeyAttribute != null ) {
+				results = true;
+			}
+			return results;
+		}
+
+		public static List<PropertyInfo> GetPrimaryKeys( this List<PropertyInfo> Properties ) {
+
+			List<PropertyInfo> results = new List<PropertyInfo>();
+
+			if ( Properties == null || Properties.Count == 0 ) {
+				return results; // Nothing yields nothing
+			}
+
+			if ( results.Count == 0 ) {
+				results = (
+					from p in Properties
+					where p.IsPrimaryKeyPropertyViaMapAttribute()
+					select p
+					).ToList();
+			}
+
+			if ( results.Count == 0 ) {
+				results = (
+					from p in Properties
+					where p.IsPrimaryKeyPropertyViaLinq()
+					select p
+					).ToList();
+			}
+
+			return results;
 		}
 
 	}

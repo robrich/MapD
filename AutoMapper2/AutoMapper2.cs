@@ -11,86 +11,30 @@ namespace AutoMapper2Lib {
 
 	public static class AutoMapper2 {
 
-		#region List<MapEntry> -- insure you say we can before we map
-
-		private class MapEntry {
-			public Type From { get; set; }
-			public Type To { get; set; }
-
-			public override bool Equals( object obj ) {
-				MapEntry m = obj as MapEntry;
-				if ( m != null ) {
-					return ( m.From == this.From && m.To == this.To );
+		// Properties are enumerated when you call Map<> the first time, therefore you can't change this property after that
+		private static bool excludeLinqPropertiesLocked;
+		private static bool excludeLinqProperties;
+		public static bool ExcludeLinqProperties {
+			get { return excludeLinqProperties; }
+			set {
+				if ( excludeLinqPropertiesLocked ) {
+					throw new NotSupportedException( "Once you call CreateMap(), you can't change ExcludeLinqProperties because the properties have already been mapped" );
 				}
-				return base.Equals( obj );
-			}
-
-			public override int GetHashCode() {
-				return base.GetHashCode();
+				excludeLinqProperties = value;
 			}
 		}
-
-		private static List<MapEntry> mapList = new List<MapEntry>();
-
-		private static void AddMapEntry( Type From, Type To ) {
-			MapEntry m = new MapEntry {
-				From = From,
-				To = To
-			};
-			if ( !mapList.Contains( m ) ) {
-				mapList.Add( m );
-			}
-		}
-
-		#endregion
-
-		#region AssertMapEntry
-		private static void AssertMapEntry<From, To>() {
-			MapEntry m = new MapEntry {
-				From = typeof( From ),
-				To = typeof( To )
-			};
-			if ( !mapList.Contains( m ) ) {
-				throw new MissingMapException<From, To>();
-			}
-		}
-		#endregion
-
-		#region AssertTypesCanMap
-		private static void AssertTypesCanMap<From, To>() {
-			Type from = typeof( From );
-			Type to = typeof( To );
-			if ( from.IsListOfT() != to.IsListOfT() ) {
-				if ( from.IsListOfT() ) {
-					throw new InvalidTypeConversionException( from, to, InvalidPropertyReason.ListTypeToNonListType );
-				}
-				if ( to.IsListOfT() ) {
-					throw new InvalidTypeConversionException( from, to, InvalidPropertyReason.NonListTypeToListType );
-				}
-			}
-			if ( from.IsListOfT() ) {
-				Type fromBase = from.GetGenericTypeDefinition();
-				Type toBase = to.GetGenericTypeDefinition(); // If it isn't a Generic, the above would've caught it
-				AssertTypeClassesCanMap( fromBase, toBase );
-			}
-			AssertTypeClassesCanMap( from, to );
-		}
-		private static void AssertTypeClassesCanMap( Type from, Type to ) {
-			if ( from.IsClassType() != to.IsClassType() ) {
-				if ( from.IsClassType() ) {
-					throw new InvalidTypeConversionException( from, to, InvalidPropertyReason.ClassTypeToNonClassType );
-				}
-				if ( to.IsClassType() ) {
-					throw new InvalidTypeConversionException( from, to, InvalidPropertyReason.NonClassTypeToClassType );
-				}
-			}
-		}
-		#endregion
-
-		public static bool ExcludeLinqProperties { get; set; }
 
 		static AutoMapper2() {
+			ResetMap();
+		}
+
+		/// <summary>
+		/// Reset the AutoMapper -- for Unit Tests and initialization
+		/// </summary>
+		public static void ResetMap() {
+			excludeLinqPropertiesLocked = false;
 			ExcludeLinqProperties = true;
+			MapEntryManager.ResetMap();
 		}
 
 		public static void CreateMap<From, To>()
@@ -98,116 +42,114 @@ namespace AutoMapper2Lib {
 			where To : class, new() {
 			Type fromType = typeof( From );
 			Type toType = typeof( To );
-			AssertTypesCanMap<From, To>();
-			AddMapEntry( fromType, toType );
-		}
+			MapEntryManager.AssertTypesCanMap<From, To>();
+			MapEntryManager.AddMapEntry( fromType, toType );
 
-		public static void ResetMap() {
-			mapList.Clear();
+			/*
+			 * Though technically not "locked" until you .Map<>() or .MapBack<>(),
+			 * we lock it here to prevent stuff like:
+			 * .CreateMap<T,U>();
+			 * .ExcludeLinqProperties = true;
+			 * .CreateMap<T,U>();
+			 * .ExcludeLinqProperties = false;
+			 * which would produce unexpected results
+			 */
+			excludeLinqPropertiesLocked = true;
 		}
 
 		public static void AssertConfigurationIsValid() {
-			if ( mapList == null || mapList.Count == 0 ) {
-				throw new ArgumentNullException( "", "You've not created any maps" );
-			}
-			foreach ( MapEntry mapEntry in mapList ) {
-				// TODO: This flexes the "null to null" case, which is pretty much not helpful
-				object source = Activator.CreateInstance( mapEntry.From );
-				object destination = Activator.CreateInstance( mapEntry.To );
-				AutoMapper2.Map( source, destination ); // If this errors, it should tell you why
-			}
+			MapEntryManager.AssertConfigurationIsValid();
 		}
 
 		public static To Map<From, To>( From Source )
-			where From : class
+			where From : class, new()
 			where To : class, new() {
-			AssertMapEntry<From, To>();
-			AssertTypesCanMap<From, To>();
+
+			Type fromType = typeof( From );
+			Type toType = typeof( To );
+			MapEntryManager.AssertTypesCanMap<From, To>();
+
 			if ( Source == null ) {
 				return null;
 			}
-			Type fromType = typeof( From );
-			Type toType = typeof( To );
-			To destination = (To)Activator.CreateInstance( toType );
-			List<PropertyChanged> changes = null; // Unused here, but maintained for similarity between Map(Source,Destination)
-			if ( fromType.IsListOfT() ) {
-				IList sourceList = Source as IList;
-				IList destinationList = (IList)destination;
-				// the below won't change what destination points to out from under Destination because Destination isn't null
-				// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
-				if ( fromType.GetGenericBaseType().IsClassType() ) {
-					changes = ListMapper.CopyListOfClass( fromType, toType, sourceList, ref destinationList, SmallerObject.Destination, ExcludeLinqProperties );
-				} else {
-					changes = ListMapper.CopyListOfNonClass( fromType, toType, sourceList, ref destinationList );
-				}
-			} else {
-				changes = PropertyMapper.CopyProperties<From, To>( Source, ref destination, SmallerObject.Destination, ExcludeLinqProperties );
-			}
+			To destination = (To)Activator.CreateInstance( typeof( To ) );
+			List<PropertyChanged> changes = Map<From, To>( Source, ref destination );
 			return destination;
 		}
 
-		public static List<PropertyChanged> Map<From, To>( From Source, To Destination )
+		public static List<PropertyChanged> Map<From, To>( From Source, ref To Destination )
 			where From : class, new()
 			where To : class, new() {
-			AssertMapEntry<From, To>();
-			AssertTypesCanMap<From, To>();
-			if ( Destination == null ) {
-				// Otherwise we'll return null right back at you
-				throw new ArgumentNullException( "Destination" );
-			}
-			if ( Source == null ) {
-				// TODO: destination is still set
-				return null;
-			}
+
+
 			Type fromType = typeof( From );
 			Type toType = typeof( To );
+			MapEntryManager.AssertTypesCanMap<From, To>();
+
+			if ( Source == null ) {
+				Destination = null;
+				return null;
+			}
+			if ( Destination == null ) {
+				Destination = (To)Activator.CreateInstance( typeof( To ) );
+			}
+
+			object destinationObject = Destination;
+			return ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.SourceToDestination );
+		}
+
+		public static List<PropertyChanged> MapBack<From, To>( To Source, ref From Destination )
+			where From : class, new()
+			where To : class, new() {
+
+			// In MapBack, "fromType" is type of From, which is the Destination
+			// Therefore calling *Mapper.Copy*() passes in toType first
+
+			Type fromType = typeof( From );
+			Type toType = typeof( To );
+			MapEntryManager.AssertTypesCanMap<From, To>();
+
+			if ( Source == null ) {
+				Destination = null;
+				return null;
+			}
+			if ( Destination == null ) {
+				Destination = (From)Activator.CreateInstance( typeof(From) );
+			}
+
+			object destinationObject = Destination;
+			return ExecuteMap( toType, fromType, Source, ref destinationObject, MapDirection.DestinationToSource );
+		}
+
+		private static List<PropertyChanged> ExecuteMap( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
 			List<PropertyChanged> changes = null;
-			if ( fromType.IsListOfT() ) {
+			if ( FromType.IsListOfT() ) {
 				IList sourceList = Source as IList;
 				IList destinationList = Destination as IList;
 				// the below won't change what destination points to out from under Destination because Destination isn't null
 				// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
-				if ( fromType.GetGenericBaseType().IsClassType() ) {
-					changes = ListMapper.CopyListOfClass( fromType, toType, sourceList, ref destinationList, SmallerObject.Destination, ExcludeLinqProperties );
+				if ( FromType.GetGenericBaseType().IsClassType() ) {
+					changes = ListMapper.CopyListOfClass( FromType, ToType, sourceList, ref destinationList, MapDirection );
 				} else {
-					changes = ListMapper.CopyListOfNonClass( fromType, toType, sourceList, ref destinationList );
+					changes = ListMapper.CopyListOfNonClass( FromType, ToType, sourceList, ref destinationList );
 				}
+			} else if ( FromType.IsClassType() ) {
+				changes = PropertyMapper.CopyProperties( FromType, ToType, Source, ref Destination, MapDirection );
 			} else {
-				changes = PropertyMapper.CopyProperties<From, To>( Source, ref Destination, SmallerObject.Destination, ExcludeLinqProperties );
+				throw new NotSupportedException( "Can't map value types here" ); // This should be a compile-time error too
 			}
+
 			return changes;
 		}
 
-		public static List<PropertyChanged> MapBack<From, To>( To Source, From Destination )
-			where From : class, new()
-			where To : class, new() {
-			AssertMapEntry<From, To>();
-			AssertTypesCanMap<From, To>();
-			if ( Destination == null ) {
-				// Otherwise we'll return null right back at you
-				throw new ArgumentNullException( "Destination" );
+		public static To MapType<From, To>( From Source ) {
+			Type fromType = typeof(From);
+			Type toType = typeof(To);
+			MapEntryManager.AssertTypesCanMap<From, To>();
+			if ( fromType.IsClassType() ) {
+				throw new NotSupportedException( "Can't call this with a class type, call Map() instead" );
 			}
-			if ( Source == null ) {
-				// TODO: destination is still set
-				return null;
-			}
-			Type fromType = typeof( From );
-			Type toType = typeof( To );
-			List<PropertyChanged> changes = null;
-			if ( fromType.IsListOfT() ) {
-				IList sourceList = Source as IList;
-				IList destinationList = Destination as IList;
-				// the below won't change what destination points to out from under Destination because Destination isn't null
-				// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
-				if ( fromType.GetGenericBaseType().IsClassType() ) {
-					changes = ListMapper.CopyListOfClass( fromType, toType, sourceList, ref destinationList, SmallerObject.Destination, ExcludeLinqProperties );
-				} else {
-					changes = ListMapper.CopyListOfNonClass( fromType, toType, sourceList, ref destinationList );
-				}
-			} else {
-				changes = PropertyMapper.CopyProperties<To, From>( Source, ref Destination, SmallerObject.Source, ExcludeLinqProperties );
-			}
-			return changes;
+			return (To)TypeConvert.Convert( Source, toType );
 		}
 
 	}

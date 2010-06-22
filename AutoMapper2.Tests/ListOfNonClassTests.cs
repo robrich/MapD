@@ -10,7 +10,7 @@ namespace AutoMapper2Lib.Tests {
 	#endregion
 
 	[TestFixture]
-	public class ChangeListOfNonClassTests : BaseTest {
+	public class ListOfNonClassTests : BaseTest {
 
 		#region Change_ListInt_Test
 
@@ -99,6 +99,29 @@ namespace AutoMapper2Lib.Tests {
 			};
 
 			List<string> destination = AutoMapper2.Map<List<string>, List<string>>( source );
+
+			AssertListsAreEqual( source, destination );
+
+		}
+
+		#endregion
+
+		#region Change_ListString_PartiallyFilled_Test
+
+		[Test]
+		public void Change_ListString_PartiallyFilled_Test() {
+
+			AutoMapper2.CreateMap<List<string>, List<string>>();
+
+			List<string> source = new List<string>() {
+				"String",
+				"gnirtS"
+			};
+			List<string> destination = new List<string> {
+				"String"
+			};
+
+			var changes = AutoMapper2.Map<List<string>, List<string>>( source, ref destination );
 
 			AssertListsAreEqual( source, destination );
 

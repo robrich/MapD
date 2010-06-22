@@ -98,9 +98,7 @@ namespace AutoMapper2Lib {
 						}
 					}
 					if ( ExcludeLinqAssociationProperties ) {
-						if ( property.PropertyType.Name.StartsWith( "EntityRef" )
-						|| property.PropertyType.Name.StartsWith( "EntitySet" )
-						|| property.PropertyType.Name.StartsWith( "EntityObject" ) ) {
+						if ( property.PropertyType.IsLinqProperty() ) {
 							continue;
 						}
 						AssociationAttribute association = (AssociationAttribute)Attribute.GetCustomAttribute( property, typeof(AssociationAttribute) );

@@ -72,16 +72,28 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseTest.cs" />
-    <Compile Include="ChangeClassOfListTests.cs" />
-    <Compile Include="ChangeListOfNonClassTests.cs" />
+    <Compile Include="ClassOfListClassTests.cs" />
+    <Compile Include="ClassOfListNonClassTests.cs" />
+    <Compile Include="ClassPropertiesTests.cs" />
+    <Compile Include="ClassToDerivedClassTests.cs" />
+    <Compile Include="ClassWithNoPropertiesTests.cs" />
+    <Compile Include="LinqToPropertyTests.cs" />
+    <Compile Include="ListOfClassTests.cs" />
+    <Compile Include="ListOfNonClassTests.cs" />
     <Compile Include="ClassWithWeirdPropertiesTests.cs" />
     <Compile Include="IgnoreAttributeTests.cs" />
     <Compile Include="MapperParameterTests.cs" />
     <Compile Include="ClassToClassTests.cs" />
+    <Compile Include="NonClassTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RemapPropertyTests.cs" />
+    <Compile Include="ResetMapTests.cs" />
+    <Compile Include="SettingExcludeLinqPropertiesTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoMapper2\AutoMapper2Lib.csproj">

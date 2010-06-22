@@ -73,8 +73,11 @@
   <ItemGroup>
     <Compile Include="Attributes.cs" />
     <Compile Include="AutoMapper2.cs" />
+    <Compile Include="MapBuilder.cs" />
     <Compile Include="Enumerations.cs" />
     <Compile Include="ListMapper.cs" />
+    <Compile Include="MapEntry.cs" />
+    <Compile Include="MapEntryManager.cs" />
     <Compile Include="PropertyMapper.cs" />
     <Compile Include="PropertyChanged.cs" />
     <Compile Include="Exceptions.cs" />

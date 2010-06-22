@@ -73,15 +73,15 @@ namespace AutoMapper2Lib.Tests {
 		}
 
 		public class Ignore_Class_Type {
-			[MapIgnore]
+			[IgnoreMap]
 			public int Integer { get; set; }
-			[MapIgnore]
+			[IgnoreMap]
 			public string String { get; set; }
-			[MapIgnore]
+			[IgnoreMap]
 			public double Double { get; set; }
-			[MapIgnore]
+			[IgnoreMap]
 			public Guid Guid { get; set; }
-			[MapIgnore]
+			[IgnoreMap]
 			public char Char { get; set; }
 
 			public void AssertEqual( Ignore_Class_Type Actual ) {
@@ -92,6 +92,38 @@ namespace AutoMapper2Lib.Tests {
 				Assert.AreEqual( null, Actual.String );
 				Assert.AreEqual( Guid.Empty, Actual.Guid );
 			}
+		}
+
+		#endregion
+
+		#region Ignore_Type
+
+		[Test]
+		public void Ignore_Type() {
+
+			AutoMapper2.CreateMap<Ignore_Type_Type, Ignore_Type_Type>();
+
+			Ignore_Type_Type source = new Ignore_Type_Type {
+				Property = new Ignore_Type_InnerType {
+					Integer = 1
+				}
+			};
+
+			Ignore_Type_Type destination = AutoMapper2.Map<Ignore_Type_Type, Ignore_Type_Type>( source );
+
+			Assert.IsNotNull( destination );
+			Assert.IsNull( destination.Property );
+
+		}
+
+		public class Ignore_Type_Type {
+			public Ignore_Type_InnerType Property { get; set;}
+		}
+
+		[IgnoreMap]
+		public class Ignore_Type_InnerType {
+			public int Integer { get; set; }
+			
 		}
 
 		#endregion

@@ -240,7 +240,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			Class_To_Similar_Class_MoreProps_Type destination = new Class_To_Similar_Class_MoreProps_Type();
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, destination );
+			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, ref destination );
 			source.AssertEqual( destination, new Class_To_Similar_Class_MoreProps_Type() );
 		}
 
@@ -252,7 +252,7 @@ namespace AutoMapper2Lib.Tests {
 			Class_To_Similar_Class_LessProps_Type source = new Class_To_Similar_Class_LessProps_Type();
 			Class_To_Similar_Class_MoreProps_Type destination = new Class_To_Similar_Class_MoreProps_Type();
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, destination );
+			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, ref destination );
 			source.AssertEqual( destination, new Class_To_Similar_Class_MoreProps_Type() );
 		}
 
@@ -286,7 +286,7 @@ namespace AutoMapper2Lib.Tests {
 			Class_To_Similar_Class_MoreProps_Type destination = AutoMapper2.Map<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_MoreProps_Type>( destTemplate );
 			Assert.IsNotNull( destination );
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, destination );
+			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, ref destination );
 
 			source.AssertEqual( destination, destTemplate );
 
@@ -316,7 +316,7 @@ namespace AutoMapper2Lib.Tests {
 			Class_To_Similar_Class_MoreProps_Type destination = AutoMapper2.Map<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_MoreProps_Type>( destTemplate );
 			Assert.IsNotNull( destination );
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, destination );
+			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type, Class_To_Similar_Class_LessProps_Type>( source, ref destination );
 			source.AssertEqual( destination, destTemplate );
 
 		}

@@ -26,7 +26,10 @@
 			ms = (MemoryStream)tw.BaseStream;
 
 			string serialized = Encoding.UTF8.GetString( ms.ToArray() );
-			if ( stripNamespace ) {
+			if ( stripNamespace && !string.IsNullOrEmpty( serialized ) ) {
+				serialized = Regex.Replace( serialized, "^﻿<\\?xml[^>]*\\?>", "" );
+			}
+			if ( stripNamespace && !string.IsNullOrEmpty( serialized ) ) {
 				serialized = serialized.Replace(
 					" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"",
 					""
@@ -76,16 +79,20 @@
 				return XML; // Can't get water from a stone
 			}
 
+			string result = XML;
+
+			if ( !result.StartsWith( "﻿<?xml", StringComparison.InvariantCultureIgnoreCase ) ) {
+				result = "﻿<?xml version=\"1.0\" encoding=\"utf-8\"?>" + result;
+			}
+
 			string nsName = GetDefaultNamespace( T );
 			if ( string.IsNullOrEmpty( nsName ) ) {
 				return XML; // No point adding nothing to it
 			}
 
-			string result = XML;
-
 			string nsAttr = string.Format( "xmlns=\"{0}\"", nsName );
-			if ( XML.IndexOf( nsAttr ) < 0 ) {
-				result = Regex.Replace( XML, @"(\?><[^ >]+? )", @"$1" + nsAttr + " " );
+			if ( result.IndexOf( nsAttr ) < 0 ) {
+				result = Regex.Replace( result, @"(\?><[^ >]+? )", @"$1" + nsAttr + " " );
 			}
 
 			return result;

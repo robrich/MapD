@@ -136,17 +136,17 @@ namespace AutoMapper2Lib {
 
 		#region ConvertToString
 		// pass in Type in case Value is null
-		public static string ConvertToString( object Value, string Type ) {
+		public static string ConvertToString( object Value, string Type, bool ToStringIfSerializeFails = false ) {
 
 			if ( string.IsNullOrEmpty( Type ) ) {
 				throw new ArgumentNullException( "Type" );
 			}
 			Type derivedType = GetDataType( Type );
 
-			return ConvertToString( Value, derivedType );
+			return ConvertToString( Value, derivedType, ToStringIfSerializeFails );
 		}
 
-		public static string ConvertToString( object Value, Type Type ) {
+		public static string ConvertToString( object Value, Type Type, bool ToStringIfSerializeFails = false ) {
 
 			if ( Type == null && Value != null ) {
 				Type = Value.GetType();
@@ -164,13 +164,22 @@ namespace AutoMapper2Lib {
 			try {
 				switch ( method ) {
 					case ConversionMethod.Serialize:
-						results = SerializationHelper.Serialize( Value, true );
+						try {
+							results = SerializationHelper.Serialize( Value, true );
+						} catch ( InvalidOperationException ) {
+							// Serialization failed
+							if ( ToStringIfSerializeFails ) {
+								results = Value.ToString();
+							} else {
+								throw;
+							}
+						}
 						break;
 					case ConversionMethod.ChangeType:
 						if ( Value is IConvertible ) {
 							results = (string)System.Convert.ChangeType( Value, typeof(string) );
 						} else {
-							results = Value.ToString();
+							results = SerializationHelper.Serialize( Value, true );
 						}
 						break;
 					case ConversionMethod.Guid:

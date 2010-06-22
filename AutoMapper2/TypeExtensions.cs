@@ -13,6 +13,10 @@ namespace AutoMapper2Lib {
 			if ( Type == null ) {
 				throw new ArgumentNullException( "Type" );
 			}
+			if ( Type.IsGenericType ) {
+				// Really what we're after is the base type, not the generic type
+				return Type.GetGenericBaseType().IsClassType();
+			}
 			if ( Type == typeof(string) ) {
 				return false; // This says it's Type.IsClass == true, but we don't treat it that way
 			}
@@ -51,6 +55,15 @@ namespace AutoMapper2Lib {
 			return results;
 		}
 
+		public static bool IsMapIgnored( this Type Type ) {
+			bool results = false;
+			IgnoreMapAttribute ignore = (IgnoreMapAttribute)Attribute.GetCustomAttribute( Type, typeof( IgnoreMapAttribute ) );
+			if ( ignore != null ) {
+				results = true;
+			}
+			return results;
+		}
+
 		public static Type GetGenericBaseType( this Type Type ) {
 			if ( Type == null ) {
 				throw new ArgumentNullException( "Type" );
@@ -60,7 +73,7 @@ namespace AutoMapper2Lib {
 			}
 			Type genericType = Type.GetGenericTypeDefinition();
 			Type[] args = Type.GetGenericArguments();
-			if ( genericType != typeof( List<> ) || args.Length != 1 ) {
+			if ( args.Length != 1 ) {
 				throw new ArgumentOutOfRangeException( "Type", Type.FullName + " isn't List<T>" );
 			}
 			return args[0];
@@ -79,6 +92,18 @@ namespace AutoMapper2Lib {
 				throw new ArgumentOutOfRangeException( "Type", Type.FullName + " isn't Nullable<T>" );
 			}
 			return args[0];
+		}
+
+		public static bool IsLinqProperty( this Type Type ) {
+			if ( Type == null ) {
+				throw new ArgumentNullException( "Type" );
+			}
+			string name = Type.Name ?? "";
+			return name.StartsWith( "EntityRef" )
+			|| name.StartsWith( "EntitySet" )
+			|| name.StartsWith( "EntityObject" )
+			|| name.StartsWith( "EntityCollection" )
+			|| name.StartsWith( "EntityReference" );
 		}
 
 		public static bool IsNumeric(this Type Type) {

@@ -13,20 +13,20 @@ namespace AutoMapper2Lib.Tests {
 	public class MapperParameterTests : BaseTest {
 
 		[Test]
-		public void MapBack_Fails_With_Null_Destination() {
+		public void MapBack_Fails_With_NonNull_Returns_NonNull() {
 			AutoMapper2.CreateMap<object, object>();
-			try {
-				AutoMapper2.MapBack<object, object>( new object(), null );
-				Assert.Fail( "MapBack didn't error with null destination" );
-			} catch ( ArgumentNullException ) {
-				// It successfully failed
-			}
+			object source = new object();
+			object dest = null;
+			AutoMapper2.MapBack<object, object>( source, ref dest );
+			Assert.IsNotNull( dest );
 		}
 
 		[Test]
 		public void MapBack_With_Null_Returns_Null() {
 			AutoMapper2.CreateMap<object, object>();
-			object result = AutoMapper2.MapBack<object, object>( null, new object() );
+			object source = null;
+			object dest = null;
+			object result = AutoMapper2.MapBack<object, object>( source, ref dest );
 			Assert.IsNull( result );
 		}
 
