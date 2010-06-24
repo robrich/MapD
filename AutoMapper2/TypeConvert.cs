@@ -127,7 +127,7 @@ namespace AutoMapper2Lib {
 						throw new ArgumentOutOfRangeException( "Can't determine conversion method" );
 				}
 			} catch ( Exception ex ) {
-				throw new Exception( string.Format( "Error deserializing {0} from {1} via {2}: {3}", Value, Type.FullName, method, ex.Message ), ex );
+				throw new FormatException( string.Format( "Error deserializing {0} from {1} via {2}: {3}", Value, Type.FullName, method, ex.Message ), ex );
 			}
 
 			return results;

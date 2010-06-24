@@ -7,7 +7,7 @@ namespace AutoMapper2Lib {
 	using System.Text;
 	#endregion
 
-	public class PropertyChanged {
+	public class PropertyChangedResults {
 
 		public Type ObjectType { get; set; }
 		public object Object { get; set; }

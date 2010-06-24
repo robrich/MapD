@@ -41,7 +41,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			List<InnerClassType> destination = new List<InnerClassType>();
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -71,7 +71,7 @@ namespace AutoMapper2Lib.Tests {
 
 			List<InnerClassType> source = new List<InnerClassType>();
 			List<InnerClassType> destination = new List<InnerClassType>();
-			List<PropertyChanged> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -126,10 +126,148 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				int index = 0;
+				foreach ( InnerClassType actualContent in source ) {
+					InnerClassType thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+					index++;
+				}
+			}
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_TooFull_Test() {
+
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			List<InnerClassType> source = new List<InnerClassType>() {
+				new InnerClassType {
+					Key = 1,
+					Double = 2.0,
+					Integer = 3,
+					String = "Four",
+				},
+				new InnerClassType {
+					Key = 2,
+					Double = 3.0,
+					Integer = 4,
+					String = "Five",
+				},
+				new InnerClassType {
+					Key = 3,
+					Double = 4.0,
+					Integer = 5,
+					String = "Six",
+				}
+			};
+			List<InnerClassType> destination = new List<InnerClassType>() {
+				new InnerClassType {
+					Key = 1,
+					Double = 10.0,
+					Integer = 10,
+					String = "Ten",
+				},
+				new InnerClassType {
+					Key = 2,
+					Double = 3.0,
+					Integer = 4,
+					String = "Five",
+				},
+				new InnerClassType {
+					Key = 4,
+					Double = 5.0,
+					Integer = 6,
+					String = "Seven",
+				}
+			};
+
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				int index = 0;
+				foreach ( InnerClassType actualContent in source ) {
+					InnerClassType thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+					index++;
+				}
+			}
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_TooFull_Back_Test() {
+
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			List<InnerClassType> source = new List<InnerClassType>() {
+				new InnerClassType {
+					Key = 1,
+					Double = 2.0,
+					Integer = 3,
+					String = "Four",
+				},
+				new InnerClassType {
+					Key = 2,
+					Double = 3.0,
+					Integer = 4,
+					String = "Five",
+				},
+				new InnerClassType {
+					Key = 3,
+					Double = 4.0,
+					Integer = 5,
+					String = "Six",
+				}
+			};
+			List<InnerClassType> destination = new List<InnerClassType>() {
+				new InnerClassType {
+					Key = 1,
+					Double = 10.0,
+					Integer = 10,
+					String = "Ten",
+				},
+				new InnerClassType {
+					Key = 2,
+					Double = 3.0,
+					Integer = 4,
+					String = "Five",
+				},
+				new InnerClassType {
+					Key = 4,
+					Double = 5.0,
+					Integer = 6,
+					String = "Seven",
+				}
+			};
+
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( 4, destination.Count );
 			if ( source.Count > 0 ) {
 				int index = 0;
 				foreach ( InnerClassType actualContent in source ) {
@@ -420,7 +558,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			List<InnerClassType2> destination = new List<InnerClassType2>();
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -450,7 +588,7 @@ namespace AutoMapper2Lib.Tests {
 
 			List<InnerClassType2> source = new List<InnerClassType2>();
 			List<InnerClassType2> destination = new List<InnerClassType2>();
-			List<PropertyChanged> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -505,7 +643,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -771,6 +909,125 @@ namespace AutoMapper2Lib.Tests {
 			public int String { get; set; }
 		}
 
+		#endregion
+
+		#region ListOf_NoPrimaryKey_Fails
+		[Test]
+		public void ListOf_NoPrimaryKey_Fails() {
+
+			AutoMapper2.CreateMap<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>();
+
+			List<NoPrimaryKeyClass> source = new List<NoPrimaryKeyClass>();
+			List<NoPrimaryKeyClass> destination = new List<NoPrimaryKeyClass>();
+
+			try {
+				var changes = AutoMapper2.Map<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>( source, ref destination );
+				Assert.Fail("A list of class with no primary keys can't map");
+			} catch ( InvalidTypeConversionException ex ) {
+				Assert.IsNotNull( ex );
+				Assert.IsNotNull( ex.Message );
+				Assert.AreEqual( InvalidPropertyReason.MissingPrimaryKey, ex.InvalidPropertyReason );
+				Assert.IsNull( ex.PropertyInfo );
+				Assert.AreEqual( typeof( List<NoPrimaryKeyClass> ), ex.From );
+				Assert.AreEqual( typeof( List<NoPrimaryKeyClass> ), ex.To );
+			}
+
+		}
+
+		public class NoPrimaryKeyClass {
+			public int Property1 { get; set; }
+		}
+		#endregion
+
+		#region ListOf_NoProperties_Fails
+		[Test]
+		public void ListOf_NoProperties_Fails() {
+
+			AutoMapper2.CreateMap<List<NoPropertiesType>, List<NoPropertiesType>>();
+
+			List<NoPropertiesType> source = new List<NoPropertiesType>();
+			List<NoPropertiesType> destination = new List<NoPropertiesType>();
+
+			try {
+				var changes = AutoMapper2.Map<List<NoPropertiesType>, List<NoPropertiesType>>( source, ref destination );
+				Assert.Fail( "A list of class with no properties can't map" );
+			} catch ( InvalidTypeConversionException ex ) {
+				Assert.IsNotNull( ex );
+				Assert.IsNotNull( ex.Message );
+				Assert.AreEqual( InvalidPropertyReason.MissingPrimaryKey, ex.InvalidPropertyReason );
+				Assert.IsNull( ex.PropertyInfo );
+				Assert.AreEqual( typeof( List<NoPropertiesType> ), ex.From );
+				Assert.AreEqual( typeof( List<NoPropertiesType> ), ex.To );
+			}
+
+		}
+
+		public class NoPropertiesType {
+		}
+		#endregion
+
+		#region ListOf_NullPrimaryKey_Fails
+		[Test]
+		public void ListOf_NullPrimaryKey_Source_Fails() {
+
+			AutoMapper2.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
+
+			List<NullPrimaryKeyClass> source = new List<NullPrimaryKeyClass> {
+				new NullPrimaryKeyClass {
+					Property1 = null
+				}
+			};
+			List<NullPrimaryKeyClass> destination = new List<NullPrimaryKeyClass>();
+
+			try {
+				var changes = AutoMapper2.Map<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>( source, ref destination );
+				Assert.Fail( "A list of class with no primary keys can't map" );
+			} catch ( InvalidTypeConversionException ex ) {
+				Assert.IsNotNull( ex );
+				Assert.IsNotNull( ex.Message );
+				Assert.AreEqual( InvalidPropertyReason.FromPrimaryKeyBlank, ex.InvalidPropertyReason );
+				Assert.IsNotNull( ex.PropertyInfo );
+				Assert.AreEqual( "Property1", ex.PropertyInfo.Name );
+				Assert.AreEqual( typeof( List<NullPrimaryKeyClass> ), ex.From );
+				Assert.AreEqual( typeof( List<NullPrimaryKeyClass> ), ex.To );
+			}
+
+		}
+		[Test]
+		public void ListOf_NullPrimaryKey_Destination_Fails() {
+
+			AutoMapper2.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
+
+			List<NullPrimaryKeyClass> source = new List<NullPrimaryKeyClass> {
+				new NullPrimaryKeyClass {
+					Property1 = 1
+				}
+			};
+			List<NullPrimaryKeyClass> destination = new List<NullPrimaryKeyClass>{
+				new NullPrimaryKeyClass {
+					Property1 = null
+				}
+			};
+
+			try {
+				var changes = AutoMapper2.Map<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>( source, ref destination );
+				Assert.Fail( "A list of class with no primary keys can't map" );
+			} catch ( InvalidTypeConversionException ex ) {
+				Assert.IsNotNull( ex );
+				Assert.IsNotNull( ex.Message );
+				Assert.AreEqual( InvalidPropertyReason.ToPrimaryKeyBlank, ex.InvalidPropertyReason );
+				Assert.IsNotNull( ex.PropertyInfo );
+				Assert.AreEqual( "Property1", ex.PropertyInfo.Name );
+				Assert.AreEqual( typeof( List<NullPrimaryKeyClass> ), ex.From );
+				Assert.AreEqual( typeof( List<NullPrimaryKeyClass> ), ex.To );
+			}
+
+		}
+
+		public class NullPrimaryKeyClass {
+			[PrimaryKey]
+			public int? Property1 { get; set; }
+		}
 		#endregion
 
 	}

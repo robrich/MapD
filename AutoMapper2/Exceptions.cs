@@ -34,16 +34,16 @@ namespace AutoMapper2Lib {
 		private Type from;
 		private Type to;
 		private readonly InvalidPropertyReason invalidPropertyReason;
-		private PropertyInfo toPropertyInfo;
+		private PropertyInfo propertyInfo;
 
 		// FRAGILE: ASSUME: both From and To aren't null
-		public InvalidTypeConversionException( Type From, Type To, InvalidPropertyReason InvalidPropertyReason, PropertyInfo ToPropertyInfo = null )
+		public InvalidTypeConversionException( Type From, Type To, InvalidPropertyReason InvalidPropertyReason, PropertyInfo PropertyInfo = null )
 			: base( string.Format( "Can't convert{0} from {1} to {2} because {3}",
-			( ToPropertyInfo != null ? ( " " + ToPropertyInfo.Name ) : "" ), From.FullName, To.FullName, InvalidPropertyReason ) ) {
+			( PropertyInfo != null ? ( " " + PropertyInfo.Name ) : "" ), From.FullName, To.FullName, InvalidPropertyReason ) ) {
 			this.from = From;
 			this.to = To;
 			this.invalidPropertyReason = InvalidPropertyReason;
-			this.toPropertyInfo = ToPropertyInfo;
+			this.propertyInfo = PropertyInfo;
 		}
 
 		public Type From {
@@ -55,22 +55,6 @@ namespace AutoMapper2Lib {
 
 		public InvalidPropertyReason InvalidPropertyReason {
 			get { return this.invalidPropertyReason; }
-		}
-
-		public PropertyInfo ToPropertyInfo {
-			get { return this.toPropertyInfo; }
-		}
-
-	}
-
-	public class MissingPropertyException<T> : Exception {
-
-		private readonly PropertyInfo propertyInfo;
-
-		public MissingPropertyException( PropertyInfo PropertyInfo )
-			// FRAGILE: Assumes PropertyInfo isn't null
-			: base( PropertyInfo.Name + " isn't found in type " + typeof( T ).Name ) {
-			this.propertyInfo = PropertyInfo;
 		}
 
 		public PropertyInfo PropertyInfo {
@@ -113,10 +97,12 @@ namespace AutoMapper2Lib {
 		MissingFromPrimaryKey,
 		MissingToPrimaryKey,
 		FromPrimaryKeyBlank,
-		MissingProperty,
-		ToPrimaryKeyBlank
+		FromPrimaryKeyConversionFailure,
+		ToPrimaryKeyBlank,
+		MissingProperty
 	}
 
+	// Using the map failed, building the map succeeded previously
 	public class MapFailureException : Exception {
 
 		private readonly PropertyInfo propertyInfo;
@@ -127,7 +113,7 @@ namespace AutoMapper2Lib {
 		public MapFailureException( PropertyInfo PropertyInfo, object Target, object Value, MapFailureReason MapFailureReason, Exception innerException )
 			// FRAGILE: Assumes PropertyInfo isn't null
 			: base( string.Format( "Failed to map {0} on {1}{2} because {3}: {4}",
-				PropertyInfo.Name,
+				(PropertyInfo != null ? PropertyInfo.Name : ""),
 				Target.ObjectToString(),
 				( Value != null ? ( "to " + Value.ObjectToString() ) : null ),
 				MapFailureReason,
@@ -158,7 +144,9 @@ namespace AutoMapper2Lib {
 		GetSourceFailure,
 		GetDestinationFailure,
 		SetDestinationFailure,
-		DuplicateFromPrimaryKey
+		DuplicateFromPrimaryKey,
+		DuplicateToPrimaryKey,
+		ConvertTypeFailure
 	}
 
 }

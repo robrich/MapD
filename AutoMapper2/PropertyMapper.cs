@@ -15,9 +15,9 @@ namespace AutoMapper2Lib {
 	internal static class PropertyMapper {
 		
 		// Pass in FromType and ToType in case Source or Destination are null or a derived type
-		public static List<PropertyChanged> CopyProperties( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
+		public static List<PropertyChangedResults> CopyProperties( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
 
-			List<PropertyChanged> changes = new List<PropertyChanged>();
+			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
 			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType, MapDirection );
 			if ( map == null ) {
@@ -26,7 +26,11 @@ namespace AutoMapper2Lib {
 
 
 			if ( Source == null ) {
-				Destination = null;
+				if ( MapDirection == MapDirection.SourceToDestination ) {
+					Destination = null;
+				} else {
+					// Leave it be
+				}
 				return changes; // You asked for nothing and I agree
 			}
 			
@@ -102,19 +106,19 @@ namespace AutoMapper2Lib {
 
 					IList sourcePropertyValueList = sourcePropertyValue as IList;
 					IList destinationPropertyValueList = destinationPropertyValue as IList;
-					List<PropertyChanged> changesStep = null;
+					List<PropertyChangedResults> changesStep = null;
 					// the below won't change what destination points to out from under Destination because Destination isn't null
 					// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
 					if ( sourceProperty.PropertyType.GetGenericBaseType().IsClassType() ) {
 						changesStep = ListMapper.CopyListOfClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection );
 					} else {
-						changesStep = ListMapper.CopyListOfNonClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList );
+						changesStep = ListMapper.CopyListOfNonClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection );
 					}
 					
 					// if references aren't to the same object, note that
 					if ( destinationPropertyValueOriginal != destinationPropertyValueList ) {
 						changes.Add(
-							new PropertyChanged {
+							new PropertyChangedResults {
 								ObjectType = ToType,
 								Object = Destination,
 								PropertyType = destinationProperty.PropertyType,
@@ -138,17 +142,17 @@ namespace AutoMapper2Lib {
 				if ( sourceProperty.PropertyType.IsClassType() || destinationProperty.PropertyType.IsClassType() ) {
 					#region Copy property as class type (recurse)
 					if ( !sourceProperty.PropertyType.IsClassType() ) {
-						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.NonClassTypeToClassType, ToPropertyInfo: destinationProperty );
+						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.NonClassTypeToClassType, PropertyInfo: destinationProperty );
 					}
 					if ( !destinationProperty.PropertyType.IsClassType() ) {
-						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, ToPropertyInfo: destinationProperty );
+						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, PropertyInfo: destinationProperty );
 					}
 					destinationPropertyValue = destinationPropertyValueOriginal;
-					List<PropertyChanged> changesStep = PropertyMapper.CopyProperties( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection ); // Recurse
+					List<PropertyChangedResults> changesStep = PropertyMapper.CopyProperties( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection ); // Recurse
 					// if references aren't to the same object, note that
 					if ( destinationPropertyValue != destinationPropertyValueOriginal ) {
 						changes.Add(
-							new PropertyChanged {
+							new PropertyChangedResults {
 								ObjectType = ToType,
 								Object = Destination,
 								PropertyType = destinationProperty.PropertyType,
@@ -180,7 +184,11 @@ namespace AutoMapper2Lib {
 				#region Copy property as non-class type
 				if ( destinationProperty.PropertyType.IsAssignableFrom( sourceProperty.PropertyType ) ) {
 					// They're compatable types
-					destinationPropertyValue = sourcePropertyValue;
+					try {
+						destinationPropertyValue = sourcePropertyValue;
+					} catch ( Exception ex ) {
+						throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.ConvertTypeFailure, ex );
+					}
 				} else if ( sourcePropertyValue == null ) {
 					// It's null
 					if ( destinationProperty.PropertyType.IsValueType ) {
@@ -190,13 +198,17 @@ namespace AutoMapper2Lib {
 					}
 				} else {
 					// They're incompatible types
-					destinationPropertyValue = TypeConvert.Convert( sourcePropertyValue, destinationProperty.PropertyType );
+					try {
+						destinationPropertyValue = TypeConvert.Convert( sourcePropertyValue, destinationProperty.PropertyType );
+					} catch ( Exception ex ) {
+						throw new MapFailureException( destinationProperty, Destination, sourcePropertyValue, MapFailureReason.ConvertTypeFailure, ex );
+					}
 				}
 
 				if ( destinationPropertyValue != destinationPropertyValueOriginal ) {
 					// It changed
 					changes.Add(
-						new PropertyChanged {
+						new PropertyChangedResults {
 							ObjectType = ToType,
 							Object = Destination,
 							PropertyType = destinationProperty.PropertyType,

@@ -44,7 +44,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type();
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -60,7 +60,7 @@ namespace AutoMapper2Lib.Tests {
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
 				Content = new List<InnerClassType>()
 			};
-			List<PropertyChanged> changeList = AutoMapper2.Map<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -105,7 +105,122 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
+
+			source.AssertEqual( destination );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Test() {
+
+			AutoMapper2.CreateMap<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>();
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			Class_To_Same_Class_Type source = new ClassOfListClassTests.Class_To_Same_Class_Type {
+				Content = new List<InnerClassType>() {
+					new InnerClassType {
+						Key = 1,
+						Double = 2.0,
+						Integer = 3,
+						String = "Four",
+					},
+					new InnerClassType {
+						Key = 2,
+						Double = 3.0,
+						Integer = 4,
+						String = "Five",
+					},
+					new InnerClassType {
+						Key = 3,
+						Double = 4.0,
+						Integer = 5,
+						String = "Six",
+					}
+				}
+			};
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type();
+
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
+
+			source.AssertEqual( destination );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Properties() {
+
+			AutoMapper2.CreateMap<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>();
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type();
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
+				Content = new List<InnerClassType>()
+			};
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.IsNotNull( destination.Content );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Objects() {
+
+			AutoMapper2.CreateMap<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>();
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			Class_To_Same_Class_Type source = null;
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
+				Content = new List<InnerClassType>()
+			};
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.IsNotNull( destination.Content );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_PartiallyFilled_Test() {
+
+			AutoMapper2.CreateMap<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>();
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
+				Content = new List<InnerClassType>() {
+					new InnerClassType {
+						Key = 1,
+						Double = 2.0,
+						Integer = 3,
+						String = "Four",
+					},
+					new InnerClassType {
+						Key = 2,
+						Double = 3.0,
+						Integer = 4,
+						String = "Five",
+					},
+					new InnerClassType {
+						Key = 3,
+						Double = 4.0,
+						Integer = 5,
+						String = "Six",
+					}
+				}
+			};
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type {
+				Content = new List<InnerClassType>() {
+					new InnerClassType {
+						Key = 1,
+						Double = 10.0,
+						Integer = 10,
+						String = "Ten",
+					}
+				}
+			};
+
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<ClassOfListClassTests.Class_To_Same_Class_Type, ClassOfListClassTests.Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 

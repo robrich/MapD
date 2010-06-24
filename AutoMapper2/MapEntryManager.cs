@@ -2,8 +2,10 @@ namespace AutoMapper2Lib {
 
 	#region using
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 	using System.Text;
 	#endregion
 
@@ -29,6 +31,29 @@ namespace AutoMapper2Lib {
 					AddMapEntry( fromBase, toBase );
 				}
 			}
+		}
+
+		public static void CreateMaps( Assembly Assembly ) {
+
+			Type[] types = Assembly.GetExportedTypes();
+			foreach ( Type toType in types ) {
+
+				if ( !toType.IsClass || toType.IsNotPublic ) {
+					continue;
+				}
+
+				Type fromType = toType.GetMapFromType();
+				if ( fromType != null ) {
+					AddMapEntry( fromType, toType );
+				}
+
+				fromType = toType.GetMapListFromType();
+				if ( fromType != null ) {
+					AddMapEntry( fromType.GetListOfType(), toType.GetListOfType() );
+				}
+
+			}
+
 		}
 
 		public static void ResetMap() {
@@ -68,6 +93,7 @@ namespace AutoMapper2Lib {
 			if ( m.Properties != null && m.Properties.Count > 0 ) {
 				foreach ( var prop in m.Properties ) {
 					if ( prop.Source.IsListOfT() && prop.Destination.IsListOfT() ) {
+						// No need for a map entry of List<> to List<> -- we know how to map lists
 						Type sourceBase = prop.Source.PropertyType.GetGenericBaseType();
 						Type destBase = prop.Destination.PropertyType.GetGenericBaseType();
 						if ( sourceBase.IsClassType() && destBase.IsClassType() ) {
@@ -81,7 +107,7 @@ namespace AutoMapper2Lib {
 
 			return m;
 		}
-		public static MapEntry GetMapEntry(Type FromType, Type ToType, MapDirection MapDirection) {
+		public static MapEntry GetMapEntry( Type FromType, Type ToType, MapDirection MapDirection ) {
 			MapEntry map = null;
 			switch ( MapDirection ) {
 				case MapDirection.SourceToDestination:
@@ -100,20 +126,23 @@ namespace AutoMapper2Lib {
 		// Doesn't check recursively, that happens on property load
 		#region AssertTypesCanMap
 		public static void AssertTypesCanMap<From, To>() {
-			Type from = typeof( From );
-			Type to = typeof( To );
-			if ( from.IsListOfT() != to.IsListOfT() ) {
-				if ( from.IsListOfT() ) {
-					throw new InvalidTypeConversionException( from, to, InvalidPropertyReason.ListTypeToNonListType );
+			Type from = typeof(From);
+			Type to = typeof(To);
+			AssertTypesCanMap(from, to);
+		}
+		public static void AssertTypesCanMap(Type From, Type To) {
+			if ( From.IsListOfT() != To.IsListOfT() ) {
+				if ( From.IsListOfT() ) {
+					throw new InvalidTypeConversionException( From, To, InvalidPropertyReason.ListTypeToNonListType );
 				}
-				if ( to.IsListOfT() ) {
-					throw new InvalidTypeConversionException( from, to, InvalidPropertyReason.NonListTypeToListType );
+				if ( To.IsListOfT() ) {
+					throw new InvalidTypeConversionException( From, To, InvalidPropertyReason.NonListTypeToListType );
 				}
 			}
-			AssertTypeClassesCanMap( from, to );
-			if ( from.IsListOfT() ) {
-				Type fromBase = from.GetGenericBaseType();
-				Type toBase = to.GetGenericBaseType(); // If it isn't a Generic, the above would've caught it
+			AssertTypeClassesCanMap( From, To );
+			if ( From.IsListOfT() ) {
+				Type fromBase = From.GetGenericBaseType();
+				Type toBase = To.GetGenericBaseType(); // If it isn't a Generic, the above would've caught it
 				AssertTypeClassesCanMap( fromBase, toBase );
 			}
 		}
@@ -129,18 +158,100 @@ namespace AutoMapper2Lib {
 		}
 		#endregion
 
+		#region AssertConfigurationIsValid
 		public static void AssertConfigurationIsValid() {
 			if ( mapList == null || mapList.Count == 0 ) {
-				throw new ArgumentNullException( "", "You've not created any maps" );
+				throw new ArgumentNullException( "", "You haven't created any maps" );
 			}
 			foreach ( MapEntry m in mapList ) {
 				// This flexes the "null to null" case, which is pretty much not helpful
 				// But it does flex MapBuilder.BuildMap(m), which is quite helpful
+
 				object source = Activator.CreateInstance( m.From );
 				object destination = Activator.CreateInstance( m.To );
-				AutoMapper2.Map( source, ref destination ); // If this errors, it should tell you why
+
+				// Populate class and list properties so copying will recurse as needed
+				FillObjectWithDefaults( m.From, m.To, source, destination );
+
+				// Can't use AutoMapper2.Map<>() because source and destination aren't strongly typed
+				AutoMapper2.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.SourceToDestination ); // If this errors, it should tell you why
+				AutoMapper2.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.DestinationToSource ); // If this errors, it should tell you why
 			}
 		}
+
+		// Recursive Helper method for AssertConfigurationIsValid
+		private static void FillObjectWithDefaults( Type FromType, Type ToType, object Source, object Destination ) {
+
+			MapEntryManager.AssertTypesCanMap(FromType, ToType);
+			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType, MapDirection.SourceToDestination );
+			if ( map == null ) {
+				throw new MissingMapException( FromType, ToType );
+			}
+			
+			foreach ( MapEntryProperty mapEntryProperty in map.Properties ) {
+
+				PropertyInfo sourceInfo = mapEntryProperty.Source;
+				Type sourceType = sourceInfo.PropertyType;
+				object sourceValue = null;
+
+				PropertyInfo destinationInfo = mapEntryProperty.Destination;
+				Type destinationType = destinationInfo.PropertyType;
+				object destinationValue = null;
+
+
+				if ( sourceType.IsListOfT() || destinationType.IsListOfT() ) {
+					MapEntryManager.AssertTypesCanMap( sourceType, destinationType );
+					IList sourceList = (IList)Activator.CreateInstance( sourceType );
+					IList destinationList = (IList)Activator.CreateInstance( destinationType );
+					Type sourceBaseType = sourceType.GetGenericBaseType();
+					Type destinationBaseType = destinationType.GetGenericBaseType();
+					// Add an object to the list
+					object sourceChild = Activator.CreateInstance( sourceBaseType );
+					sourceList.Add( sourceChild );
+					object destinationChild = Activator.CreateInstance( destinationBaseType );
+					destinationList.Add( destinationChild );
+					if ( sourceBaseType.IsClassType() || destinationBaseType.IsClassType() ) {
+						// Fill the child with default values
+						FillObjectWithDefaults( sourceBaseType, destinationBaseType, sourceChild, destinationChild ); // Recurse to populate this object
+					}
+					sourceValue = sourceList;
+					destinationValue = destinationList;
+				} else if ( sourceType.IsClassType() ) {
+					MapEntryManager.AssertTypesCanMap( sourceType, destinationType );
+					sourceValue = Activator.CreateInstance( sourceType );
+					destinationValue = Activator.CreateInstance( destinationType );
+					FillObjectWithDefaults( sourceType, destinationType, sourceValue, destinationValue ); // Recurse to populate this object
+				} else {
+					// Creating the object set it to the appropriate default value
+					// default( propertyType ) only works with generic<T> type code
+					sourceValue = null;
+					destinationValue = null;
+				}
+
+				if ( sourceValue != null ) {
+					sourceInfo.SetValue( Source, sourceValue, null );
+				}
+				if ( destinationValue != null ) {
+					destinationInfo.SetValue( Destination, destinationValue, null );
+				}
+
+			}
+		}
+		#endregion
+
+		#region AssertMapCount
+		public static void AssertMapCount( int Count ) {
+			if ( mapList.Count != Count ) {
+				throw new ArgumentOutOfRangeException(
+					string.Format(
+						"The number of mapped entities should be {0} but it is {1}",
+						Count,
+						( mapList == null ? 0 : mapList.Count )
+					)
+				);
+			}
+		}
+		#endregion
 
 	}
 

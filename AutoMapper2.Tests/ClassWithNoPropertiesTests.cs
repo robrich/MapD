@@ -10,7 +10,7 @@ namespace AutoMapper2Lib.Tests {
 	#endregion
 
 	[TestFixture]
-	public class ClassWithNoPropertiesTests {
+	public class ClassWithNoPropertiesTests : BaseTest {
 
 		[Test]
 		public void ClassWithNoProperties_NotNull() {
@@ -94,7 +94,7 @@ namespace AutoMapper2Lib.Tests {
 
 			var changes = AutoMapper2.MapBack<NoPropertiesClass, NoPropertiesClass>( source, ref destination );
 
-			Assert.IsNull( destination );
+			Assert.IsNotNull( destination );
 
 		}
 

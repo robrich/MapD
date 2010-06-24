@@ -7,7 +7,7 @@ namespace AutoMapper2Lib.Tests {
 	#endregion
 
 	[TestFixture]
-	public class ClassPropertiesTests {
+	public class ClassPropertiesTests : BaseTest {
 
 		[Test]
 		public void ClassWithClassProperties_NotNull() {

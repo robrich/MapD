@@ -6,21 +6,34 @@ namespace AutoMapper2Lib {
 	using System.Collections.Generic;
 	using System.Configuration;
 	using System.Linq;
+	using System.Reflection;
 	using System.Text;
 	#endregion
 
 	public static class AutoMapper2 {
 
 		// Properties are enumerated when you call Map<> the first time, therefore you can't change this property after that
-		private static bool excludeLinqPropertiesLocked;
+		private static bool mappingPropertiesLocked;
+
 		private static bool excludeLinqProperties;
 		public static bool ExcludeLinqProperties {
 			get { return excludeLinqProperties; }
 			set {
-				if ( excludeLinqPropertiesLocked ) {
+				if ( mappingPropertiesLocked ) {
 					throw new NotSupportedException( "Once you call CreateMap(), you can't change ExcludeLinqProperties because the properties have already been mapped" );
 				}
 				excludeLinqProperties = value;
+			}
+		}
+
+		private static PropertyIs ignorePropertiesIf;
+		public static PropertyIs IgnorePropertiesIf {
+			get { return ignorePropertiesIf; }
+			set {
+				if ( mappingPropertiesLocked ) {
+					throw new NotSupportedException( "Once you call CreateMap(), you can't change IgnorePropertiesIf because the properties have already been mapped" );
+				}
+				ignorePropertiesIf = value;
 			}
 		}
 
@@ -32,8 +45,9 @@ namespace AutoMapper2Lib {
 		/// Reset the AutoMapper -- for Unit Tests and initialization
 		/// </summary>
 		public static void ResetMap() {
-			excludeLinqPropertiesLocked = false;
+			mappingPropertiesLocked = false;
 			ExcludeLinqProperties = true;
+			IgnorePropertiesIf = PropertyIs.NotSet;
 			MapEntryManager.ResetMap();
 		}
 
@@ -54,11 +68,29 @@ namespace AutoMapper2Lib {
 			 * .ExcludeLinqProperties = false;
 			 * which would produce unexpected results
 			 */
-			excludeLinqPropertiesLocked = true;
+			mappingPropertiesLocked = true;
+		}
+
+		/// <summary>
+		/// Reflect on the specified assembly to get the maps from <see cref="MapFromAttribute"/>-annotated classes and <see cref="MapListFromListOfAttribute"/>-annotated classes
+		/// </summary>
+		/// <param name="Assembly"></param>
+		public static void CreateMaps( Assembly Assembly = null ) {
+			if ( Assembly == null ) {
+				Assembly = Assembly.GetCallingAssembly();
+				if ( Assembly == null ) {
+					throw new ArgumentNullException( "Assembly" );
+				}
+			}
+
+			MapEntryManager.CreateMaps( Assembly );
 		}
 
 		public static void AssertConfigurationIsValid() {
 			MapEntryManager.AssertConfigurationIsValid();
+		}
+		public static void AssertMapCount( int Count ) {
+			MapEntryManager.AssertMapCount( Count );
 		}
 
 		public static To Map<From, To>( From Source )
@@ -73,11 +105,11 @@ namespace AutoMapper2Lib {
 				return null;
 			}
 			To destination = (To)Activator.CreateInstance( typeof( To ) );
-			List<PropertyChanged> changes = Map<From, To>( Source, ref destination );
+			List<PropertyChangedResults> changes = Map<From, To>( Source, ref destination );
 			return destination;
 		}
 
-		public static List<PropertyChanged> Map<From, To>( From Source, ref To Destination )
+		public static List<PropertyChangedResults> Map<From, To>( From Source, ref To Destination )
 			where From : class, new()
 			where To : class, new() {
 
@@ -98,7 +130,7 @@ namespace AutoMapper2Lib {
 			return ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.SourceToDestination );
 		}
 
-		public static List<PropertyChanged> MapBack<From, To>( To Source, ref From Destination )
+		public static List<PropertyChangedResults> MapBack<From, To>( To Source, ref From Destination )
 			where From : class, new()
 			where To : class, new() {
 
@@ -110,19 +142,19 @@ namespace AutoMapper2Lib {
 			MapEntryManager.AssertTypesCanMap<From, To>();
 
 			if ( Source == null ) {
-				Destination = null;
+				// Leave Destination alone
 				return null;
 			}
 			if ( Destination == null ) {
-				Destination = (From)Activator.CreateInstance( typeof(From) );
+				Destination = (From)Activator.CreateInstance( typeof( From ) );
 			}
 
 			object destinationObject = Destination;
 			return ExecuteMap( toType, fromType, Source, ref destinationObject, MapDirection.DestinationToSource );
 		}
 
-		private static List<PropertyChanged> ExecuteMap( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
-			List<PropertyChanged> changes = null;
+		internal static List<PropertyChangedResults> ExecuteMap( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
+			List<PropertyChangedResults> changes = null;
 			if ( FromType.IsListOfT() ) {
 				IList sourceList = Source as IList;
 				IList destinationList = Destination as IList;
@@ -131,7 +163,7 @@ namespace AutoMapper2Lib {
 				if ( FromType.GetGenericBaseType().IsClassType() ) {
 					changes = ListMapper.CopyListOfClass( FromType, ToType, sourceList, ref destinationList, MapDirection );
 				} else {
-					changes = ListMapper.CopyListOfNonClass( FromType, ToType, sourceList, ref destinationList );
+					changes = ListMapper.CopyListOfNonClass( FromType, ToType, sourceList, ref destinationList, MapDirection );
 				}
 			} else if ( FromType.IsClassType() ) {
 				changes = PropertyMapper.CopyProperties( FromType, ToType, Source, ref Destination, MapDirection );
@@ -143,8 +175,8 @@ namespace AutoMapper2Lib {
 		}
 
 		public static To MapType<From, To>( From Source ) {
-			Type fromType = typeof(From);
-			Type toType = typeof(To);
+			Type fromType = typeof( From );
+			Type toType = typeof( To );
 			MapEntryManager.AssertTypesCanMap<From, To>();
 			if ( fromType.IsClassType() ) {
 				throw new NotSupportedException( "Can't call this with a class type, call Map() instead" );

@@ -26,7 +26,7 @@ namespace AutoMapper2Lib {
 		public PropertyInfo Destination { get; set; }
 	}
 
-	public enum MapEntryType {
+	internal enum MapEntryType {
 		NotSet = 0,
 		Class,
 		NonClass,

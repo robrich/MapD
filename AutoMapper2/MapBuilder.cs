@@ -62,6 +62,8 @@ namespace AutoMapper2Lib {
 			List<PropertyInfo> fromProperties = ReflectionHelper.GetProperties( fromType );
 			List<PropertyInfo> toProperties = ReflectionHelper.GetProperties( toType );
 
+			PropertyIs ignorePropertiesIf = toType.GetIgnorePropertiesIf() ?? fromType.GetIgnorePropertiesIf() ?? AutoMapper2.IgnorePropertiesIf;
+
 			if ( toProperties != null && toProperties.Count != 0 ) {
 				foreach ( PropertyInfo toProperty in toProperties ) {
 
@@ -93,35 +95,47 @@ namespace AutoMapper2Lib {
 
 					// TODO: If property can't read/write, does this property "not exist"?
 					if ( !fromProperty.CanRead ) {
+						if ( ( ignorePropertiesIf & PropertyIs.ReadOnly ) == PropertyIs.ReadOnly ) {
+							continue;
+						}
 						throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantRead );
 					}
 					if ( !fromProperty.CanWrite ) {
 						// If we're ever called to map back, fromProperty.CanWrite is also important
+						if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
+							continue;
+						}
 						throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantWrite );
 					}
 					if ( !toProperty.CanWrite ) {
+						if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
+							continue;
+						}
 						throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantWrite );
 					}
 					if ( !toProperty.CanRead ) {
+						if ( ( ignorePropertiesIf & PropertyIs.ReadOnly ) == PropertyIs.ReadOnly ) {
+							continue;
+						}
 						throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantRead );
 					}
 					// If it's a list and it's initialized, we can get by without write, but that's a fragile assumption, so don't
 
 					if ( fromProperty.PropertyType.IsListOfT() != toProperty.PropertyType.IsListOfT() ) {
 						if ( fromProperty.PropertyType.IsListOfT() ) {
-							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.ListTypeToNonListType );
+							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.ListTypeToNonListType, toProperty );
 						}
 						if ( toProperty.PropertyType.IsListOfT() ) {
-							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.NonListTypeToListType );
+							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.NonListTypeToListType, toProperty );
 						}
 					}
 
 					if ( fromProperty.PropertyType.IsClassType() != toProperty.PropertyType.IsClassType() ) {
 						if ( fromProperty.PropertyType.IsClassType() ) {
-							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType );
+							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, toProperty );
 						}
 						if ( toProperty.PropertyType.IsClassType() ) {
-							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.NonClassTypeToClassType );
+							throw new InvalidTypeConversionException( fromProperty.PropertyType, toProperty.PropertyType, InvalidPropertyReason.NonClassTypeToClassType, toProperty );
 						}
 					}
 
@@ -180,7 +194,7 @@ namespace AutoMapper2Lib {
 				foreach ( PropertyInfo fromPrimaryKey in fromPrimaryKeys ) {
 					PropertyInfo toProperty = toProperties.GetPropertyByName( fromPrimaryKey.Name );
 					if ( toProperty == null ) {
-						throw new InvalidTypeConversionException( fromType, toType, InvalidPropertyReason.MissingToPrimaryKey );
+						throw new InvalidTypeConversionException( fromType, toType, InvalidPropertyReason.MissingToPrimaryKey, fromPrimaryKey );
 					}
 					MapEntry.Properties.Add( new MapEntryProperty {
 						Source = fromPrimaryKey,
@@ -200,7 +214,7 @@ namespace AutoMapper2Lib {
 				foreach ( PropertyInfo toPrimaryKey in toPrimaryKeys ) {
 					PropertyInfo fromProperty = fromProperties.GetPropertyByName( toPrimaryKey.Name );
 					if ( fromProperty == null ) {
-						throw new InvalidTypeConversionException( fromType, toType, InvalidPropertyReason.MissingFromPrimaryKey );
+						throw new InvalidTypeConversionException( fromType, toType, InvalidPropertyReason.MissingFromPrimaryKey, toPrimaryKey );
 					}
 					MapEntry.Properties.Add(
 						new MapEntryProperty {

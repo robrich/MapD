@@ -64,6 +64,33 @@ namespace AutoMapper2Lib {
 			return results;
 		}
 
+		public static PropertyIs? GetIgnorePropertiesIf( this Type Type ) {
+			PropertyIs? results = null;
+			IgnorePropertiesIfAttribute ignoreIf = (IgnorePropertiesIfAttribute)Attribute.GetCustomAttribute( Type, typeof( IgnorePropertiesIfAttribute ) );
+			if ( ignoreIf != null ) {
+				results = ignoreIf.PropertyIs;
+			}
+			return results;
+		}
+
+		public static Type GetMapFromType( this Type Type ) {
+			Type results = null;
+			MapFromAttribute attr = (MapFromAttribute)Attribute.GetCustomAttribute( Type, typeof( MapFromAttribute ) );
+			if ( attr != null ) {
+				results = attr.Type;
+			}
+			return results;
+		}
+
+		public static Type GetMapListFromType( this Type Type ) {
+			Type results = null;
+			MapListFromListOfAttribute attr = (MapListFromListOfAttribute)Attribute.GetCustomAttribute( Type, typeof(MapListFromListOfAttribute) );
+			if ( attr != null ) {
+				results = attr.Type;
+			}
+			return results;
+		}
+
 		public static Type GetGenericBaseType( this Type Type ) {
 			if ( Type == null ) {
 				throw new ArgumentNullException( "Type" );
@@ -77,6 +104,15 @@ namespace AutoMapper2Lib {
 				throw new ArgumentOutOfRangeException( "Type", Type.FullName + " isn't List<T>" );
 			}
 			return args[0];
+		}
+
+		public static Type GetListOfType( this Type Type ) {
+			if ( Type == null ) {
+				throw new ArgumentNullException( "Type" );
+			}
+			return typeof(List<>).MakeGenericType(
+				new Type[] { Type }
+			);
 		}
 
 		public static Type GetNullableBaseType( this Type Type ) {

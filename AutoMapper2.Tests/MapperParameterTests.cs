@@ -49,7 +49,7 @@ namespace AutoMapper2Lib.Tests {
 				AutoMapper2.AssertConfigurationIsValid();
 				Assert.Fail( "Null configuration was fine" );
 			} catch ( ArgumentNullException ex ) {
-				Assert.AreEqual( "You've not created any maps", ex.Message );
+				Assert.AreEqual( "You haven't created any maps", ex.Message );
 				// It successfully failed
 			}
 		}

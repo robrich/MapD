@@ -128,6 +128,194 @@ namespace AutoMapper2Lib.Tests {
 
 		#endregion
 
+		#region Ignore_From_Class
+
+		[Test]
+		public void Ignore_From_Class() {
+
+			AutoMapper2.CreateMap<Ignore_From_Class_Type1, Ignore_From_Class_Type2>();
+
+			Ignore_From_Class_Type1 source = new Ignore_From_Class_Type1 {
+				Integer = 1234,
+				Char = 'c',
+				Double = 1234.234,
+				String = "String",
+				Guid = Guid.NewGuid()
+			};
+
+			Ignore_From_Class_Type2 destination = AutoMapper2.Map<Ignore_From_Class_Type1, Ignore_From_Class_Type2>( source );
+
+			source.AssertEqual( destination );
+
+		}
+
+		public class Ignore_From_Class_Type1 {
+			[IgnoreMap]
+			public int Integer { get; set; }
+			[IgnoreMap]
+			public string String { get; set; }
+			[IgnoreMap]
+			public double Double { get; set; }
+			[IgnoreMap]
+			public Guid Guid { get; set; }
+			[IgnoreMap]
+			public char Char { get; set; }
+
+			public void AssertEqual( Ignore_From_Class_Type2 Actual ) {
+				Assert.IsNotNull( Actual );
+				Assert.AreEqual( 0, Actual.Integer );
+				Assert.AreEqual( '\0', Actual.Char );
+				Assert.AreEqual( 0.0, Actual.Double );
+				Assert.AreEqual( null, Actual.String );
+				Assert.AreEqual( Guid.Empty, Actual.Guid );
+			}
+		}
+
+		public class Ignore_From_Class_Type2 {
+			public int Integer { get; set; }
+			public string String { get; set; }
+			public double Double { get; set; }
+			public Guid Guid { get; set; }
+			public char Char { get; set; }
+		}
+
+		#endregion
+
+		#region Ignore_From_Type
+
+		[Test]
+		public void Ignore_From_Type() {
+
+			AutoMapper2.CreateMap<Ignore_From_Type_Type1, Ignore_From_Type_Type2>();
+
+			Ignore_From_Type_Type1 source = new Ignore_From_Type_Type1 {
+				Property = new Ignore_From_Type_InnerType1 {
+					Integer = 1
+				}
+			};
+
+			Ignore_From_Type_Type2 destination = AutoMapper2.Map<Ignore_From_Type_Type1, Ignore_From_Type_Type2>( source );
+
+			Assert.IsNotNull( destination );
+			Assert.IsNull( destination.Property );
+
+		}
+
+		public class Ignore_From_Type_Type1 {
+			public Ignore_From_Type_InnerType1 Property { get; set; }
+		}
+
+		[IgnoreMap]
+		public class Ignore_From_Type_InnerType1 {
+			public int Integer { get; set; }
+
+		}
+
+		public class Ignore_From_Type_Type2 {
+			public Ignore_From_Type_InnerType2 Property { get; set; }
+		}
+
+		public class Ignore_From_Type_InnerType2 {
+			public int Integer { get; set; }
+
+		}
+
+		#endregion
+
+		#region Ignore_To_Class
+
+		[Test]
+		public void Ignore_To_Class() {
+
+			AutoMapper2.CreateMap<Ignore_To_Class_Type1, Ignore_To_Class_Type2>();
+
+			Ignore_To_Class_Type1 source = new Ignore_To_Class_Type1 {
+				Integer = 1234,
+				Char = 'c',
+				Double = 1234.234,
+				String = "String",
+				Guid = Guid.NewGuid()
+			};
+
+			Ignore_To_Class_Type2 destination = AutoMapper2.Map<Ignore_To_Class_Type1, Ignore_To_Class_Type2>( source );
+
+			source.AssertEqual( destination );
+
+		}
+
+		public class Ignore_To_Class_Type1 {
+			public int Integer { get; set; }
+			public string String { get; set; }
+			public double Double { get; set; }
+			public Guid Guid { get; set; }
+			public char Char { get; set; }
+
+			public void AssertEqual( Ignore_To_Class_Type2 Actual ) {
+				Assert.IsNotNull( Actual );
+				Assert.AreEqual( 0, Actual.Integer );
+				Assert.AreEqual( '\0', Actual.Char );
+				Assert.AreEqual( 0.0, Actual.Double );
+				Assert.AreEqual( null, Actual.String );
+				Assert.AreEqual( Guid.Empty, Actual.Guid );
+			}
+		}
+
+		public class Ignore_To_Class_Type2 {
+			[IgnoreMap]
+			public int Integer { get; set; }
+			[IgnoreMap]
+			public string String { get; set; }
+			[IgnoreMap]
+			public double Double { get; set; }
+			[IgnoreMap]
+			public Guid Guid { get; set; }
+			[IgnoreMap]
+			public char Char { get; set; }
+		}
+
+		#endregion
+
+		#region Ignore_To_Type
+
+		[Test]
+		public void Ignore_To_Type() {
+
+			AutoMapper2.CreateMap<Ignore_To_Type_Type1, Ignore_To_Type_Type2>();
+
+			Ignore_To_Type_Type1 source = new Ignore_To_Type_Type1 {
+				Property = new Ignore_To_Type_InnerType1 {
+					Integer = 1
+				}
+			};
+
+			Ignore_To_Type_Type2 destination = AutoMapper2.Map<Ignore_To_Type_Type1, Ignore_To_Type_Type2>( source );
+
+			Assert.IsNotNull( destination );
+			Assert.IsNull( destination.Property );
+
+		}
+
+		public class Ignore_To_Type_Type1 {
+			public Ignore_To_Type_InnerType1 Property { get; set; }
+		}
+
+		public class Ignore_To_Type_InnerType1 {
+			public int Integer { get; set; }
+
+		}
+
+		public class Ignore_To_Type_Type2 {
+			public Ignore_To_Type_InnerType2 Property { get; set; }
+		}
+
+		[IgnoreMap]
+		public class Ignore_To_Type_InnerType2 {
+			public int Integer { get; set; }
+
+		}
+
+		#endregion
+
 	}
 
 }

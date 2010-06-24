@@ -14,9 +14,9 @@ namespace AutoMapper2Lib {
 		// Pass in FromType and ToType in case Source or Destination are null or a derived type
 		// No need for direction since the logic would be the same either way
 		// If List<Non-class>
-		public static List<PropertyChanged> CopyListOfNonClass( Type FromType, Type ToType, IList Source, ref IList Destination ) {
+		public static List<PropertyChangedResults> CopyListOfNonClass( Type FromType, Type ToType, IList Source, ref IList Destination, MapDirection MapDirection ) {
 
-			List<PropertyChanged> changes = new List<PropertyChanged>();
+			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
 			Type toInnerType = ToType.GetGenericBaseType();
 			Type fromInnerType = FromType.GetGenericBaseType();
@@ -29,7 +29,11 @@ namespace AutoMapper2Lib {
 			}
 
 			if ( Source == null ) {
-				Destination = null;
+				if ( MapDirection == MapDirection.SourceToDestination ) {
+					Destination = null;
+				} else {
+					// Leave it be
+				}
 				return changes;
 			}
 			if ( Destination == null ) {
@@ -41,10 +45,15 @@ namespace AutoMapper2Lib {
 
 			foreach ( object from in Source ) {
 
-				object to = TypeConvert.Convert( from, toInnerType );
+				object to = null;
+				try {
+					to = TypeConvert.Convert( from, toInnerType );
+				} catch ( Exception ex ) {
+					throw new MapFailureException( null, Destination, from, MapFailureReason.ConvertTypeFailure, ex );
+				}
 				if ( !Destination.Contains( to ) ) {
 					changes.Add(
-						new PropertyChanged {
+						new PropertyChangedResults {
 							NewValue = TypeConvert.ConvertToString( to, toInnerType ),
 							Object = Destination,
 							OldValue = null,
@@ -64,9 +73,9 @@ namespace AutoMapper2Lib {
 
 		// Pass in FromType and ToType in case Source or Destination are null or a derived type
 		// If List<class>
-		public static List<PropertyChanged> CopyListOfClass( Type FromType, Type ToType, IList Source, ref IList Destination, MapDirection MapDirection ) {
+		public static List<PropertyChangedResults> CopyListOfClass( Type FromType, Type ToType, IList Source, ref IList Destination, MapDirection MapDirection ) {
 
-			List<PropertyChanged> changes = new List<PropertyChanged>();
+			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
 			Type toInnerType = ToType.GetGenericBaseType();
 			Type fromInnerType = FromType.GetGenericBaseType();
@@ -142,7 +151,7 @@ namespace AutoMapper2Lib {
 					// Convert to destination primary key type
 					object toKey = TypeConvert.Convert( fromKey, destinationPrimaryKeys[i].PropertyType );
 					if ( toKey == null ) {
-						throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.FromPrimaryKeyBlank, sourcePrimaryKey );
+						throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.FromPrimaryKeyConversionFailure, sourcePrimaryKey );
 					}
 					fromKeys.Add( toKey );
 				}
@@ -194,7 +203,7 @@ namespace AutoMapper2Lib {
 							}
 							return true;
 						} ).Any() ) {
-						throw new MapFailureException( destinationPrimaryKeys[0], to, null, MapFailureReason.DuplicateFromPrimaryKey, null );
+						throw new MapFailureException( destinationPrimaryKeys[0], to, null, MapFailureReason.DuplicateToPrimaryKey, null );
 					}
 
 					// It's unique, add it
@@ -203,7 +212,7 @@ namespace AutoMapper2Lib {
 				}
 			}
 
-			// TODO: what if there are extras in destination not in source?
+
 			foreach ( KeyValuePair<List<object>, object> fromEntry in sourceMap ) {
 
 				// Get source object and key
@@ -230,7 +239,7 @@ namespace AutoMapper2Lib {
 				if ( to == null ) {
 					to = Activator.CreateInstance( toInnerType );
 					changes.Add(
-						new PropertyChanged {
+						new PropertyChangedResults {
 							NewValue = TypeConvert.ConvertToString( to, toInnerType ),
 							Object = Destination,
 							OldValue = null,
@@ -242,7 +251,7 @@ namespace AutoMapper2Lib {
 				}
 
 				// Map the source object to the destination object
-				List<PropertyChanged> changeListStep = PropertyMapper.CopyProperties( fromInnerType, toInnerType, from, ref to, MapDirection );
+				List<PropertyChangedResults> changeListStep = PropertyMapper.CopyProperties( fromInnerType, toInnerType, from, ref to, MapDirection );
 				if ( changeListStep != null && changeListStep.Count > 0 ) {
 					changes.AddRange( changeListStep );
 				}
@@ -262,7 +271,7 @@ namespace AutoMapper2Lib {
 				// Remove them from destination
 				foreach ( KeyValuePair<List<object>, object> destEntry in destinationMap ) {
 					changes.Add(
-						new PropertyChanged {
+						new PropertyChangedResults {
 							NewValue = null,
 							Object = Destination,
 							OldValue = TypeConvert.ConvertToString( destEntry.Value, toInnerType ),
@@ -270,10 +279,9 @@ namespace AutoMapper2Lib {
 							PropertyName = "this",
 							PropertyType = fromInnerType
 						} );
+					Destination.Remove( destEntry.Value );
 				}
 			}
-
-			// TODO: Check for stuff in destinationPropertyValue not in sourcePropertyValue and remove them?
 
 			return changes;
 		}

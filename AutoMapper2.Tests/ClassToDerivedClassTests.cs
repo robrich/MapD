@@ -10,7 +10,7 @@ namespace AutoMapper2Lib.Tests {
 	#endregion
 
 	[TestFixture]
-	public class ClassToDerivedClassTests {
+	public class ClassToDerivedClassTests : BaseTest {
 
 		[Test]
 		public void ClassToDerivedClass1_NonNull() {

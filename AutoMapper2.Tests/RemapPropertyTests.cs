@@ -7,7 +7,7 @@ namespace AutoMapper2Lib.Tests {
 	#endregion
 
 	[TestFixture]
-	public class RemapPropertyTests {
+	public class RemapPropertyTests : BaseTest {
 
 		[Test]
 		public void ClassWithClassProperties_NotNull() {
@@ -88,7 +88,9 @@ namespace AutoMapper2Lib.Tests {
 
 			var changed = AutoMapper2.MapBack<RemapClass1, RemapClass2>( source, ref destination );
 
-			Assert.IsNull( destination );
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( "one", destination.Property1 );
+			Assert.AreEqual( "two", destination.Property2 );
 		}
 
 		[Test]

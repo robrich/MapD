@@ -28,7 +28,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type();
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -54,7 +54,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = new List<Guid> { source.Guid[0] }
 			};
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -80,7 +80,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = new List<Guid> { source.Guid[0], source.Guid[1] }
 			};
 
-			List<PropertyChanged> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 			Assert.IsNotNull( changeList );
@@ -101,9 +101,131 @@ namespace AutoMapper2Lib.Tests {
 				Integer = new List<int>(),
 				String = new List<string>()
 			};
-			List<PropertyChanged> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Test() {
+
+			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+
+			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
+				Integer = new List<int> { 1234, 4321 },
+				Char = new List<char> { 'c', 'd' },
+				Double = new List<double> { 1234.1234, 4321.4321 },
+				String = new List<string> { "String", "gnirtS" },
+				Guid = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() }
+			};
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type();
+
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+
+			source.AssertEqual( destination );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_PartiallyFilled_Test() {
+
+			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+
+			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
+				Integer = new List<int> { 1234, 4321 },
+				Char = new List<char> { 'c', 'd' },
+				Double = new List<double> { 1234.1234, 4321.4321 },
+				String = new List<string> { "String", "gnirtS" },
+				Guid = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() }
+			};
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type {
+				Integer = new List<int> { 1234 },
+				Char = new List<char> { 'c' },
+				Double = new List<double> { 1234.1234 },
+				String = new List<string> { "String" },
+				Guid = new List<Guid> { source.Guid[0] }
+			};
+
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+
+			source.AssertEqual( destination );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Equal_Test() {
+
+			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+
+			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
+				Integer = new List<int> { 1234, 4321 },
+				Char = new List<char> { 'c', 'd' },
+				Double = new List<double> { 1234.1234, 4321.4321 },
+				String = new List<string> { "String", "gnirtS" },
+				Guid = new List<Guid> { Guid.NewGuid(), Guid.NewGuid() }
+			};
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type {
+				Integer = new List<int> { 1234, 4321 },
+				Char = new List<char> { 'c', 'd' },
+				Double = new List<double> { 1234.1234, 4321.4321 },
+				String = new List<string> { "String", "gnirtS" },
+				Guid = new List<Guid> { source.Guid[0], source.Guid[1] }
+			};
+
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+
+			source.AssertEqual( destination );
+			Assert.IsNotNull( changeList );
+			Assert.AreEqual( 0, changeList.Count );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Properties() {
+
+			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+
+			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type();
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
+				Char = new List<char>(),
+				Double = new List<double>(),
+				Guid = new List<Guid>(),
+				Integer = new List<int>(),
+				String = new List<string>()
+			};
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.IsNotNull( destination.Char );
+			Assert.IsNotNull( destination.Double );
+			Assert.IsNotNull( destination.Guid );
+			Assert.IsNotNull( destination.Integer );
+			Assert.IsNotNull( destination.String );
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Objects() {
+
+			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+
+			Class_To_Same_Class_Type source = null;
+			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
+				Char = new List<char>(),
+				Double = new List<double>(),
+				Guid = new List<Guid>(),
+				Integer = new List<int>(),
+				String = new List<string>()
+			};
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.IsNotNull( destination.Char );
+			Assert.IsNotNull( destination.Double );
+			Assert.IsNotNull( destination.Guid );
+			Assert.IsNotNull( destination.Integer );
+			Assert.IsNotNull( destination.String );
 
 		}
 

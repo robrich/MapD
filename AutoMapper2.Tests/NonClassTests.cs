@@ -10,7 +10,7 @@ namespace AutoMapper2Lib.Tests {
 	#endregion
 
 	[TestFixture]
-	public class NonClassTests {
+	public class NonClassTests : BaseTest {
 
 		[Test]
 		public void Can_Map_Int_To_Double() {
@@ -32,6 +32,23 @@ namespace AutoMapper2Lib.Tests {
 			dest = AutoMapper2.MapType<double, string>( source );
 
 			Assert.AreEqual( destTemplate, dest );
+		}
+
+		[Test]
+		public void Cant_Map_ValueTypes_With_MapType() {
+
+			try {
+				ValueTypeClass dest = AutoMapper2.MapType<ValueTypeClass, ValueTypeClass>( new ValueTypeClass() );
+				Assert.Fail("Class types can't use MapType<>");
+			} catch (NotSupportedException ex) {
+				Assert.IsNotNull( ex );
+				Assert.IsNotNull( ex.Message );
+				Assert.IsTrue( ex.Message.Contains( "call Map()" ) );
+			}
+
+		}
+
+		public class ValueTypeClass {
 		}
 
 	}
