@@ -89,6 +89,12 @@ namespace AutoMapper2Lib {
 	}
 
 	/// <summary>
+	/// Map from the current type to the current type when you call AutoMapper2.CreateMaps()
+	/// </summary>
+	public class MapFromSelfAttribute : Attribute {
+	}
+
+	/// <summary>
 	/// Map a List&lt;&gt; from the passed type to a List&lt;&gt; of the current type when you call AutoMapper2.CreateMaps()
 	/// </summary>
 	public class MapListFromListOfAttribute : Attribute {
@@ -106,6 +112,12 @@ namespace AutoMapper2Lib {
 			get { return this.type; }
 		}
 
+	}
+
+	/// <summary>
+	/// Map a List&lt;&gt; from the current type to a List&lt;&gt; of the current type when you call AutoMapper2.CreateMaps()
+	/// </summary>
+	public class MapListFromListOfSelfAttribute : Attribute {
 	}
 
 }

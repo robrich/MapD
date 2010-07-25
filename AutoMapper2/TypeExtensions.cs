@@ -79,6 +79,10 @@ namespace AutoMapper2Lib {
 			if ( attr != null ) {
 				results = attr.Type;
 			}
+			MapFromSelfAttribute selfAttr = (MapFromSelfAttribute)Attribute.GetCustomAttribute( Type, typeof( MapFromSelfAttribute ) );
+			if ( selfAttr != null ) {
+				results = Type;
+			}
 			return results;
 		}
 
@@ -87,6 +91,10 @@ namespace AutoMapper2Lib {
 			MapListFromListOfAttribute attr = (MapListFromListOfAttribute)Attribute.GetCustomAttribute( Type, typeof(MapListFromListOfAttribute) );
 			if ( attr != null ) {
 				results = attr.Type;
+			}
+			MapListFromListOfSelfAttribute listOfSelfAttr = (MapListFromListOfSelfAttribute)Attribute.GetCustomAttribute( Type, typeof( MapListFromListOfSelfAttribute ) );
+			if ( listOfSelfAttr != null ) {
+				results = Type;
 			}
 			return results;
 		}

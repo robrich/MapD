@@ -77,7 +77,7 @@ namespace AutoMapper2Lib {
 			StringBuilder sb = new StringBuilder();
 
 			sb.Append( type.Name );
-			sb.Append( ": " );
+			sb.Append( ": {" ); // Cheer up, reflection isn't that bad.  :P
 			if ( properties == null || properties.Count == 0 ) {
 				sb.Append( obj );
 			} else {
@@ -136,6 +136,7 @@ namespace AutoMapper2Lib {
 				}
 			}
 
+			sb.Append( "}" );
 			return sb.ToString();
 		}
 
