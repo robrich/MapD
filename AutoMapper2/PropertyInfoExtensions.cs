@@ -46,17 +46,26 @@ namespace AutoMapper2Lib {
 			return results;
 		}
 
-		public static bool IsMapIgnored( this PropertyInfo Property ) {
-			bool results = false;
+		public static IgnoreDirection GetIgnoreStatus( this PropertyInfo Property ) {
+			IgnoreDirection results = IgnoreDirection.None;
 			IgnoreMapAttribute ignore = (IgnoreMapAttribute)Attribute.GetCustomAttribute( Property, typeof(IgnoreMapAttribute) );
 			if ( ignore != null ) {
-				results = true;
+				results |= ignore.IgnoreDirection;
 			}
-			if ( !results ) {
-				// Is the type ignored?
-				results = Property.PropertyType.IsMapIgnored();
-			}
+			// Is the type ignored?
+			results |= Property.PropertyType.GetIgnoreStatus();
 			return results;
+		}
+
+		public static PropertyIs GetIgnorePropertiesIf( this PropertyInfo Property ) {
+			PropertyIs propertyIs = PropertyIs.NotSet;
+			IgnorePropertiesIfAttribute ignoreIf = (IgnorePropertiesIfAttribute)Attribute.GetCustomAttribute( Property, typeof( IgnorePropertiesIfAttribute ) );
+			if ( ignoreIf != null ) {
+				propertyIs |= ignoreIf.PropertyIs;
+			}
+			// Is the type ignored?
+			propertyIs |= Property.PropertyType.GetIgnorePropertiesIf();
+			return propertyIs;
 		}
 
 		public static bool IsPrimaryKeyPropertyViaMapAttribute( this PropertyInfo Property ) {

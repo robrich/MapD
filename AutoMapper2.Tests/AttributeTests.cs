@@ -12,6 +12,18 @@ namespace AutoMapper2Lib.Tests {
 	[TestFixture]
 	public class AttributeTests : BaseTest {
 
+		[Test]
+		public void IgnoreMap_With_None_Fails() {
+			try {
+				IgnoreMapAttribute attr = new IgnoreMapAttribute( IgnoreDirection.None );
+				Assert.Fail( "IgnroeDirection.None isn't valid" );
+			} catch ( ArgumentOutOfRangeException ex ) {
+				Assert.IsNotNull( ex );
+				Assert.IsNotNull( ex.Message );
+				Assert.AreEqual( "IgnoreDirection", ex.ParamName );
+			}
+		}
+
 		// These silly tests are purely to get 100% code coverage on the affected classes
 
 		[Test]
@@ -35,7 +47,7 @@ namespace AutoMapper2Lib.Tests {
 			} catch ( ArgumentNullException ex ) {
 				Assert.IsNotNull( ex );
 				Assert.IsNotNull( ex.Message );
-				Assert.AreEqual( "MapProperty", ex.ParamName );
+				Assert.AreEqual( "MapPropertyName", ex.ParamName );
 			}
 		}
 

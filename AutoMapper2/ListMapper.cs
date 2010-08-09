@@ -29,7 +29,7 @@ namespace AutoMapper2Lib {
 			}
 
 			if ( Source == null ) {
-				if ( MapDirection == MapDirection.SourceToDestination ) {
+				if ( MapDirection != MapDirection.DestinationToSource ) {
 					Destination = null;
 				} else {
 					// Leave it be
@@ -108,7 +108,7 @@ namespace AutoMapper2Lib {
 			}
 
 			if ( Source == null ) {
-				if ( MapDirection == MapDirection.SourceToDestination ) {
+				if ( MapDirection != MapDirection.DestinationToSource ) {
 					Destination = null;
 				} else {
 					// Leave it be
@@ -119,7 +119,7 @@ namespace AutoMapper2Lib {
 				Destination = (IList)Activator.CreateInstance( ToType );
 			}
 			if ( Source.Count == 0 ) {
-				if ( MapDirection == MapDirection.SourceToDestination ) {
+				if ( MapDirection != MapDirection.DestinationToSource ) {
 					Destination = (IList)Activator.CreateInstance( ToType ); // Easier than emptying the list
 				} else {
 					// Leave it be

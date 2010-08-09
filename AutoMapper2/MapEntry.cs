@@ -24,6 +24,7 @@ namespace AutoMapper2Lib {
 	internal class MapEntryProperty {
 		public PropertyInfo Source { get; set; }
 		public PropertyInfo Destination { get; set; }
+		public IgnoreDirection IgnoreDirection { get; set; }
 	}
 
 	internal enum MapEntryType {

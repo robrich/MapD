@@ -62,13 +62,18 @@ namespace AutoMapper2Lib {
 			List<PropertyInfo> fromProperties = ReflectionHelper.GetProperties( fromType );
 			List<PropertyInfo> toProperties = ReflectionHelper.GetProperties( toType );
 
-			PropertyIs ignorePropertiesIf = toType.GetIgnorePropertiesIf() ?? fromType.GetIgnorePropertiesIf() ?? AutoMapper2.IgnorePropertiesIf;
+			PropertyIs ignorePropertiesIfObject = toType.GetIgnorePropertiesIf() 
+				| fromType.GetIgnorePropertiesIf() 
+				| AutoMapper2.IgnorePropertiesIf;
 
 			if ( toProperties != null && toProperties.Count != 0 ) {
 				foreach ( PropertyInfo toProperty in toProperties ) {
 
-					if ( toProperty.IsMapIgnored() ) {
-						continue; // Ignore it
+					IgnoreDirection ignoreDirection = IgnoreDirection.None;
+
+					ignoreDirection |= toProperty.GetIgnoreStatus();
+					if ( ignoreDirection == ( IgnoreDirection.Map | IgnoreDirection.MapBack ) ) {
+						continue; // Ignore it fully
 					}
 					if ( AutoMapper2.ExcludeLinqProperties && toProperty.IsLinqProperty() ) {
 						continue;
@@ -86,38 +91,46 @@ namespace AutoMapper2Lib {
 						throw new InvalidPropertyException( toProperty, InvalidPropertyReason.MissingProperty );
 					}
 
-					if ( fromProperty.IsMapIgnored() ) {
-						continue; // Ignore it
+					ignoreDirection |= fromProperty.GetIgnoreStatus();
+					if ( ignoreDirection == ( IgnoreDirection.Map | IgnoreDirection.MapBack ) ) {
+						continue; // Ignore it fully
 					}
 					if ( AutoMapper2.ExcludeLinqProperties && fromProperty.IsLinqProperty() ) {
 						continue;
 					}
 
-					// TODO: If property can't read/write, does this property "not exist"?
+					PropertyIs ignorePropertiesIf = toProperty.GetIgnorePropertiesIf() 
+						| fromProperty.GetIgnorePropertiesIf()
+						| ignorePropertiesIfObject;
+
 					if ( !fromProperty.CanRead ) {
 						if ( ( ignorePropertiesIf & PropertyIs.ReadOnly ) == PropertyIs.ReadOnly ) {
 							continue;
 						}
 						throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantRead );
 					}
-					if ( !fromProperty.CanWrite ) {
-						// If we're ever called to map back, fromProperty.CanWrite is also important
-						if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
-							continue;
-						}
-						throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantWrite );
-					}
-					if ( !toProperty.CanWrite ) {
-						if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
-							continue;
-						}
-						throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantWrite );
-					}
 					if ( !toProperty.CanRead ) {
 						if ( ( ignorePropertiesIf & PropertyIs.ReadOnly ) == PropertyIs.ReadOnly ) {
 							continue;
 						}
 						throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantRead );
+					}
+					if ( !fromProperty.CanWrite ) {
+						if ( ( ignoreDirection & IgnoreDirection.MapBack ) != IgnoreDirection.MapBack ) {
+							// If we're ever called to map back, fromProperty.CanWrite is also important
+							if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
+								continue;
+							}
+							throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantWrite );
+						}
+					}
+					if ( !toProperty.CanWrite ) {
+						if ( ( ignoreDirection & IgnoreDirection.Map ) != IgnoreDirection.Map ) {
+							if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
+								continue;
+							}
+							throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantWrite );
+						}
 					}
 					// If it's a list and it's initialized, we can get by without write, but that's a fragile assumption, so don't
 
@@ -155,7 +168,8 @@ namespace AutoMapper2Lib {
 					properties.Add(
 						new MapEntryProperty {
 							Source = fromProperty,
-							Destination = toProperty
+							Destination = toProperty,
+							IgnoreDirection = ignoreDirection
 						} );
 
 				}
@@ -219,7 +233,8 @@ namespace AutoMapper2Lib {
 					MapEntry.Properties.Add(
 						new MapEntryProperty {
 							Source = fromProperty,
-							Destination = toPrimaryKey
+							Destination = toPrimaryKey,
+							IgnoreDirection = IgnoreDirection.None
 						} );
 				}
 

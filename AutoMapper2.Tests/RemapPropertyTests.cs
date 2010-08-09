@@ -40,7 +40,7 @@ namespace AutoMapper2Lib.Tests {
 
 		[Test]
 		public void ClassWithClassProperties_NullDirectly() {
-			
+
 			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
@@ -56,7 +56,7 @@ namespace AutoMapper2Lib.Tests {
 
 		[Test]
 		public void ClassWithClassProperties_NullToNonNull() {
-			
+
 			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
@@ -76,7 +76,7 @@ namespace AutoMapper2Lib.Tests {
 
 		[Test]
 		public void ClassWithClassProperties_NullBack() {
-			
+
 			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = null;
@@ -95,7 +95,7 @@ namespace AutoMapper2Lib.Tests {
 
 		[Test]
 		public void ClassWithClassProperties_NullToNonNullBack() {
-			
+
 			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = new RemapClass2 {
@@ -133,7 +133,7 @@ namespace AutoMapper2Lib.Tests {
 			public string Property1 { get; set; }
 			public string Property2 { get; set; }
 
-			public void AssertEqual(RemapClass2 Actual) {
+			public void AssertEqual( RemapClass2 Actual ) {
 				Assert.IsNotNull( Actual );
 				Assert.AreEqual( this.Property1, Actual.Property1a );
 				Assert.AreEqual( this.Property2, Actual.Property2a );

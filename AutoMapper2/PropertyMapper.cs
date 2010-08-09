@@ -26,7 +26,7 @@ namespace AutoMapper2Lib {
 
 
 			if ( Source == null ) {
-				if ( MapDirection == MapDirection.SourceToDestination ) {
+				if ( MapDirection != MapDirection.DestinationToSource ) {
 					Destination = null;
 				} else {
 					// Leave it be
@@ -67,6 +67,20 @@ namespace AutoMapper2Lib {
 					destinationProperty = mapEntry.Source;
 				}
 
+				switch ( MapDirection ) {
+					case MapDirection.SourceToDestination:
+						if ( ( mapEntry.IgnoreDirection & IgnoreDirection.Map ) == IgnoreDirection.Map ) {
+							continue; // This property is ignored going this direction
+						}
+						break;
+					case MapDirection.DestinationToSource:
+						if ( ( mapEntry.IgnoreDirection & IgnoreDirection.MapBack ) == IgnoreDirection.MapBack ) {
+							continue; // This property is ignored going this direction
+						}
+						break;
+					default:
+						throw new ArgumentOutOfRangeException( "MapDirection" );
+				}
 
 				object sourcePropertyValue = null;
 				object destinationPropertyValueOriginal = null;

@@ -55,22 +55,22 @@ namespace AutoMapper2Lib {
 			return results;
 		}
 
-		public static bool IsMapIgnored( this Type Type ) {
-			bool results = false;
+		public static IgnoreDirection GetIgnoreStatus( this Type Type ) {
+			IgnoreDirection results = IgnoreDirection.None;
 			IgnoreMapAttribute ignore = (IgnoreMapAttribute)Attribute.GetCustomAttribute( Type, typeof( IgnoreMapAttribute ) );
 			if ( ignore != null ) {
-				results = true;
+				results |= ignore.IgnoreDirection;
 			}
 			return results;
 		}
 
-		public static PropertyIs? GetIgnorePropertiesIf( this Type Type ) {
-			PropertyIs? results = null;
+		public static PropertyIs GetIgnorePropertiesIf( this Type Type ) {
+			PropertyIs propertyIs = PropertyIs.NotSet;
 			IgnorePropertiesIfAttribute ignoreIf = (IgnorePropertiesIfAttribute)Attribute.GetCustomAttribute( Type, typeof( IgnorePropertiesIfAttribute ) );
 			if ( ignoreIf != null ) {
-				results = ignoreIf.PropertyIs;
+				propertyIs |= ignoreIf.PropertyIs;
 			}
-			return results;
+			return propertyIs;
 		}
 
 		public static Type GetMapFromType( this Type Type ) {
