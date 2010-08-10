@@ -30,7 +30,7 @@
 
 	<!-- Libs -->
 
-	<loadtasks assembly="External References/SlnToProjects.dll" />
+	<loadtasks assembly="ExternalReferences/SlnToProjects.dll" />
 
 	<target name="replacestring">
 		<!-- Pass in ${filename}, ${content-from}, ${content-to} (literal strings, not regexes -->
