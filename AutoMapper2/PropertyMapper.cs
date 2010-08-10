@@ -156,10 +156,10 @@ namespace AutoMapper2Lib {
 				if ( sourceProperty.PropertyType.IsClassType() || destinationProperty.PropertyType.IsClassType() ) {
 					#region Copy property as class type (recurse)
 					if ( !sourceProperty.PropertyType.IsClassType() ) {
-						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.NonClassTypeToClassType, PropertyInfo: destinationProperty );
+						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.NonClassTypeToClassType, destinationProperty );
 					}
 					if ( !destinationProperty.PropertyType.IsClassType() ) {
-						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, PropertyInfo: destinationProperty );
+						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, destinationProperty );
 					}
 					destinationPropertyValue = destinationPropertyValueOriginal;
 					List<PropertyChangedResults> changesStep = PropertyMapper.CopyProperties( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection ); // Recurse

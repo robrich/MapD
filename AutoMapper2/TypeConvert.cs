@@ -136,7 +136,11 @@ namespace AutoMapper2Lib {
 
 		#region ConvertToString
 		// pass in Type in case Value is null
-		public static string ConvertToString( object Value, string Type, bool ToStringIfSerializeFails = false ) {
+		public static string ConvertToString( object Value, string Type ) {
+			return ConvertToString( Value, Type, false );
+		}
+
+		public static string ConvertToString( object Value, string Type, bool ToStringIfSerializeFails ) {
 
 			if ( string.IsNullOrEmpty( Type ) ) {
 				throw new ArgumentNullException( "Type" );
@@ -146,7 +150,11 @@ namespace AutoMapper2Lib {
 			return ConvertToString( Value, derivedType, ToStringIfSerializeFails );
 		}
 
-		public static string ConvertToString( object Value, Type Type, bool ToStringIfSerializeFails = false ) {
+		public static string ConvertToString( object Value, Type Type ) {
+			return ConvertToString( Value, Type, false );
+		}
+
+		public static string ConvertToString( object Value, Type Type, bool ToStringIfSerializeFails ) {
 
 			if ( Type == null && Value != null ) {
 				Type = Value.GetType();

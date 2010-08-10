@@ -60,7 +60,7 @@ namespace AutoMapper2Lib.Tests {
 		}
 
 
-		[Test]
+		//[Test]
 		[Ignore("This test fails as the properties on EntityCollection<> and EntitySet<> are not all Get/Set")]
 		public void LinqToEntitiesPropertyIncluded() {
 

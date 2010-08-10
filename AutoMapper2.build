@@ -1,0 +1,306 @@
+<?xml version="1.0"?>
+<project name="Build" default="Build" basedir="." xmlns="http://nant.sf.net/release/0.85/nant.xsd">
+
+	<!-- Global varialbes and defaults -->
+	<property name="Solution" value="AutoMapper2.sln" />
+	<property name="Platform" value="Any CPU" />
+
+	<property name="Configuration" value="Release" overwrite="false" />
+	<property name="Debug" value="false" />
+	<property name="DebugConditional" value="" />
+	<property name="MSBuildXmlLoggerPath" value="C:\Program Files (x86)\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll" />
+
+
+	<target name="Build_Release" depends="Release,Clean,RevertVersion,Build" />
+
+
+	<!-- Select the configuration: Debug or Release -->
+	<target name="Debug">
+		<property name="Debug" value="true" />
+		<property name="Configuration" value="Debug" />
+		<property name="DebugConditional" value="DEBUG;TRACE;" />
+	</target>
+
+	<target name="Release">
+		<property name="Debug" value="false" />
+		<property name="Configuration" value="Release" />
+		<property name="DebugConditional" value="" />
+	</target>
+
+
+	<!-- Libs -->
+
+	<loadtasks assembly="External References/SlnToProjects.dll" />
+
+	<target name="replacestring">
+		<!-- Pass in ${filename}, ${content-from}, ${content-to} (literal strings, not regexes -->
+		<!-- echo message="In ${filename} changing from '${content-from}' to '${content-to}'" /-->
+
+		<loadfile file="${filename}" property="filecontents">
+			<filterchain>
+				<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+			</filterchain>
+		</loadfile>
+		<echo file="${filename}" message="${string::trim-end(filecontents)}"/>
+	</target>
+
+	<script language="CSHARP" prefix="regex" >
+		<code>
+			<![CDATA[
+			[Function("replace")]
+			public static string Replace( string Input, string Pattern, string Replace ) {
+				return Regex.Replace( Input, Pattern, Regex.Unescape(Replace), System.Text.RegularExpressions.RegexOptions.Multiline );
+			}
+			]]>
+		</code>
+	</script>
+
+
+	<!-- Interogate standard properties -->
+
+	<slntoprojects sln="${Solution}" delim=";" projectsproperty="ProjectList" type="all" />
+	<fileset id="AppConfigs" basedir=".">
+		<exclude name="**/-*-/**/*.config" />
+		<exclude name="build/**/*.config" />
+		<include name="**/App.config" />
+		<include name="**/app.config" />
+	</fileset>
+
+
+	<!-- Clean target will delete the current version -->
+	<target name="Clean"
+		description="remove generated files">
+		<delete failonerror="false">
+			<fileset basedir=".">
+				<include name="*.log" />
+				<include name="*results.xml" /><!-- NUnit results -->
+				<include name="*msbuild.xml" /><!-- MSBuild results -->
+				<include name="build/**" />
+				<include name="*.tmp" />
+			</fileset>
+		</delete>
+		<call target="CleanStep" />
+	</target>
+	<target name="CleanStep"
+		description="remove generated files in anticipation of another build">
+		<delete failonerror="false">
+			<fileset basedir=".">
+				<include name="**/bin/**" />
+				<include name="**/obj/**" />
+				<include name="**/Debug/**" />
+				<include name="**/Release/**" />
+				<include name="**/*.tmp_*" />
+			</fileset>
+		</delete>
+	</target>
+
+
+	<!-- Get the current SVN version -->
+	<target name="GetVersion" description="Get the version from svn">
+
+		<!-- A bunch of mayhem because exec can't output to a variable -->
+		<exec program="svn.exe" workingdir="${project::get-base-directory()}" output="version.log" failonerror="true">
+			<arg value="info" />
+			<arg value="--xml" />
+		</exec>
+		<xmlpeek file="version.log"
+				 property="svn-version"
+				 xpath="/info/entry/commit/@revision" />
+		<delete file="version.log" />
+
+		<echo>Current version from Subversion is ${svn-version}</echo>
+	</target>
+
+	<target name="SetVersion" depends="GetVersion,RevertVersion">
+
+		<!-- This isn't a regular expression, this is a hard-coded major/minor: -->
+		<property name="content-from" value=".*&quot;" />
+		<property name="content-to" value=".${svn-version}&quot;" />
+
+		<echo message="Changing from ${content-from} to ${content-to} in AssemblyInfo files" />
+
+		<foreach item="File" property="file">
+			<in>
+				<items refid="AssemblyInfos" />
+			</in>
+			<do>
+
+				<loadfile file="${file}" property="filecontents">
+					<filterchain>
+						<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+					</filterchain>
+				</loadfile>
+				<echo file="${file}" message="${string::trim-end(filecontents)}"/>
+			</do>
+		</foreach>
+
+	</target>
+
+	<target name="RevertVersion" descripiton="Put the files back so svn can change it next time">
+
+		<fileset id="AssemblyInfos" basedir=".">
+			<exclude name="**/-*-/**/AssemblyInfo.cs" />
+			<include name="**/AssemblyInfo.cs" />
+		</fileset>
+
+		<foreach item="File" property="file">
+			<in>
+				<items refid="AssemblyInfos" />
+			</in>
+			<do>
+				<exec program="svn.exe" failonerror="true">
+					<arg value="revert" />
+					<arg value="${file}" />
+				</exec>
+			</do>
+		</foreach>
+
+	</target>
+
+
+	<target name="Build"
+		depends="Clean,SetVersion,BuildAndTestSolutions" />
+
+
+	<target name="BuildAndTestSolutions">
+	
+		<property name="nant.settings.currentframework" value="net-3.5" />
+		<call target="RevertProjectVersion" />
+		
+		<call target="BuildAndTestSolution" />
+	
+		<property name="nant.settings.currentframework" value="net-4.0" />
+		<call target="SetProjectVersion" />
+		
+		<call target="BuildAndTestSolution" />
+
+		<call target="RevertProjectVersion" />
+	
+	</target>
+
+	<target name="RevertProjectVersion">
+
+		<fileset id="Csprojs" basedir=".">
+			<exclude name="**/-*-/**/*.csproj" />
+			<include name="**/*.csproj" />
+		</fileset>
+		<foreach item="File" property="file">
+			<in>
+				<items refid="Csprojs" />
+			</in>
+			<do>
+				<exec program="svn.exe" failonerror="true">
+					<arg value="revert" />
+					<arg value="${file}" />
+				</exec>
+			</do>
+		</foreach>
+
+	</target>
+	<target name="SetProjectVersion">
+
+		<!-- This isn't a regular expression, this is a hard-coded string -->
+		<property name="content-from" value="TargetFrameworkVersion&gt;v3.5&lt;/TargetFrameworkVersion" />
+		<property name="content-to" value="TargetFrameworkVersion&gt;v4.0&lt;/TargetFrameworkVersion" />
+
+		<echo message="Changing from ${content-from} to ${content-to} in csproj files" />
+
+		<fileset id="Csprojs" basedir=".">
+			<exclude name="**/-*-/**/*.csproj" />
+			<include name="**/*.csproj" />
+		</fileset>
+		<foreach item="File" property="file">
+			<in>
+				<items refid="Csprojs" />
+			</in>
+			<do>
+
+				<loadfile file="${file}" property="filecontents">
+					<filterchain>
+						<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+					</filterchain>
+				</loadfile>
+				<echo file="${file}" message="${string::trim-end(filecontents)}"/>
+			</do>
+		</foreach>
+
+	</target>
+
+	<target name="BuildAndTestSolution" description="Compiles 1 solution">
+
+		<call target="CleanStep" />
+		<call target="CompileSolution" />
+
+		<property name="PlatformNoSpace" value="${string::replace(Platform,' ','')}" />
+		<property name="FrameworkNoSpace" value="${string::replace(nant.settings.currentframework,'net-','net')}" />
+		
+		<call target="NUnit" />
+
+		<property name="Project" value="AutoMapper2/AutoMapper2.csproj" />
+		<call target="CopyProject" />
+
+		<zip zipfile="build/AutoMapper2-${FrameworkNoSpace}.zip">
+			<fileset basedir="build/${nant.settings.currentframework}-${PlatformNoSpace}/AutoMapper2">
+				<include name="**/**" />
+			</fileset>
+		</zip>
+
+
+	</target>
+
+	<target name="CompileSolution" description="Compiles 1 solution using msbuild">
+
+		<property name="MSBuildLogger" value="" />
+		<property name="MSBuildConsoleLogger" value="" />
+		<if test="${file::exists(MSBuildXmlLoggerPath)}">
+			<property name="MSBuildLogger" value="/l:ThoughtWorks.CruiseControl.MsBuild.XmlLogger,${MSBuildXmlLoggerPath};${Solution}-${nant.settings.currentframework}-${Platform}.msbuild.xml" />
+			<property name="MSBuildConsoleLogger" value="/noconsolelogger" />
+		</if>
+
+		<echo message="Building ${Solution} for ${Platform}: ${nant.settings.currentframework} ${Configuration} ${DebugConditional}"/>
+		<msbuild
+			project="${Solution}"
+			verbosity="Normal"
+			failonerror="true">
+			<property name="Configuration" value="${Configuration}" />
+			<property name="Platform" value="${Platform}" />
+			<property name="debug" value="${Debug}" />
+			<property name="trace" value="${Debug}" />
+			<arg value='/p:DefineConstants="${DebugConditional}"' />
+			<arg value='${MSBuildLogger}' />
+			<arg value='${MSBuildConsoleLogger}' />
+		</msbuild>
+	</target>
+
+	<target name="NUnit">
+		<exec program="nunit-console.exe" failonerror="true" workingdir="AutoMapper2.Tests/bin/${Configuration}/">
+			<arg value="/nodots" />
+			<!--arg value="/nologo" /-->
+			<arg value="/xml:${project::get-base-directory()}\NUnit-${FrameworkNoSpace}-results.xml" />
+			<arg value="/framework:${nant.settings.currentframework}" />
+			<arg value="AutoMapper2Lib.Tests.dll" />
+		</exec>
+	</target>
+
+ 	<target name="CopyProject" descrption="Copy a project">
+
+		<property name="ProjectPath" value="${path::get-directory-name(Project)}"/>
+		<property name="ProjectName" value="${path::get-file-name(ProjectPath)}"/>
+
+		<property name="Dest" value="build/${FrameworkNoSpace}"/>
+
+ 		<echo message="Copy ${ProjectName} from [${ProjectPath}] to [${Dest}]"/>
+
+		<!-- Copy app -->
+		<property name="PathShim" value="/bin/${Configuration}" />
+		<copy todir="${Dest}" includeemptydirs="true" overwrite="true">
+			<fileset basedir="${ProjectPath}${PathShim}">
+				<exclude name="**/*.pdb" if="${Debug != 'true'}" />
+				<include name="**/*.pdb" if="${Debug == 'true'}" />
+				<include name="**/**" />
+			</fileset>
+		</copy>
+
+	</target>
+
+</project>

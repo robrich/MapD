@@ -37,7 +37,11 @@ namespace AutoMapper2Lib {
 		private PropertyInfo propertyInfo;
 
 		// FRAGILE: ASSUME: both From and To aren't null
-		public InvalidTypeConversionException( Type From, Type To, InvalidPropertyReason InvalidPropertyReason, PropertyInfo PropertyInfo = null )
+		public InvalidTypeConversionException( Type From, Type To, InvalidPropertyReason InvalidPropertyReason )
+			: this( From, To, InvalidPropertyReason, null ) {
+		}
+
+		public InvalidTypeConversionException( Type From, Type To, InvalidPropertyReason InvalidPropertyReason, PropertyInfo PropertyInfo )
 			: base( string.Format( "Can't convert{0} from {1} to {2} because {3}",
 			( PropertyInfo != null ? ( " " + PropertyInfo.Name ) : "" ), From.FullName, To.FullName, InvalidPropertyReason ) ) {
 			this.from = From;

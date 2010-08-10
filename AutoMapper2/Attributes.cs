@@ -23,7 +23,10 @@ namespace AutoMapper2Lib {
 
 		private IgnoreDirection ignoreDirection;
 
-		public IgnoreMapAttribute( IgnoreDirection IgnoreDirection = IgnoreDirection.Map | IgnoreDirection.MapBack ) {
+		public IgnoreMapAttribute() : this( IgnoreDirection.Map | IgnoreDirection.MapBack ) {
+		}
+
+		public IgnoreMapAttribute( IgnoreDirection IgnoreDirection ) {
 			if ( IgnoreDirection == IgnoreDirection.None ) {
 				throw new ArgumentOutOfRangeException( "IgnoreDirection" );
 			}
