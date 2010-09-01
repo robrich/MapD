@@ -8,7 +8,7 @@
 	<property name="Configuration" value="Release" overwrite="false" />
 	<property name="Debug" value="false" />
 	<property name="DebugConditional" value="" />
-	<property name="MSBuildXmlLoggerPath" value="C:\Program Files (x86)\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll" />
+	<property name="MSBuildXmlLoggerPath" value="C:\ci\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll" />
 
 
 	<target name="Build_Release" depends="Release,Clean,RevertVersion,Build" />
