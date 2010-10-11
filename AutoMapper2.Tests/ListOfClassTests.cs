@@ -65,7 +65,85 @@ namespace AutoMapper2Lib.Tests {
 		}
 
 		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Back_Test() {
+
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			List<InnerClassType> source = new List<InnerClassType>() {
+				new InnerClassType {
+					Key = 1,
+					Double = 2.0,
+					Integer = 3,
+					String = "Four",
+				},
+				new InnerClassType {
+					Key = 2,
+					Double = 3.0,
+					Integer = 4,
+					String = "Five",
+				},
+				new InnerClassType {
+					Key = 3,
+					Double = 4.0,
+					Integer = 5,
+					String = "Six",
+				}
+			};
+			List<InnerClassType> destination = new List<InnerClassType>();
+
+			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				int index = 0;
+				foreach ( InnerClassType actualContent in source ) {
+					InnerClassType thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+					index++;
+				}
+			}
+
+		}
+
+		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Properties() {
+
+			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+
+			List<InnerClassType> source = new List<InnerClassType>();
+			List<InnerClassType> destination = new List<InnerClassType>();
+			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				foreach ( InnerClassType actualContent in source ) {
+					InnerClassType thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+				}
+			}
+
+		}
+
+		[Test]
+		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Back_Properties() {
 
 			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
@@ -368,6 +446,74 @@ namespace AutoMapper2Lib.Tests {
 		}
 
 		[Test]
+		public void Class_To_DifferentProperties_DestKey_Back_Class() {
+
+			AutoMapper2.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
+
+			List<InnerClassType1a> source = new List<InnerClassType1a>() {
+					new InnerClassType1a {
+						Key = 1,
+						Double = 2.0,
+						Integer = 3,
+						String = "4",
+					},
+					new InnerClassType1a {
+						Key = 2,
+						Double = 3.0,
+						Integer = 4,
+						String = "5",
+					},
+					new InnerClassType1a {
+						Key = 3,
+						Double = 4.0,
+						Integer = 5,
+						String = "6",
+					}
+			};
+			List<InnerClassType2a> destinationTemplate = new List<InnerClassType2a>() {
+					new InnerClassType2a {
+						Key = 1,
+						Double = "2",
+						Integer = 3.0,
+						String = 4,
+					},
+					new InnerClassType2a {
+						Key = 2,
+						Double = "3",
+						Integer = 4.0,
+						String = 5,
+					},
+					new InnerClassType2a {
+						Key = 3,
+						Double = "4",
+						Integer = 5.0,
+						String = 6,
+					}
+			};
+
+			List<InnerClassType2a> destination = new List<InnerClassType2a>();
+			var results = AutoMapper2.MapBack<List<InnerClassType2a>, List<InnerClassType1a>>( source, ref destination );
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				foreach ( InnerClassType2a actualContent in destinationTemplate ) {
+					InnerClassType2a thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+				}
+			}
+
+		}
+
+		[Test]
 		public void Class_To_DifferentProperties_DestKey_Class_With_Null_Properties() {
 
 			AutoMapper2.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
@@ -377,6 +523,37 @@ namespace AutoMapper2Lib.Tests {
 			List<InnerClassType2a> destinationTemplate = new List<InnerClassType2a>();
 
 			List<InnerClassType2a> destination = AutoMapper2.Map<List<InnerClassType1a>, List<InnerClassType2a>>( source );
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				foreach ( InnerClassType2a actualContent in destinationTemplate ) {
+					InnerClassType2a thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+				}
+			}
+
+		}
+
+		[Test]
+		public void Class_To_DifferentProperties_DestKey_Class_With_Null_Properties_Back() {
+
+			AutoMapper2.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
+
+			List<InnerClassType1a> source = new List<InnerClassType1a>();
+
+			List<InnerClassType2a> destinationTemplate = new List<InnerClassType2a>();
+
+			List<InnerClassType2a> destination = new List<InnerClassType2a>();
+			var results = AutoMapper2.MapBack<List<InnerClassType2a>, List<InnerClassType1a>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -484,6 +661,75 @@ namespace AutoMapper2Lib.Tests {
 		}
 
 		[Test]
+		public void Class_To_DifferentProperties_SourceKey_Class_Back() {
+
+			AutoMapper2.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
+
+			List<InnerClassType1b> source = new List<InnerClassType1b>() {
+					new InnerClassType1b {
+						Key = 1,
+						Double = 2.0,
+						Integer = 3,
+						String = "4",
+					},
+					new InnerClassType1b {
+						Key = 2,
+						Double = 3.0,
+						Integer = 4,
+						String = "5",
+					},
+					new InnerClassType1b {
+						Key = 3,
+						Double = 4.0,
+						Integer = 5,
+						String = "6",
+					}
+			};
+			List<InnerClassType2b> destinationTemplate = new List<InnerClassType2b>() {
+					new InnerClassType2b {
+						Key = 1,
+						Double = "2",
+						Integer = 3.0,
+						String = 4,
+					},
+					new InnerClassType2b {
+						Key = 2,
+						Double = "3",
+						Integer = 4.0,
+						String = 5,
+					},
+					new InnerClassType2b {
+						Key = 3,
+						Double = "4",
+						Integer = 5.0,
+						String = 6,
+					}
+			};
+
+			List<InnerClassType2b> destination = new List<InnerClassType2b>();
+			var results = AutoMapper2.MapBack<List<InnerClassType2b>, List<InnerClassType1b>>( source, ref destination );
+
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				foreach ( InnerClassType2b actualContent in destinationTemplate ) {
+					InnerClassType2b thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+				}
+			}
+
+		}
+
+		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_With_Null_Properties() {
 
 			AutoMapper2.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
@@ -493,6 +739,37 @@ namespace AutoMapper2Lib.Tests {
 			List<InnerClassType2b> destinationTemplate = new List<InnerClassType2b>();
 
 			List<InnerClassType2b> destination = AutoMapper2.Map<List<InnerClassType1b>, List<InnerClassType2b>>( source );
+
+			Assert.IsNotNull( destination );
+			Assert.AreEqual( source.Count, destination.Count );
+			if ( source.Count > 0 ) {
+				foreach ( InnerClassType2b actualContent in destinationTemplate ) {
+					InnerClassType2b thisContent = (
+						from t in destination
+						where t.Key == actualContent.Key
+						select t
+						).FirstOrDefault();
+					Assert.IsNotNull( thisContent );
+					Assert.AreEqual( thisContent.Key, actualContent.Key );
+					Assert.AreEqual( thisContent.Integer, actualContent.Integer );
+					Assert.AreEqual( thisContent.Double, actualContent.Double );
+					Assert.AreEqual( thisContent.String, actualContent.String );
+				}
+			}
+
+		}
+
+		[Test]
+		public void Class_To_DifferentProperties_SourceKey_Class_With_Null_Properties_Back() {
+
+			AutoMapper2.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
+
+			List<InnerClassType1b> source = new List<InnerClassType1b>();
+
+			List<InnerClassType2b> destinationTemplate = new List<InnerClassType2b>();
+
+			List<InnerClassType2b> destination = new List<InnerClassType2b>();
+			var results = AutoMapper2.MapBack<List<InnerClassType2b>, List<InnerClassType1b>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );

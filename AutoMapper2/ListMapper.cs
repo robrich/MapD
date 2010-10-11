@@ -92,14 +92,32 @@ namespace AutoMapper2Lib {
 				throw new MissingMapException( FromType, ToType );
 			}
 
-			List<PropertyInfo> sourcePrimaryKeys = (
-				from p in map.Properties
-				select p.Source
-				).ToList();
-			List<PropertyInfo> destinationPrimaryKeys = (
-				from p in map.Properties
-				select p.Destination
-				).ToList();
+			List<PropertyInfo> sourcePrimaryKeys = null;
+			List<PropertyInfo> destinationPrimaryKeys = null;
+			switch ( MapDirection ) {
+				case MapDirection.SourceToDestination:
+					sourcePrimaryKeys = (
+						from p in map.Properties
+						select p.Source
+						).ToList();
+					destinationPrimaryKeys = (
+						from p in map.Properties
+						select p.Destination
+						).ToList();
+					break;
+				case MapDirection.DestinationToSource:
+					destinationPrimaryKeys = (
+						from p in map.Properties
+						select p.Source
+						).ToList();
+					sourcePrimaryKeys = (
+						from p in map.Properties
+						select p.Destination
+						).ToList();
+					break;
+				default:
+					throw new ArgumentOutOfRangeException( "MapDirection" );
+			}
 			if ( sourcePrimaryKeys == null || sourcePrimaryKeys.Count == 0 ) {
 				throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.MissingFromPrimaryKey );
 			}
