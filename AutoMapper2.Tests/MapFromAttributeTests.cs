@@ -6,6 +6,7 @@ namespace AutoMapper2Lib.Tests {
 	using System.Linq;
 	using System.Reflection;
 	using System.Text;
+	using AutoMapper2Lib.TestsResource;
 	using NUnit.Framework;
 
 	#endregion
@@ -13,13 +14,46 @@ namespace AutoMapper2Lib.Tests {
 	[TestFixture]
 	public class MapFromAttributeTests : BaseTest {
 
+		// FRAGILE: As new tests are added that do this, we need to adjust these numbers
+		private const int MappedClassesCount = 6;
+		private const int MappedResourceClassesCount = 2;
+		
 		[Test]
 		public void MapFromAttribute_Works() {
 
 			AutoMapper2.CreateMaps();
 
-			AutoMapper2.AssertMapCount( 6 ); // FRAGILE: As new tests are added that do this, we need to adjust this number
-			
+			AutoMapper2.AssertMapCount( MappedClassesCount );
+
+		}
+
+		[Test]
+		public void MapFromAttribute_AllAssemblies_Works() {
+
+			// TODO: Why do I have to use each assembly before this works?
+			MapFromAttributeResourceType t = new MapFromAttributeResourceType();
+
+			AutoMapper2.CreateAllMaps();
+
+			AutoMapper2.AssertMapCount( MappedClassesCount + MappedResourceClassesCount );
+
+		}
+
+		[Test]
+		public void Resources_Can_Map_SameType_Via_Attribute() {
+
+			MapFromAttributeResourceType source = new MapFromAttributeResourceType {
+				Property1 = 1,
+				Property2 = 2,
+				Property3 = 3
+			};
+
+			// TODO: Why do I have to use each assembly before this works?
+			AutoMapper2.CreateAllMaps();
+
+			MapFromAttributeResourceType destination = AutoMapper2.Map<MapFromAttributeResourceType, MapFromAttributeResourceType>( source );
+			source.AssertEqual( destination );
+
 		}
 
 		[Test]

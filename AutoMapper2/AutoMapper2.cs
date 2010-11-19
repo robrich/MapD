@@ -79,6 +79,18 @@ namespace AutoMapper2Lib {
 		}
 
 		/// <summary>
+		/// Reflect on all loaded assemblies to get the maps from <see cref="MapFromAttribute"/>-annotated classes and <see cref="MapListFromListOfAttribute"/>-annotated classes
+		/// </summary>
+		public static void CreateAllMaps() {
+			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+			if ( assemblies != null && assemblies.Length > 0 ) {
+				foreach ( Assembly assembly in assemblies ) {
+					CreateMaps( assembly );
+				}
+			}
+		}
+
+		/// <summary>
 		/// Reflect on the specified assembly to get the maps from <see cref="MapFromAttribute"/>-annotated classes and <see cref="MapListFromListOfAttribute"/>-annotated classes
 		/// </summary>
 		/// <param name="Assembly"></param>
