@@ -6,7 +6,7 @@ namespace AutoMapper2Lib {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-	using System.Text;
+
 	#endregion
 
 	internal class MapEntryManager {
@@ -174,8 +174,8 @@ namespace AutoMapper2Lib {
 				FillObjectWithDefaults( m.From, m.To, source, destination );
 
 				// Can't use AutoMapper2.Map<>() because source and destination aren't strongly typed
-				AutoMapper2.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.SourceToDestination ); // If this errors, it should tell you why
-				AutoMapper2.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.DestinationToSource ); // If this errors, it should tell you why
+				AutoMapper2.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.SourceToDestination, ExecutionType.Copy ); // If this errors, it should tell you why
+				AutoMapper2.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.DestinationToSource, ExecutionType.Copy ); // If this errors, it should tell you why
 			}
 		}
 

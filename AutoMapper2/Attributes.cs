@@ -2,10 +2,7 @@ namespace AutoMapper2Lib {
 
 	#region using
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Linq.Expressions;
-	using System.Text;
+
 	#endregion
 
 	/// <summary>
@@ -98,6 +95,11 @@ namespace AutoMapper2Lib {
 	internal enum MapDirection {
 		SourceToDestination,
 		DestinationToSource
+	}
+
+	internal enum ExecutionType {
+		Copy,
+		Compare
 	}
 
 	/// <summary>

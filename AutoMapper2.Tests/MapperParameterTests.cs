@@ -2,9 +2,6 @@ namespace AutoMapper2Lib.Tests {
 
 	#region using
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
 	using AutoMapper2Lib;
 	using NUnit.Framework;
 
@@ -26,8 +23,8 @@ namespace AutoMapper2Lib.Tests {
 			AutoMapper2.CreateMap<object, object>();
 			object source = null;
 			object dest = null;
-			object result = AutoMapper2.MapBack<object, object>( source, ref dest );
-			Assert.IsNull( result );
+			AutoMapper2.MapBack<object, object>( source, ref dest );
+			Assert.IsNull( dest );
 		}
 
 		[Test]

@@ -5,17 +5,13 @@ namespace AutoMapper2Lib {
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
-	using System.Data.Linq.Mapping;
-	using System.Data.Objects;
-	using System.Data.Objects.DataClasses;
-	using System.Data.EntityClient;
-	using System.Linq;
+
 	#endregion
 
 	internal static class PropertyMapper {
 		
 		// Pass in FromType and ToType in case Source or Destination are null or a derived type
-		public static List<PropertyChangedResults> CopyProperties( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
+		public static List<PropertyChangedResults> CopyProperties( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection, ExecutionType ExecutionType ) {
 
 			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
@@ -124,26 +120,44 @@ namespace AutoMapper2Lib {
 					// the below won't change what destination points to out from under Destination because Destination isn't null
 					// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
 					if ( sourceProperty.PropertyType.GetGenericBaseType().IsClassType() ) {
-						changesStep = ListMapper.CopyListOfClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection );
+						changesStep = ListMapper.CopyListOfClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection, ExecutionType );
 					} else {
-						changesStep = ListMapper.CopyListOfNonClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection );
+						changesStep = ListMapper.CopyListOfNonClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection, ExecutionType );
 					}
 					
 					// if references aren't to the same object, note that
 					if ( destinationPropertyValueOriginal != destinationPropertyValueList ) {
 						changes.Add(
 							new PropertyChangedResults {
-								ObjectType = ToType,
-								Object = Destination,
-								PropertyType = destinationProperty.PropertyType,
-								PropertyName = destinationProperty.Name,
-								OldValue = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType ),
-								NewValue = TypeConvert.ConvertToString( destinationPropertyValueList, destinationProperty.PropertyType )
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = sourceProperty.Name,
+									PropertyType =  sourceProperty.PropertyType,
+									Value = TypeConvert.ConvertToString( sourcePropertyValue, sourceProperty.PropertyType ) // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = destinationProperty.Name,
+									PropertyType = destinationProperty.PropertyType,
+									Value = TypeConvert.ConvertToString( destinationPropertyValueOriginal, sourceProperty.PropertyType ) // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+								}
 							} );
-						try {
-							destinationProperty.SetValue( Destination, destinationPropertyValueList, null );
-						} catch ( Exception ex ) {
-							throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+
+						switch ( ExecutionType ) {
+							case ExecutionType.Copy:
+								try {
+									destinationProperty.SetValue( Destination, destinationPropertyValueList, null );
+								} catch ( Exception ex ) {
+									throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+								}
+								break;
+							case ExecutionType.Compare:
+								// We've already done it
+								break;
+							default:
+								throw new ArgumentOutOfRangeException( "ExecutionType" );
 						}
 					}
 					if ( changesStep != null && changesStep.Count > 0 ) {
@@ -162,22 +176,40 @@ namespace AutoMapper2Lib {
 						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, destinationProperty );
 					}
 					destinationPropertyValue = destinationPropertyValueOriginal;
-					List<PropertyChangedResults> changesStep = PropertyMapper.CopyProperties( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection ); // Recurse
+					List<PropertyChangedResults> changesStep = PropertyMapper.CopyProperties( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection, ExecutionType ); // Recurse
 					// if references aren't to the same object, note that
 					if ( destinationPropertyValue != destinationPropertyValueOriginal ) {
 						changes.Add(
 							new PropertyChangedResults {
-								ObjectType = ToType,
-								Object = Destination,
-								PropertyType = destinationProperty.PropertyType,
-								PropertyName = destinationProperty.Name,
-								OldValue = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType, true ),
-								NewValue = TypeConvert.ConvertToString( destinationPropertyValue, destinationProperty.PropertyType, true )
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = sourceProperty.Name,
+									PropertyType =  sourceProperty.PropertyType,
+									Value = sourcePropertyValue.ObjectToString() // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = destinationProperty.Name,
+									PropertyType = destinationProperty.PropertyType,
+									Value = destinationPropertyValueOriginal.ObjectToString() // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+								}
 							} );
-						try {
-							destinationProperty.SetValue( Destination, destinationPropertyValue, null );
-						} catch ( Exception ex ) {
-							throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+
+						switch ( ExecutionType ) {
+							case ExecutionType.Copy:
+								try {
+									destinationProperty.SetValue( Destination, destinationPropertyValue, null );
+								} catch ( Exception ex ) {
+									throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+								}
+								break;
+							case ExecutionType.Compare:
+								// We've already done it
+								break;
+							default:
+								throw new ArgumentOutOfRangeException( "ExecutionType" );
 						}
 					}
 					if ( changesStep != null && changesStep.Count > 0 ) {
@@ -219,21 +251,39 @@ namespace AutoMapper2Lib {
 					}
 				}
 
-				if ( destinationPropertyValue != destinationPropertyValueOriginal ) {
+				if ( !object.Equals( destinationPropertyValue, destinationPropertyValueOriginal ) ) {
 					// It changed
 					changes.Add(
 						new PropertyChangedResults {
-							ObjectType = ToType,
-							Object = Destination,
-							PropertyType = destinationProperty.PropertyType,
-							PropertyName = destinationProperty.Name,
-							OldValue = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType ),
-							NewValue = TypeConvert.ConvertToString( destinationPropertyValue, destinationProperty.PropertyType )
+							Source = new PropertyChangedResult {
+								Object = Source,
+								ObjectType = FromType,
+								PropertyName = sourceProperty.Name,
+								PropertyType =  sourceProperty.PropertyType,
+								Value = TypeConvert.ConvertToString( sourcePropertyValue, sourceProperty.PropertyType )
+							},
+							Destination = new PropertyChangedResult {
+								Object = Destination,
+								ObjectType = ToType,
+								PropertyName = destinationProperty.Name,
+								PropertyType = destinationProperty.PropertyType,
+								Value = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType )
+							}
 						} );
-					try {
-						destinationProperty.SetValue( Destination, destinationPropertyValue, null );
-					} catch ( Exception ex ) {
-						throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+
+					switch ( ExecutionType ) {
+						case ExecutionType.Copy:
+							try {
+								destinationProperty.SetValue( Destination, destinationPropertyValue, null );
+							} catch ( Exception ex ) {
+								throw new MapFailureException( destinationProperty, Destination, destinationPropertyValue, MapFailureReason.SetDestinationFailure, ex );
+							}
+							break;
+						case ExecutionType.Compare:
+							// We've already done it
+							break;
+						default:
+							throw new ArgumentOutOfRangeException( "ExecutionType" );
 					}
 				}
 				#endregion

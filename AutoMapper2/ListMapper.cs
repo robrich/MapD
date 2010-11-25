@@ -6,7 +6,7 @@ namespace AutoMapper2Lib {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-	using System.Text;
+
 	#endregion
 
 	internal class ListMapper {
@@ -14,7 +14,7 @@ namespace AutoMapper2Lib {
 		// Pass in FromType and ToType in case Source or Destination are null or a derived type
 		// No need for direction since the logic would be the same either way
 		// If List<Non-class>
-		public static List<PropertyChangedResults> CopyListOfNonClass( Type FromType, Type ToType, IList Source, ref IList Destination, MapDirection MapDirection ) {
+		public static List<PropertyChangedResults> CopyListOfNonClass( Type FromType, Type ToType, IList Source, ref IList Destination, MapDirection MapDirection, ExecutionType ExecutionType ) {
 
 			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
@@ -28,19 +28,63 @@ namespace AutoMapper2Lib {
 				throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.ListClassTypeToListNonClassType );
 			}
 
-			if ( Source == null ) {
-				if ( MapDirection != MapDirection.DestinationToSource ) {
-					Destination = null;
-				} else {
-					// Leave it be
-				}
-				return changes;
-			}
-			if ( Destination == null ) {
-				Destination = (IList)Activator.CreateInstance( ToType );
-			}
-			if ( Source.Count == 0 ) {
-				return changes;
+			switch ( ExecutionType ) {
+				case ExecutionType.Copy:
+					if ( Source == null ) {
+						changes.Add(
+							new PropertyChangedResults {
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = "this",
+									PropertyType = FromType,
+									Value = Source.ObjectToString()
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = "this",
+									PropertyType = ToType,
+									Value = Destination.ObjectToString()
+								}
+							} );
+						if ( MapDirection != MapDirection.DestinationToSource ) {
+							Destination = null;
+						} else {
+							// Leave it be
+						}
+						return changes;
+					}
+					if ( Destination == null ) {
+						Destination = (IList)Activator.CreateInstance( ToType );
+					}
+					break;
+
+				case ExecutionType.Compare:
+					if ( Source == null || Destination == null ) {
+						changes.Add(
+							new PropertyChangedResults {
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = "this",
+									PropertyType = FromType,
+									Value = Source.ObjectToString()
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = "this",
+									PropertyType = ToType,
+									Value = Destination.ObjectToString()
+								}
+							} );
+						return changes;
+					}
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException( "ExecutionType" );
 			}
 
 			foreach ( object from in Source ) {
@@ -54,26 +98,51 @@ namespace AutoMapper2Lib {
 				if ( !Destination.Contains( to ) ) {
 					changes.Add(
 						new PropertyChangedResults {
-							NewValue = TypeConvert.ConvertToString( to, toInnerType ),
-							Object = Destination,
-							OldValue = null,
-							ObjectType = toInnerType,
-							PropertyName = "this",
-							PropertyType = fromInnerType
+							Source = new PropertyChangedResult {
+								Object = from,
+								ObjectType = fromInnerType,
+								PropertyName = "index",
+								PropertyType = fromInnerType,
+								Value = from.ObjectToString()
+							},
+							Destination = new PropertyChangedResult {
+								Object = to,
+								ObjectType = toInnerType,
+								PropertyName = "index",
+								PropertyType = toInnerType,
+								Value = to.ObjectToString()
+							}
 						} );
-					Destination.Add( to );
+
+					switch ( ExecutionType ) {
+						case ExecutionType.Copy:
+							Destination.Add( to );
+							break;
+						case ExecutionType.Compare:
+							// We've already done so
+							break;
+						default:
+							throw new ArgumentOutOfRangeException( "ExecutionType" );
+					}
 				}
 
 			}
 
-			// TODO: Check for stuff in destinationPropertyValue not in sourcePropertyValue and remove them?
+			if ( MapDirection == MapDirection.SourceToDestination /* TODO: && destinationMap.Count > 0 */ ) {
+				// These existed in dest but don't exist in source
+				// Remove them from destination
+				
+				// TODO: Check for stuff in destinationPropertyValue not in sourcePropertyValue and remove them
+				// TODO: Note that they exist in dest but not in source
+			}
+
 
 			return changes;
 		}
 
 		// Pass in FromType and ToType in case Source or Destination are null or a derived type
 		// If List<class>
-		public static List<PropertyChangedResults> CopyListOfClass( Type FromType, Type ToType, IList Source, ref IList Destination, MapDirection MapDirection ) {
+		public static List<PropertyChangedResults> CopyListOfClass( Type FromType, Type ToType, IList Source, ref IList Destination, MapDirection MapDirection, ExecutionType ExecutionType ) {
 
 			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
@@ -125,26 +194,72 @@ namespace AutoMapper2Lib {
 				throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.MissingToPrimaryKey );
 			}
 
-			if ( Source == null ) {
-				if ( MapDirection != MapDirection.DestinationToSource ) {
-					Destination = null;
-				} else {
-					// Leave it be
-				}
-				return changes;
-			}
-			if ( Destination == null ) {
-				Destination = (IList)Activator.CreateInstance( ToType );
-			}
-			if ( Source.Count == 0 ) {
-				if ( MapDirection != MapDirection.DestinationToSource ) {
-					Destination = (IList)Activator.CreateInstance( ToType ); // Easier than emptying the list
-				} else {
-					// Leave it be
-				}
-				return changes;
-			}
+			switch ( ExecutionType ) {
+				case ExecutionType.Copy:
+					if ( Source == null ) {
+						changes.Add(
+							new PropertyChangedResults {
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = "this",
+									PropertyType = FromType,
+									Value = Source.ObjectToString()
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = "this",
+									PropertyType = ToType,
+									Value = Destination.ObjectToString()
+								}
+							} );
+						if ( MapDirection != MapDirection.DestinationToSource ) {
+							Destination = null;
+						} else {
+							// Leave it be
+						}
+						return changes;
+					}
+					if ( Destination == null ) {
+						Destination = (IList)Activator.CreateInstance( ToType );
+					}
+					if ( Source.Count == 0 ) {
+						if ( MapDirection != MapDirection.DestinationToSource ) {
+							Destination = (IList)Activator.CreateInstance( ToType ); // Easier than emptying the list
+						} else {
+							// Leave it be
+						}
+						return changes;
+					}
+					break;
 
+				case ExecutionType.Compare:
+					if ( Source == null || Destination == null ) {
+						changes.Add(
+							new PropertyChangedResults {
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = "this",
+									PropertyType = FromType,
+									Value = Source.ObjectToString()
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = "this",
+									PropertyType = ToType,
+									Value = Destination.ObjectToString()
+								}
+							} );
+						return changes;
+					}
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException( "ExecutionType" );
+			}
 
 			// Map source and destination objects to avoid reflecting against them too many times
 			Dictionary<List<object>, object> sourceMap = new Dictionary<List<object>, object>();
@@ -258,18 +373,36 @@ namespace AutoMapper2Lib {
 					to = Activator.CreateInstance( toInnerType );
 					changes.Add(
 						new PropertyChangedResults {
-							NewValue = TypeConvert.ConvertToString( to, toInnerType ),
-							Object = Destination,
-							OldValue = null,
-							ObjectType = toInnerType,
-							PropertyName = "this",
-							PropertyType = fromInnerType
+							Source = new PropertyChangedResult {
+								Object = Source,
+								ObjectType = FromType,
+								PropertyName = "index",
+								PropertyType = fromInnerType,
+								Value = from.ObjectToString()
+							},
+							Destination = new PropertyChangedResult {
+								Object = Destination,
+								ObjectType = ToType,
+								PropertyName = "index",
+								PropertyType = toInnerType,
+								Value = to.ObjectToString()
+							}
 						} );
-					Destination.Add( to );
+
+					switch ( ExecutionType ) {
+						case ExecutionType.Copy:
+							Destination.Add( to );
+							break;
+						case ExecutionType.Compare:
+							// We've already done so
+							break;
+						default:
+							throw new ArgumentOutOfRangeException( "ExecutionType" );
+					}
 				}
 
 				// Map the source object to the destination object
-				List<PropertyChangedResults> changeListStep = PropertyMapper.CopyProperties( fromInnerType, toInnerType, from, ref to, MapDirection );
+				List<PropertyChangedResults> changeListStep = PropertyMapper.CopyProperties( fromInnerType, toInnerType, from, ref to, MapDirection, ExecutionType );
 				if ( changeListStep != null && changeListStep.Count > 0 ) {
 					changes.AddRange( changeListStep );
 				}
@@ -290,14 +423,32 @@ namespace AutoMapper2Lib {
 				foreach ( KeyValuePair<List<object>, object> destEntry in destinationMap ) {
 					changes.Add(
 						new PropertyChangedResults {
-							NewValue = null,
-							Object = Destination,
-							OldValue = TypeConvert.ConvertToString( destEntry.Value, toInnerType ),
-							ObjectType = toInnerType,
-							PropertyName = "this",
-							PropertyType = fromInnerType
+							Source = new PropertyChangedResult {
+								Object = Source,
+								ObjectType = FromType,
+								PropertyName = "index",
+								PropertyType = fromInnerType,
+								Value = null
+							},
+							Destination = new PropertyChangedResult {
+								Object = Destination,
+								ObjectType = ToType,
+								PropertyName = "index",
+								PropertyType = toInnerType,
+								Value = destEntry.Value.ObjectToString()
+							}
 						} );
-					Destination.Remove( destEntry.Value );
+
+					switch ( ExecutionType ) {
+						case ExecutionType.Copy:
+							Destination.Remove( destEntry.Value );
+							break;
+						case ExecutionType.Compare:
+							// We've already done so
+							break;
+						default:
+							throw new ArgumentOutOfRangeException( "ExecutionType" );
+					}
 				}
 			}
 

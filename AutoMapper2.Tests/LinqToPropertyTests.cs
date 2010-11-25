@@ -1,14 +1,8 @@
 namespace AutoMapper2Lib.Tests {
 
 	#region using
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
 	using System.Data.Linq.Mapping;
-	using System.Data.Metadata.Edm;
 	using System.Data.Objects.DataClasses;
-	using System.Linq;
-	using System.Text;
 	using NUnit.Framework;
 
 	#endregion

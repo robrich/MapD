@@ -2,9 +2,6 @@ namespace AutoMapper2Lib.Tests {
 
 	#region using
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
 	using AutoMapper2Lib;
 	using NUnit.Framework;
 

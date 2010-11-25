@@ -86,6 +86,7 @@
     <Compile Include="ClassPropertiesTests.cs" />
     <Compile Include="ClassToDerivedClassTests.cs" />
     <Compile Include="ClassWithNoPropertiesTests.cs" />
+    <Compile Include="CompareClassTests.cs" />
     <Compile Include="GenericClassTests.cs" />
     <Compile Include="IgnorePropertiesIfTests.cs" />
     <Compile Include="LinqToPropertyTests.cs" />
@@ -102,6 +103,7 @@
     <Compile Include="RemapPropertyTests.cs" />
     <Compile Include="ResetMapTests.cs" />
     <Compile Include="SettingExcludeLinqPropertiesTests.cs" />
+    <Compile Include="TestTheTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\AutoMapper2.TestsResource\AutoMapper2.TestsResource.csproj">

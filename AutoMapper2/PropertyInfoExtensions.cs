@@ -7,7 +7,7 @@ namespace AutoMapper2Lib {
 	using System.Data.Objects.DataClasses;
 	using System.Linq;
 	using System.Reflection;
-	using System.Text;
+
 	#endregion
 
 	internal static class PropertyInfoExtensions {

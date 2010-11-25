@@ -4,10 +4,8 @@ namespace AutoMapper2Lib {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Linq;
 	using System.Reflection;
-	using System.Text;
+
 	#endregion
 
 	public static class AutoMapper2 {
@@ -138,15 +136,36 @@ namespace AutoMapper2Lib {
 			MapEntryManager.AssertTypesCanMap<From, To>();
 
 			if ( Source == null ) {
-				Destination = null;
-				return null;
+				List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
+				if ( Destination != null ) {
+					changes.Add(
+						new PropertyChangedResults {
+							Source = new PropertyChangedResult {
+								Object = Source,
+								ObjectType = fromType,
+								PropertyName = "this",
+								PropertyType = fromType,
+								Value = Source.ObjectToString()
+							},
+							Destination = new PropertyChangedResult {
+								Object = Destination,
+								ObjectType = toType,
+								PropertyName = "this",
+								PropertyType = toType,
+								Value = Destination.ObjectToString()
+							}
+						} );
+					Destination = null;
+				}
+				return changes;
 			}
 			if ( Destination == null ) {
+				// TODO: Note that we created it?
 				Destination = (To)Activator.CreateInstance( typeof( To ) );
 			}
 
 			object destinationObject = Destination;
-			return ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.SourceToDestination );
+			return ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.SourceToDestination, ExecutionType.Copy );
 		}
 
 		public static List<PropertyChangedResults> MapBack<From, To>( To Source, ref From Destination )
@@ -161,18 +180,77 @@ namespace AutoMapper2Lib {
 			MapEntryManager.AssertTypesCanMap<From, To>();
 
 			if ( Source == null ) {
+				List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
+				if ( Destination != null ) {
+					changes.Add(
+						new PropertyChangedResults {
+							Source = new PropertyChangedResult {
+								Object = Destination,
+								ObjectType = fromType,
+								PropertyName = "this",
+								PropertyType = fromType,
+								Value = Destination.ObjectToString()
+							},
+							Destination = new PropertyChangedResult {
+								Object = Source,
+								ObjectType = toType,
+								PropertyName = "this",
+								PropertyType = toType,
+								Value = Source.ObjectToString()
+							}
+						} );
+				}
 				// Leave Destination alone
-				return null;
+				return changes;
 			}
 			if ( Destination == null ) {
+				// TODO: Note that we created it?
 				Destination = (From)Activator.CreateInstance( typeof( From ) );
 			}
 
 			object destinationObject = Destination;
-			return ExecuteMap( toType, fromType, Source, ref destinationObject, MapDirection.DestinationToSource );
+			return ExecuteMap( toType, fromType, Source, ref destinationObject, MapDirection.DestinationToSource, ExecutionType.Copy );
 		}
 
-		internal static List<PropertyChangedResults> ExecuteMap( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection ) {
+		public static List<PropertyChangedResults> Compare<From, To>( From Source, To Destination )
+			where From : class, new()
+			where To : class, new() {
+
+
+			Type fromType = typeof(From);
+			Type toType = typeof(To);
+			MapEntryManager.AssertTypesCanMap<From, To>();
+
+			if ( Source == null && Destination == null ) {
+				return new List<PropertyChangedResults>(); // Both are null, no change
+			} else if ( Source == null || Destination == null ) {
+				// One is null, the other isn't
+				return new List<PropertyChangedResults> {
+					new PropertyChangedResults {
+						Source = new PropertyChangedResult {
+							Object = Source,
+							ObjectType = fromType,
+							PropertyName = "this",
+							PropertyType = fromType,
+							Value = Source.ObjectToString()
+						},
+						Destination = new PropertyChangedResult {
+							Object = Destination,
+							ObjectType = toType,
+							PropertyName = "this",
+							PropertyType = toType,
+							Value = Destination.ObjectToString()
+						}
+					}
+				};
+			}
+			// Both aren't null
+
+			object destinationObject = Destination;
+			return ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.SourceToDestination, ExecutionType.Compare );
+		}
+
+		internal static List<PropertyChangedResults> ExecuteMap( Type FromType, Type ToType, object Source, ref object Destination, MapDirection MapDirection, ExecutionType ExecutionType ) {
 			List<PropertyChangedResults> changes = null;
 			if ( FromType.IsListOfT() ) {
 				IList sourceList = Source as IList;
@@ -180,12 +258,12 @@ namespace AutoMapper2Lib {
 				// the below won't change what destination points to out from under Destination because Destination isn't null
 				// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
 				if ( FromType.GetGenericBaseType().IsClassType() ) {
-					changes = ListMapper.CopyListOfClass( FromType, ToType, sourceList, ref destinationList, MapDirection );
+					changes = ListMapper.CopyListOfClass( FromType, ToType, sourceList, ref destinationList, MapDirection, ExecutionType );
 				} else {
-					changes = ListMapper.CopyListOfNonClass( FromType, ToType, sourceList, ref destinationList, MapDirection );
+					changes = ListMapper.CopyListOfNonClass( FromType, ToType, sourceList, ref destinationList, MapDirection, ExecutionType );
 				}
 			} else if ( FromType.IsClassType() ) {
-				changes = PropertyMapper.CopyProperties( FromType, ToType, Source, ref Destination, MapDirection );
+				changes = PropertyMapper.CopyProperties( FromType, ToType, Source, ref Destination, MapDirection, ExecutionType );
 			} else {
 				throw new NotSupportedException( "Can't map value types here" ); // This should be a compile-time error too
 			}

@@ -1,7 +1,6 @@
 namespace AutoMapper2Lib.Tests {
 
 	#region using
-	using System;
 	using NUnit.Framework;
 
 	#endregion
