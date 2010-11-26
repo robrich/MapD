@@ -29,7 +29,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class No_Ignore_Class_Type {
+		private class No_Ignore_Class_Type {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -69,7 +69,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_Property_Type {
+		private class Ignore_Property_Type {
 			[IgnoreMap]
 			public int Integer { get; set; }
 			[IgnoreMap]
@@ -113,12 +113,12 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_Type_Type {
+		private class Ignore_Type_Type {
 			public Ignore_Type_InnerType Property { get; set;}
 		}
 
 		[IgnoreMap]
-		public class Ignore_Type_InnerType {
+		private class Ignore_Type_InnerType {
 			public int Integer { get; set; }
 			
 		}
@@ -146,7 +146,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_From_Class_Type1 {
+		private class Ignore_From_Class_Type1 {
 			[IgnoreMap]
 			public int Integer { get; set; }
 			[IgnoreMap]
@@ -168,7 +168,7 @@ namespace AutoMapper2Lib.Tests {
 			}
 		}
 
-		public class Ignore_From_Class_Type2 {
+		private class Ignore_From_Class_Type2 {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -198,21 +198,21 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_From_Type_Type1 {
+		private class Ignore_From_Type_Type1 {
 			public Ignore_From_Type_InnerType1 Property { get; set; }
 		}
 
 		[IgnoreMap]
-		public class Ignore_From_Type_InnerType1 {
+		private class Ignore_From_Type_InnerType1 {
 			public int Integer { get; set; }
 
 		}
 
-		public class Ignore_From_Type_Type2 {
+		private class Ignore_From_Type_Type2 {
 			public Ignore_From_Type_InnerType2 Property { get; set; }
 		}
 
-		public class Ignore_From_Type_InnerType2 {
+		private class Ignore_From_Type_InnerType2 {
 			public int Integer { get; set; }
 
 		}
@@ -240,7 +240,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_To_Class_Type1 {
+		private class Ignore_To_Class_Type1 {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -257,7 +257,7 @@ namespace AutoMapper2Lib.Tests {
 			}
 		}
 
-		public class Ignore_To_Class_Type2 {
+		private class Ignore_To_Class_Type2 {
 			[IgnoreMap]
 			public int Integer { get; set; }
 			[IgnoreMap]
@@ -292,21 +292,21 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_To_Type_Type1 {
+		private class Ignore_To_Type_Type1 {
 			public Ignore_To_Type_InnerType1 Property { get; set; }
 		}
 
-		public class Ignore_To_Type_InnerType1 {
+		private class Ignore_To_Type_InnerType1 {
 			public int Integer { get; set; }
 
 		}
 
-		public class Ignore_To_Type_Type2 {
+		private class Ignore_To_Type_Type2 {
 			public Ignore_To_Type_InnerType2 Property { get; set; }
 		}
 
 		[IgnoreMap]
-		public class Ignore_To_Type_InnerType2 {
+		private class Ignore_To_Type_InnerType2 {
 			public int Integer { get; set; }
 
 		}
@@ -339,7 +339,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_Property_Partial_Type {
+		private class Ignore_Property_Partial_Type {
 			[IgnoreMap(IgnoreDirection.MapBack)]
 			public int Integer { get; set; }
 			[IgnoreMap( IgnoreDirection.MapBack )]
@@ -397,7 +397,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_Property_Partial_Back_Type {
+		private class Ignore_Property_Partial_Back_Type {
 			[IgnoreMap( IgnoreDirection.Map )]
 			public int Integer { get; set; }
 			[IgnoreMap( IgnoreDirection.Map )]
@@ -454,7 +454,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Ignore_Property_Partial_Both_Type {
+		private class Ignore_Property_Partial_Both_Type {
 			[IgnoreMap( IgnoreDirection.Map | IgnoreDirection.MapBack )]
 			public int Integer { get; set; }
 			[IgnoreMap( IgnoreDirection.Map | IgnoreDirection.MapBack )]

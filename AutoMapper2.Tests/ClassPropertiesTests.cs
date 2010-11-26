@@ -82,7 +82,7 @@ namespace AutoMapper2Lib.Tests {
 			source.AssertEqual( destination );
 		}
 
-		public class ClassWithProperties {
+		private class ClassWithProperties {
 			public ClassWithPropertiesInner Property1 { get; set; }
 
 			public void AssertEqual( ClassWithProperties Actual ) {
@@ -94,7 +94,7 @@ namespace AutoMapper2Lib.Tests {
 			}
 
 		}
-		public class ClassWithPropertiesInner {
+		private class ClassWithPropertiesInner {
 			public int Property2 { get; set; }
 			public string Property3 { get; set; }
 			public Guid Property4 { get; set; }

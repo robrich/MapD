@@ -128,7 +128,7 @@ namespace AutoMapper2Lib.Tests {
 			source.AssertEqual( destination );
 		}
 
-		public class RemapClass1 {
+		private class RemapClass1 {
 			public string Property1 { get; set; }
 			public string Property2 { get; set; }
 
@@ -139,7 +139,7 @@ namespace AutoMapper2Lib.Tests {
 			}
 		}
 
-		public class RemapClass2 {
+		private class RemapClass2 {
 			[RemapProperty( "Property1" )]
 			public string Property1a { get; set; }
 			[RemapProperty( "Property2" )]

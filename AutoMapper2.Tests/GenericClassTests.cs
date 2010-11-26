@@ -47,7 +47,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Same_Class_Type<T> where T : IOfType {
+		private class Class_To_Same_Class_Type<T> where T : IOfType {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -109,7 +109,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Similar_Class_Type1<T> where T : IOfType {
+		private class Class_To_Similar_Class_Type1<T> where T : IOfType {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -130,7 +130,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			}
 		}
-		public class Class_To_Similar_Class_Type2<T> where T : IOfType {
+		private class Class_To_Similar_Class_Type2<T> where T : IOfType {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -186,7 +186,7 @@ namespace AutoMapper2Lib.Tests {
 			Item3
 		}
 
-		public class Class_To_DifferentProperties_Class_Type1<T> where T : IOfType {
+		private class Class_To_DifferentProperties_Class_Type1<T> where T : IOfType {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -209,7 +209,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			}
 		}
-		public class Class_To_DifferentProperties_Class_Type2<T> where T : IOfType {
+		private class Class_To_DifferentProperties_Class_Type2<T> where T : IOfType {
 			public double Integer { get; set; }
 			public char String { get; set; }
 			public int Double { get; set; }
@@ -385,7 +385,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Similar_Class_MoreProps_Type<T> where T : IOfType {
+		private class Class_To_Similar_Class_MoreProps_Type<T> where T : IOfType {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -411,7 +411,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			}
 		}
-		public class Class_To_Similar_Class_LessProps_Type<T> where T : IOfType {
+		private class Class_To_Similar_Class_LessProps_Type<T> where T : IOfType {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -440,7 +440,7 @@ namespace AutoMapper2Lib.Tests {
 
 		#endregion
 
-		public class OfType : IOfType {
+		private class OfType : IOfType {
 			public string SomethingIrrelevant1 { get; set; }
 			public string SomethingIrrelevant2 { get; set; }
 			public string SomethingIrrelevant3 { get; set; }

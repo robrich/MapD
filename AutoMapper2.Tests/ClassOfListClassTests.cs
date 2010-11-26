@@ -224,7 +224,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Same_Class_Type {
+		private class Class_To_Same_Class_Type {
 			public List<InnerClassType> Content { get; set; }
 
 			public void AssertEqual( Class_To_Same_Class_Type Actual ) {
@@ -247,7 +247,7 @@ namespace AutoMapper2Lib.Tests {
 			}
 
 		}
-		public class InnerClassType {
+		private class InnerClassType {
 			[PrimaryKey]
 			public int Key { get; set; }
 			public int Integer { get; set; }
@@ -330,18 +330,18 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_DifferentProperties_Class_Type1 {
+		private class Class_To_DifferentProperties_Class_Type1 {
 			public List<InnerClassType1> Content { get; set; }
 
 		}
-		public class InnerClassType1 {
+		private class InnerClassType1 {
 			[PrimaryKey]
 			public int Key { get; set; }
 			public int Integer { get; set; }
 			public double Double { get; set; }
 			public string String { get; set; }
 		}
-		public class Class_To_DifferentProperties_Class_Type2 {
+		private class Class_To_DifferentProperties_Class_Type2 {
 			public List<InnerClassType2> Content { get; set; }
 
 			public void AssertEqual( Class_To_DifferentProperties_Class_Type2 Actual ) {
@@ -364,7 +364,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			}
 		}
-		public class InnerClassType2 {
+		private class InnerClassType2 {
 			[PrimaryKey]
 			public int Key { get; set; }
 			public double Integer { get; set; }

@@ -48,7 +48,7 @@ namespace AutoMapper2Lib.Tests {
 			Item3
 		}
 
-		public class EnumProperties_Class_Type1 {
+		private class EnumProperties_Class_Type1 {
 			public EnumProperties_Class_Enum Enum1 { get; set; }
 			public EnumProperties_Class_Enum Enum2 { get; set; }
 			public string Enum3 { get; set; }
@@ -65,7 +65,7 @@ namespace AutoMapper2Lib.Tests {
 				Assert.AreEqual( (int)this.Enum5, Actual.Enum5, string.Format( "Expected: {0}, Actual: {1}", this.Enum5, Actual.Enum5 ) );
 			}
 		}
-		public class EnumProperties_Class_Type2 {
+		private class EnumProperties_Class_Type2 {
 			public string Enum1 { get; set; }
 			public EnumProperties_Class_Enum Enum2 { get; set; }
 			public EnumProperties_Class_Enum Enum3 { get; set; }
@@ -106,7 +106,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NullableIntProperties_Class_Type1 {
+		private class NullableIntProperties_Class_Type1 {
 			public int Int1 { get; set; }
 			public int? Int2 { get; set; }
 			public string IntToString { get; set; }
@@ -127,7 +127,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			}
 		}
-		public class NullableIntProperties_Class_Type2 {
+		private class NullableIntProperties_Class_Type2 {
 			public int? Int1 { get; set; }
 			public int Int2 { get; set; }
 			public int? IntToString { get; set; }
@@ -167,7 +167,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NullableDoubleProperties_Class_Type1 {
+		private class NullableDoubleProperties_Class_Type1 {
 			public double Double1 { get; set; }
 			public double? Double2 { get; set; }
 			public string DoubleToString { get; set; }
@@ -187,7 +187,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			}
 		}
-		public class NullableDoubleProperties_Class_Type2 {
+		private class NullableDoubleProperties_Class_Type2 {
 			public double? Double1 { get; set; }
 			public double Double2 { get; set; }
 			public double? DoubleToString { get; set; }
@@ -227,7 +227,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NullableDateTimeProperties_Class_Type1 {
+		private class NullableDateTimeProperties_Class_Type1 {
 			public DateTime DateTime1 { get; set; }
 			public DateTime? DateTime2 { get; set; }
 			public string DateTimeToString { get; set; }
@@ -248,7 +248,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			}
 		}
-		public class NullableDateTimeProperties_Class_Type2 {
+		private class NullableDateTimeProperties_Class_Type2 {
 			public DateTime? DateTime1 { get; set; }
 			public DateTime DateTime2 { get; set; }
 			public DateTime? DateTimeToString { get; set; }

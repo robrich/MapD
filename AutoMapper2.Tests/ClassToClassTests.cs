@@ -41,7 +41,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Same_Class_Type {
+		private class Class_To_Same_Class_Type {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -92,7 +92,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Similar_Class_Type1 {
+		private class Class_To_Similar_Class_Type1 {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -108,7 +108,7 @@ namespace AutoMapper2Lib.Tests {
 				Assert.AreEqual( this.Guid, Actual.Guid );
 			}
 		}
-		public class Class_To_Similar_Class_Type2 {
+		private class Class_To_Similar_Class_Type2 {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -157,7 +157,7 @@ namespace AutoMapper2Lib.Tests {
 			Item3
 		}
 
-		public class Class_To_DifferentProperties_Class_Type1 {
+		private class Class_To_DifferentProperties_Class_Type1 {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -175,7 +175,7 @@ namespace AutoMapper2Lib.Tests {
 				Assert.AreEqual( this.Number.ToString(), Actual.Number, string.Format( "Expected: {0}, Actual: {1}", this.Number, Actual.Number ) );
 			}
 		}
-		public class Class_To_DifferentProperties_Class_Type2 {
+		private class Class_To_DifferentProperties_Class_Type2 {
 			public double Integer { get; set; }
 			public char String { get; set; }
 			public int Double { get; set; }
@@ -318,7 +318,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Similar_Class_MoreProps_Type {
+		private class Class_To_Similar_Class_MoreProps_Type {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }
@@ -339,7 +339,7 @@ namespace AutoMapper2Lib.Tests {
 				Assert.AreEqual( this.Guid, Actual.Guid );
 			}
 		}
-		public class Class_To_Similar_Class_LessProps_Type {
+		private class Class_To_Similar_Class_LessProps_Type {
 			public int Integer { get; set; }
 			public string String { get; set; }
 			public double Double { get; set; }

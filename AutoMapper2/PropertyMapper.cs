@@ -134,14 +134,14 @@ namespace AutoMapper2Lib {
 									ObjectType = FromType,
 									PropertyName = sourceProperty.Name,
 									PropertyType =  sourceProperty.PropertyType,
-									Value = TypeConvert.ConvertToString( sourcePropertyValue, sourceProperty.PropertyType ) // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+									PropertyValue = sourcePropertyValue
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
 									ObjectType = ToType,
 									PropertyName = destinationProperty.Name,
 									PropertyType = destinationProperty.PropertyType,
-									Value = TypeConvert.ConvertToString( destinationPropertyValueOriginal, sourceProperty.PropertyType ) // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+									PropertyValue = destinationPropertyValueOriginal
 								}
 							} );
 
@@ -186,14 +186,14 @@ namespace AutoMapper2Lib {
 									ObjectType = FromType,
 									PropertyName = sourceProperty.Name,
 									PropertyType =  sourceProperty.PropertyType,
-									Value = sourcePropertyValue.ObjectToString() // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+									PropertyValue = sourcePropertyValue
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
 									ObjectType = ToType,
 									PropertyName = destinationProperty.Name,
 									PropertyType = destinationProperty.PropertyType,
-									Value = destinationPropertyValueOriginal.ObjectToString() // TODO: .ObjectToString() or TypeConvert.ConvertToString()?
+									PropertyValue = destinationPropertyValueOriginal
 								}
 							} );
 
@@ -260,14 +260,14 @@ namespace AutoMapper2Lib {
 								ObjectType = FromType,
 								PropertyName = sourceProperty.Name,
 								PropertyType =  sourceProperty.PropertyType,
-								Value = TypeConvert.ConvertToString( sourcePropertyValue, sourceProperty.PropertyType )
+								PropertyValue = sourcePropertyValue
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
 								ObjectType = ToType,
 								PropertyName = destinationProperty.Name,
 								PropertyType = destinationProperty.PropertyType,
-								Value = TypeConvert.ConvertToString( destinationPropertyValueOriginal, destinationProperty.PropertyType )
+								PropertyValue = destinationPropertyValueOriginal
 							}
 						} );
 

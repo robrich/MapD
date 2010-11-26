@@ -45,7 +45,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class ValueTypeClass {
+		private class ValueTypeClass {
 		}
 
 	}

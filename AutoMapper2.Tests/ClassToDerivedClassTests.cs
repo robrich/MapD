@@ -38,11 +38,11 @@ namespace AutoMapper2Lib.Tests {
 			Assert.IsNull( destination );
 		}
 
-		public class BaseClass1 {
+		private class BaseClass1 {
 			public int Property1 { get; set; }
 			public int Property2 { get; set; }
 		}
-		public class DerivedClass1 : BaseClass1 {
+		private class DerivedClass1 : BaseClass1 {
 			public int Property3 { get; set; }
 		}
 
@@ -77,11 +77,11 @@ namespace AutoMapper2Lib.Tests {
 			Assert.IsNull( destination );
 		}
 
-		public class BaseClass2 {
+		private class BaseClass2 {
 			public int Property1 { get; set; }
 			public int Property2 { get; set; }
 		}
-		public class DerivedClass2 : BaseClass2 {
+		private class DerivedClass2 : BaseClass2 {
 			public DerivedClass2() {
 				this.Property4 = 4;
 			}

@@ -47,7 +47,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class LinqToSqlPropertyClass {
+		private class LinqToSqlPropertyClass {
 			public int RegularProperty { get; set; }
 			[Association]
 			public int LinqProperty { get; set; }
@@ -156,7 +156,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class LinqToEntitiesPropertyClass {
+		private class LinqToEntitiesPropertyClass {
 			public int RegularProperty { get; set; }
 			[EdmRelationshipNavigationProperty( "namespace", "name", "role" )]
 			public int LinqProperty1 { get; set; }
@@ -164,7 +164,7 @@ namespace AutoMapper2Lib.Tests {
 			public EntityReference<LinqToEntitiesRelatedClass> LinqProperty3 { get; set; }
 		}
 
-		public class LinqToEntitiesRelatedClass : IEntityWithRelationships {
+		private class LinqToEntitiesRelatedClass : IEntityWithRelationships {
 			[IgnoreMap] // TODO: Find a way to make this not necessary
 			public RelationshipManager RelationshipManager { get; set; }
 			public int Property1 { get; set; }

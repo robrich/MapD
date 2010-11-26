@@ -227,7 +227,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class MapFromAttributeType2 {
+		private class MapFromAttributeType2 {
 			[PrimaryKey]
 			public int Property1 { get; set; }
 			public int Property2 { get; set; }

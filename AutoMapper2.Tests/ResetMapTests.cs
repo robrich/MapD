@@ -76,7 +76,7 @@ namespace AutoMapper2Lib.Tests {
 			}
 		}
 
-		public class RemapClass {
+		private class RemapClass {
 			public int Property1 { get; set; }
 		}
 

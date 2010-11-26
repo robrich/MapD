@@ -77,7 +77,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Irrelevant_Class {
+		private class Irrelevant_Class {
 			public bool Boolean { get; set; }
 		}
 

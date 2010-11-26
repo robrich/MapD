@@ -70,14 +70,14 @@ namespace AutoMapper2Lib {
 		}
 
 		/// <summary>
-		/// Reflect on the current assembly to get the maps from <see cref="MapFromAttribute"/>-annotated classes and <see cref="MapListFromListOfAttribute"/>-annotated classes
+		/// Reflect on the current assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 		/// </summary>
 		public static void CreateMaps() {
 			CreateMaps( Assembly.GetCallingAssembly() );
 		}
 
 		/// <summary>
-		/// Reflect on all loaded assemblies to get the maps from <see cref="MapFromAttribute"/>-annotated classes and <see cref="MapListFromListOfAttribute"/>-annotated classes
+		/// Reflect on all loaded assemblies to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 		/// </summary>
 		public static void CreateAllMaps() {
 			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
@@ -89,7 +89,7 @@ namespace AutoMapper2Lib {
 		}
 
 		/// <summary>
-		/// Reflect on the specified assembly to get the maps from <see cref="MapFromAttribute"/>-annotated classes and <see cref="MapListFromListOfAttribute"/>-annotated classes
+		/// Reflect on the specified assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 		/// </summary>
 		/// <param name="Assembly"></param>
 		public static void CreateMaps( Assembly Assembly ) {
@@ -130,13 +130,13 @@ namespace AutoMapper2Lib {
 			where From : class, new()
 			where To : class, new() {
 
+			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
 			Type fromType = typeof( From );
 			Type toType = typeof( To );
 			MapEntryManager.AssertTypesCanMap<From, To>();
 
 			if ( Source == null ) {
-				List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 				if ( Destination != null ) {
 					changes.Add(
 						new PropertyChangedResults {
@@ -145,14 +145,14 @@ namespace AutoMapper2Lib {
 								ObjectType = fromType,
 								PropertyName = "this",
 								PropertyType = fromType,
-								Value = Source.ObjectToString()
+								PropertyValue = Source
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
 								ObjectType = toType,
 								PropertyName = "this",
 								PropertyType = toType,
-								Value = Destination.ObjectToString()
+								PropertyValue = Destination
 							}
 						} );
 					Destination = null;
@@ -160,12 +160,30 @@ namespace AutoMapper2Lib {
 				return changes;
 			}
 			if ( Destination == null ) {
-				// TODO: Note that we created it?
+				changes.Add(
+					new PropertyChangedResults {
+						Source = new PropertyChangedResult {
+							Object = Source,
+							ObjectType = fromType,
+							PropertyName = "this",
+							PropertyType = fromType,
+							PropertyValue = Source
+						},
+						Destination = new PropertyChangedResult {
+							Object = Destination,
+							ObjectType = toType,
+							PropertyName = "this",
+							PropertyType = toType,
+							PropertyValue = Destination
+						}
+					} );
 				Destination = (To)Activator.CreateInstance( typeof( To ) );
 			}
 
 			object destinationObject = Destination;
-			return ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.SourceToDestination, ExecutionType.Copy );
+			List<PropertyChangedResults> changesStep = ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.SourceToDestination, ExecutionType.Copy );
+			changes.AddRange( changesStep );
+			return changes;
 		}
 
 		public static List<PropertyChangedResults> MapBack<From, To>( To Source, ref From Destination )
@@ -175,28 +193,29 @@ namespace AutoMapper2Lib {
 			// In MapBack, "fromType" is type of From, which is the Destination
 			// Therefore calling *Mapper.Copy*() passes in toType first
 
+			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
+
 			Type fromType = typeof( From );
 			Type toType = typeof( To );
 			MapEntryManager.AssertTypesCanMap<From, To>();
 
 			if ( Source == null ) {
-				List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 				if ( Destination != null ) {
 					changes.Add(
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
-								Object = Destination,
-								ObjectType = fromType,
-								PropertyName = "this",
-								PropertyType = fromType,
-								Value = Destination.ObjectToString()
-							},
-							Destination = new PropertyChangedResult {
 								Object = Source,
 								ObjectType = toType,
 								PropertyName = "this",
 								PropertyType = toType,
-								Value = Source.ObjectToString()
+								PropertyValue = Source
+							},
+							Destination = new PropertyChangedResult {
+								Object = Destination,
+								ObjectType = fromType,
+								PropertyName = "this",
+								PropertyType = fromType,
+								PropertyValue = Destination
 							}
 						} );
 				}
@@ -204,12 +223,30 @@ namespace AutoMapper2Lib {
 				return changes;
 			}
 			if ( Destination == null ) {
-				// TODO: Note that we created it?
+				changes.Add(
+					new PropertyChangedResults {
+						Source = new PropertyChangedResult {
+							Object = Source,
+							ObjectType = toType,
+							PropertyName = "this",
+							PropertyType = toType,
+							PropertyValue = Source
+						},
+						Destination = new PropertyChangedResult {
+							Object = Destination,
+							ObjectType = fromType,
+							PropertyName = "this",
+							PropertyType = fromType,
+							PropertyValue = Destination
+						}
+					} );
 				Destination = (From)Activator.CreateInstance( typeof( From ) );
 			}
 
 			object destinationObject = Destination;
-			return ExecuteMap( toType, fromType, Source, ref destinationObject, MapDirection.DestinationToSource, ExecutionType.Copy );
+			List<PropertyChangedResults> changesStep = ExecuteMap( toType, fromType, Source, ref destinationObject, MapDirection.DestinationToSource, ExecutionType.Copy );
+			changes.AddRange( changesStep );
+			return changes;
 		}
 
 		public static List<PropertyChangedResults> Compare<From, To>( From Source, To Destination )
@@ -232,14 +269,14 @@ namespace AutoMapper2Lib {
 							ObjectType = fromType,
 							PropertyName = "this",
 							PropertyType = fromType,
-							Value = Source.ObjectToString()
+							PropertyValue = Source
 						},
 						Destination = new PropertyChangedResult {
 							Object = Destination,
 							ObjectType = toType,
 							PropertyName = "this",
 							PropertyType = toType,
-							Value = Destination.ObjectToString()
+							PropertyValue = Destination
 						}
 					}
 				};

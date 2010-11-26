@@ -86,7 +86,7 @@
     <Compile Include="ClassPropertiesTests.cs" />
     <Compile Include="ClassToDerivedClassTests.cs" />
     <Compile Include="ClassWithNoPropertiesTests.cs" />
-    <Compile Include="CompareClassTests.cs" />
+    <Compile Include="ResultsTests\CompareClassResultsTests.cs" />
     <Compile Include="GenericClassTests.cs" />
     <Compile Include="IgnorePropertiesIfTests.cs" />
     <Compile Include="LinqToPropertyTests.cs" />
@@ -94,6 +94,8 @@
     <Compile Include="ListOfNonClassTests.cs" />
     <Compile Include="ClassWithWeirdPropertiesTests.cs" />
     <Compile Include="IgnoreAttributeTests.cs" />
+    <Compile Include="ResultsTests\MapBackClassResultsTests.cs" />
+    <Compile Include="ResultsTests\MapClassResultsTests.cs" />
     <Compile Include="MapFromAttributeTests.cs" />
     <Compile Include="MapperParameterTests.cs" />
     <Compile Include="ClassToClassTests.cs" />

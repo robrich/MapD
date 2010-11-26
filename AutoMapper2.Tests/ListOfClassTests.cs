@@ -363,7 +363,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class InnerClassType {
+		private class InnerClassType {
 			[PrimaryKey]
 			public int Key { get; set; }
 			public int Integer { get; set; }
@@ -572,13 +572,13 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class InnerClassType1a {
+		private class InnerClassType1a {
 			public int Key { get; set; }
 			public int Integer { get; set; }
 			public double Double { get; set; }
 			public string String { get; set; }
 		}
-		public class InnerClassType2a {
+		private class InnerClassType2a {
 			[PrimaryKey]
 			public int Key { get; set; }
 			public double Integer { get; set; }
@@ -788,14 +788,14 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class InnerClassType1b {
+		private class InnerClassType1b {
 			[PrimaryKey]
 			public int Key { get; set; }
 			public int Integer { get; set; }
 			public double Double { get; set; }
 			public string String { get; set; }
 		}
-		public class InnerClassType2b {
+		private class InnerClassType2b {
 			public int Key { get; set; }
 			public double Integer { get; set; }
 			public string Double { get; set; }
@@ -941,7 +941,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class InnerClassType2 {
+		private class InnerClassType2 {
 			[PrimaryKey]
 			public int Key { get; set; }
 			[PrimaryKey]
@@ -1052,13 +1052,13 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class InnerClassType1c {
+		private class InnerClassType1c {
 			public int Key { get; set; }
 			public int Integer { get; set; }
 			public double Double { get; set; }
 			public string String { get; set; }
 		}
-		public class InnerClassType2c {
+		private class InnerClassType2c {
 			[PrimaryKey]
 			public int Key { get; set; }
 			[PrimaryKey]
@@ -1169,7 +1169,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class InnerClassType1d {
+		private class InnerClassType1d {
 			[PrimaryKey]
 			public int Key { get; set; }
 			[PrimaryKey]
@@ -1177,7 +1177,7 @@ namespace AutoMapper2Lib.Tests {
 			public double Double { get; set; }
 			public string String { get; set; }
 		}
-		public class InnerClassType2d {
+		private class InnerClassType2d {
 			public int Key { get; set; }
 			public double Integer { get; set; }
 			public string Double { get; set; }
@@ -1209,7 +1209,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NoPrimaryKeyClass {
+		private class NoPrimaryKeyClass {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -1237,7 +1237,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NoPropertiesType {
+		private class NoPropertiesType {
 		}
 		#endregion
 
@@ -1299,7 +1299,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NullPrimaryKeyClass {
+		private class NullPrimaryKeyClass {
 			[PrimaryKey]
 			public int? Property1 { get; set; }
 		}

@@ -227,7 +227,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_Same_Class_Type {
+		private class Class_To_Same_Class_Type {
 			public List<int> Integer { get; set; }
 			public List<string> String { get; set; }
 			public List<double> Double { get; set; }
@@ -289,7 +289,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class Class_To_DifferentProperties_Class_Type1 {
+		private class Class_To_DifferentProperties_Class_Type1 {
 			public List<int> Integer { get; set; }
 			public List<string> String { get; set; }
 			public List<double> Double { get; set; }
@@ -316,7 +316,7 @@ namespace AutoMapper2Lib.Tests {
 			}
 			*/
 		}
-		public class Class_To_DifferentProperties_Class_Type2 {
+		private class Class_To_DifferentProperties_Class_Type2 {
 			public List<double> Integer { get; set; }
 			public List<char> String { get; set; }
 			public List<int> Double { get; set; }

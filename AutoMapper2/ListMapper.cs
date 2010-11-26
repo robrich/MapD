@@ -38,14 +38,14 @@ namespace AutoMapper2Lib {
 									ObjectType = FromType,
 									PropertyName = "this",
 									PropertyType = FromType,
-									Value = Source.ObjectToString()
+									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
 									ObjectType = ToType,
 									PropertyName = "this",
 									PropertyType = ToType,
-									Value = Destination.ObjectToString()
+									PropertyValue = Destination
 								}
 							} );
 						if ( MapDirection != MapDirection.DestinationToSource ) {
@@ -69,14 +69,14 @@ namespace AutoMapper2Lib {
 									ObjectType = FromType,
 									PropertyName = "this",
 									PropertyType = FromType,
-									Value = Source.ObjectToString()
+									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
 									ObjectType = ToType,
 									PropertyName = "this",
 									PropertyType = ToType,
-									Value = Destination.ObjectToString()
+									PropertyValue = Destination
 								}
 							} );
 						return changes;
@@ -103,14 +103,14 @@ namespace AutoMapper2Lib {
 								ObjectType = fromInnerType,
 								PropertyName = "index",
 								PropertyType = fromInnerType,
-								Value = from.ObjectToString()
+								PropertyValue = from
 							},
 							Destination = new PropertyChangedResult {
 								Object = to,
 								ObjectType = toInnerType,
 								PropertyName = "index",
 								PropertyType = toInnerType,
-								Value = to.ObjectToString()
+								PropertyValue = null // we created it
 							}
 						} );
 
@@ -204,14 +204,14 @@ namespace AutoMapper2Lib {
 									ObjectType = FromType,
 									PropertyName = "this",
 									PropertyType = FromType,
-									Value = Source.ObjectToString()
+									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
 									ObjectType = ToType,
 									PropertyName = "this",
 									PropertyType = ToType,
-									Value = Destination.ObjectToString()
+									PropertyValue = Destination
 								}
 							} );
 						if ( MapDirection != MapDirection.DestinationToSource ) {
@@ -243,14 +243,14 @@ namespace AutoMapper2Lib {
 									ObjectType = FromType,
 									PropertyName = "this",
 									PropertyType = FromType,
-									Value = Source.ObjectToString()
+									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
 									ObjectType = ToType,
 									PropertyName = "this",
 									PropertyType = ToType,
-									Value = Destination.ObjectToString()
+									PropertyValue = Destination
 								}
 							} );
 						return changes;
@@ -378,14 +378,14 @@ namespace AutoMapper2Lib {
 								ObjectType = FromType,
 								PropertyName = "index",
 								PropertyType = fromInnerType,
-								Value = from.ObjectToString()
+								PropertyValue = from
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
 								ObjectType = ToType,
 								PropertyName = "index",
 								PropertyType = toInnerType,
-								Value = to.ObjectToString()
+								PropertyValue = null // We created it, it didn't exist yet
 							}
 						} );
 
@@ -428,14 +428,14 @@ namespace AutoMapper2Lib {
 								ObjectType = FromType,
 								PropertyName = "index",
 								PropertyType = fromInnerType,
-								Value = null
+								PropertyValue = null
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
 								ObjectType = ToType,
 								PropertyName = "index",
 								PropertyType = toInnerType,
-								Value = destEntry.Value.ObjectToString()
+								PropertyValue = destEntry
 							}
 						} );
 

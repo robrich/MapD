@@ -86,10 +86,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class IgnorePropertiesIfReadClass {
+		private class IgnorePropertiesIfReadClass {
 			public int Property1 { set { } }
 		}
-		public class IgnorePropertiesIfWriteClass {
+		private class IgnorePropertiesIfWriteClass {
 			public int Property1 { get { return 0; } }
 		}
 
@@ -132,11 +132,11 @@ namespace AutoMapper2Lib.Tests {
 		}
 
 		[IgnorePropertiesIf( PropertyIs.WriteOnly )]
-		public class IgnorePropertiesIfReadOnClass {
+		private class IgnorePropertiesIfReadOnClass {
 			public int Property1 { set { } }
 		}
 		[IgnorePropertiesIf( PropertyIs.ReadOnly )]
-		public class IgnorePropertiesIfWriteOnClass {
+		private class IgnorePropertiesIfWriteOnClass {
 			public int Property1 { get { return 0; } }
 		}
 

@@ -94,7 +94,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NoPropertiesClass {
+		private class NoPropertiesClass {
 		}
 
 	}

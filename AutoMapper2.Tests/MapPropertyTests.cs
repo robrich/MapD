@@ -29,7 +29,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class MissingMapType {
+		private class MissingMapType {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -63,10 +63,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class MissingInnerMapType {
+		private class MissingInnerMapType {
 			public MissingInnerMapInnerType Property1 { get; set; }
 		}
-		public class MissingInnerMapInnerType {
+		private class MissingInnerMapInnerType {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -86,7 +86,7 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class MissingListOfNonClassMapType {
+		private class MissingListOfNonClassMapType {
 			public List<int> Property1 { get; set; }
 		}
 		#endregion
@@ -153,10 +153,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class MissingListOfClassMapType {
+		private class MissingListOfClassMapType {
 			public List<MissingListOfClassMapListOfClassType> Property1 { get; set; }
 		}
-		public class MissingListOfClassMapListOfClassType {
+		private class MissingListOfClassMapListOfClassType {
 			[PrimaryKey]
 			public int Property1 { get; set; }
 		}
@@ -186,10 +186,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class MissingPrimaryKeyType {
+		private class MissingPrimaryKeyType {
 			public List<MissingPrimaryKeyListOfClassType> Property1 { get; set; }
 		}
-		public class MissingPrimaryKeyListOfClassType {
+		private class MissingPrimaryKeyListOfClassType {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -211,10 +211,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class MissingPropertyType1 {
+		private class MissingPropertyType1 {
 			public int Property1 { get; set; }
 		}
-		public class MissingPropertyType2 {
+		private class MissingPropertyType2 {
 			public int Property1 { get; set; }
 			public int Property2 { get; set; }
 		}
@@ -237,10 +237,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class RedirectedPropertyType1 {
+		private class RedirectedPropertyType1 {
 			public int Property1 { get; set; }
 		}
-		public class RedirectedPropertyType2 {
+		private class RedirectedPropertyType2 {
 			[RemapProperty("Property2")]
 			public int Property1 { get; set; }
 		}
@@ -263,10 +263,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class ReadOnlySourcePropertyType1 {
+		private class ReadOnlySourcePropertyType1 {
 			public int Property1 { get { return 0; } }
 		}
-		public class ReadOnlySourcePropertyType2 {
+		private class ReadOnlySourcePropertyType2 {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -288,10 +288,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class ReadOnlyDestinationPropertyType1 {
+		private class ReadOnlyDestinationPropertyType1 {
 			public int Property1 { get; set; }
 		}
-		public class ReadOnlyDestinationPropertyType2 {
+		private class ReadOnlyDestinationPropertyType2 {
 			public int Property1 { get { return 0; } }
 		}
 		#endregion
@@ -313,10 +313,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class WriteOnlySourcePropertyType1 {
+		private class WriteOnlySourcePropertyType1 {
 			public int Property1 { set { } }
 		}
-		public class WriteOnlySourcePropertyType2 {
+		private class WriteOnlySourcePropertyType2 {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -338,10 +338,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class WriteOnlyDestinationPropertyType1 {
+		private class WriteOnlyDestinationPropertyType1 {
 			public int Property1 { get; set; }
 		}
-		public class WriteOnlyDestinationPropertyType2 {
+		private class WriteOnlyDestinationPropertyType2 {
 			public int Property1 { set { } }
 		}
 		#endregion
@@ -364,10 +364,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class ListToNonListType1 {
+		private class ListToNonListType1 {
 			public List<int> Property1 { get; set; }
 		}
-		public class ListToNonListType2 {
+		private class ListToNonListType2 {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -390,10 +390,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NonListToListType1 {
+		private class NonListToListType1 {
 			public int Property1 { get; set; }
 		}
-		public class NonListToListType2 {
+		private class NonListToListType2 {
 			public List<int> Property1 { get; set; }
 		}
 		#endregion
@@ -416,10 +416,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class ClassToNonClassType1 {
+		private class ClassToNonClassType1 {
 			public InnerClass Property1 { get; set; }
 		}
-		public class ClassToNonClassType2 {
+		private class ClassToNonClassType2 {
 			public int Property1 { get; set; }
 		}
 		#endregion
@@ -442,10 +442,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class NonClassToClassType1 {
+		private class NonClassToClassType1 {
 			public int Property1 { get; set; }
 		}
-		public class NonClassToClassType2 {
+		private class NonClassToClassType2 {
 			public InnerClass Property1 { get; set; }
 		}
 		#endregion
@@ -473,10 +473,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class IncompatiblePropertyType1 {
+		private class IncompatiblePropertyType1 {
 			public DateTime Property1 { get; set; }
 		}
-		public class IncompatiblePropertyType2 {
+		private class IncompatiblePropertyType2 {
 			public Guid Property1 { get; set; }
 		}
 		#endregion
@@ -501,10 +501,10 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class IncompatibleListPropertyType1 {
+		private class IncompatibleListPropertyType1 {
 			public List<DateTime> Property1 { get; set; }
 		}
-		public class IncompatibleListPropertyType2 {
+		private class IncompatibleListPropertyType2 {
 			public List<Guid> Property1 { get; set; }
 		}
 		#endregion
@@ -530,16 +530,16 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class IncompatibleListClassPropertyType1 {
+		private class IncompatibleListClassPropertyType1 {
 			public IncompatibleListClassInnerType1 Property1 { get; set; }
 		}
-		public class IncompatibleListClassPropertyType2 {
+		private class IncompatibleListClassPropertyType2 {
 			public IncompatibleListClassInnerType2 Property1 { get; set; }
 		}
-		public class IncompatibleListClassInnerType1 {
+		private class IncompatibleListClassInnerType1 {
 			public DateTime Property1 { get; set; }
 		}
-		public class IncompatibleListClassInnerType2 {
+		private class IncompatibleListClassInnerType2 {
 			public Guid Property1 { get; set; }
 		}
 		#endregion
@@ -663,16 +663,16 @@ namespace AutoMapper2Lib.Tests {
 
 		}
 
-		public class DuplicatePrimaryKeyType {
+		private class DuplicatePrimaryKeyType {
 			public List<DuplicatePrimaryKeyInnerType> Property1 { get; set; }
 		}
-		public class DuplicatePrimaryKeyInnerType {
+		private class DuplicatePrimaryKeyInnerType {
 			[PrimaryKey]
 			public int Key { get; set; }
 		}
 		#endregion
 
-		public class InnerClass {
+		private class InnerClass {
 		}
 
 	}

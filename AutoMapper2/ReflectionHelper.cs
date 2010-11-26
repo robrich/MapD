@@ -72,6 +72,9 @@ namespace AutoMapper2Lib {
 			}
 
 			Type type = obj.GetType();
+
+			// TODO: If it's a value type or has no properties (outside object), use TypeConvert.ConvertToString(  )
+
 			List<PropertyInfo> properties = GetProperties( type );
 
 			StringBuilder sb = new StringBuilder();
