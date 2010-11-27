@@ -11,7 +11,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NotNull() {
 
-			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
+			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = "one",
@@ -26,7 +26,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_Null() {
 
-			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
+			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = null
@@ -40,7 +40,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullDirectly() {
 
-			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
+			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = null,
@@ -56,7 +56,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullToNonNull() {
 
-			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
+			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = null,
@@ -76,7 +76,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullBack() {
 
-			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
+			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = null;
 
@@ -95,7 +95,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullToNonNullBack() {
 
-			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
+			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = new RemapClass2 {
 				Property1a = null,
@@ -115,7 +115,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NotNullBack() {
 
-			AutoMapper2.CreateMap<RemapClass1, RemapClass2>();
+			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = new RemapClass2 {
 				Property1a = "one",

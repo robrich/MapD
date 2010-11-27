@@ -64,7 +64,7 @@ namespace AutoMapper2Lib {
 
 			PropertyIs ignorePropertiesIfObject = toType.GetIgnorePropertiesIf() 
 				| fromType.GetIgnorePropertiesIf() 
-				| AutoMapper2.IgnorePropertiesIf;
+				| AutoMapper2.Config.IgnorePropertiesIf;
 
 			if ( toProperties != null && toProperties.Count != 0 ) {
 				foreach ( PropertyInfo toProperty in toProperties ) {
@@ -75,7 +75,7 @@ namespace AutoMapper2Lib {
 					if ( ignoreDirection == ( IgnoreDirection.Map | IgnoreDirection.MapBack ) ) {
 						continue; // Ignore it fully
 					}
-					if ( AutoMapper2.ExcludeLinqProperties && toProperty.IsLinqProperty() ) {
+					if ( AutoMapper2.Config.ExcludeLinqProperties && toProperty.IsLinqProperty() ) {
 						continue;
 					}
 
@@ -95,7 +95,7 @@ namespace AutoMapper2Lib {
 					if ( ignoreDirection == ( IgnoreDirection.Map | IgnoreDirection.MapBack ) ) {
 						continue; // Ignore it fully
 					}
-					if ( AutoMapper2.ExcludeLinqProperties && fromProperty.IsLinqProperty() ) {
+					if ( AutoMapper2.Config.ExcludeLinqProperties && fromProperty.IsLinqProperty() ) {
 						continue;
 					}
 

@@ -11,7 +11,7 @@ namespace AutoMapper2Lib.Tests {
 
 		[SetUp]
 		public void Init() {
-			AutoMapper2.ResetMap();
+			AutoMapper2.Config.ResetMap();
 		}
 
 		protected static void AssertListsAreEqual<T>( List<T> Expected, List<T> Actual ) {

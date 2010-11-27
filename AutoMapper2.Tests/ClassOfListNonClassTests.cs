@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -35,7 +35,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_PartiallyFilled_Test() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -61,7 +61,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Equal_Test() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -89,7 +89,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type();
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
@@ -108,7 +108,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -128,7 +128,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_PartiallyFilled_Test() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -154,7 +154,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Equal_Test() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -182,7 +182,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type();
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
@@ -206,7 +206,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Objects() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = null;
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
@@ -251,7 +251,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class() {
 
-			AutoMapper2.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
+			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
 
 			Class_To_DifferentProperties_Class_Type1 source = new Class_To_DifferentProperties_Class_Type1 {
 				Integer = new List<int> { 1234, 4321 },
@@ -279,7 +279,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
+			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
 
 			Class_To_DifferentProperties_Class_Type1 source = new Class_To_DifferentProperties_Class_Type1();
 			Class_To_DifferentProperties_Class_Type2 destinationTemplate = new Class_To_DifferentProperties_Class_Type2();

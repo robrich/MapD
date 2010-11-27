@@ -13,7 +13,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSourceandDestList_NoChanges() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = null;
 			List<SimplePrimaryClass> destination = null;
@@ -32,7 +32,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSourceFullDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = null;
 			List<SimplePrimaryClass> destination = new List<SimplePrimaryClass>() {
@@ -79,7 +79,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void FullSourceNullDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -127,7 +127,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void FullSourceEmptyDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -183,7 +183,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void EmptySourceFullDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>();
 			List<SimplePrimaryClass> destination = new List<SimplePrimaryClass>() {
@@ -243,7 +243,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void IdenticalSourceandDestList_NoDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -281,7 +281,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void ExtraSourceList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -342,7 +342,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void ExtraDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -404,7 +404,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void DissimilarList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass2>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass2>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -462,7 +462,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void DissimilarObject_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {

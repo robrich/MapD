@@ -13,7 +13,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void No_Ignore_Class() {
 
-			AutoMapper2.CreateMap<No_Ignore_Class_Type, No_Ignore_Class_Type>();
+			AutoMapper2.Config.CreateMap<No_Ignore_Class_Type, No_Ignore_Class_Type>();
 
 			No_Ignore_Class_Type source = new No_Ignore_Class_Type {
 				Integer = 1234,
@@ -53,7 +53,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property() {
 
-			AutoMapper2.CreateMap<Ignore_Property_Type, Ignore_Property_Type>();
+			AutoMapper2.Config.CreateMap<Ignore_Property_Type, Ignore_Property_Type>();
 
 			Ignore_Property_Type source = new Ignore_Property_Type {
 				Integer = 1234,
@@ -98,7 +98,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Type() {
 
-			AutoMapper2.CreateMap<Ignore_Type_Type, Ignore_Type_Type>();
+			AutoMapper2.Config.CreateMap<Ignore_Type_Type, Ignore_Type_Type>();
 
 			Ignore_Type_Type source = new Ignore_Type_Type {
 				Property = new Ignore_Type_InnerType {
@@ -130,7 +130,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_From_Class() {
 
-			AutoMapper2.CreateMap<Ignore_From_Class_Type1, Ignore_From_Class_Type2>();
+			AutoMapper2.Config.CreateMap<Ignore_From_Class_Type1, Ignore_From_Class_Type2>();
 
 			Ignore_From_Class_Type1 source = new Ignore_From_Class_Type1 {
 				Integer = 1234,
@@ -183,7 +183,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_From_Type() {
 
-			AutoMapper2.CreateMap<Ignore_From_Type_Type1, Ignore_From_Type_Type2>();
+			AutoMapper2.Config.CreateMap<Ignore_From_Type_Type1, Ignore_From_Type_Type2>();
 
 			Ignore_From_Type_Type1 source = new Ignore_From_Type_Type1 {
 				Property = new Ignore_From_Type_InnerType1 {
@@ -224,7 +224,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_To_Class() {
 
-			AutoMapper2.CreateMap<Ignore_To_Class_Type1, Ignore_To_Class_Type2>();
+			AutoMapper2.Config.CreateMap<Ignore_To_Class_Type1, Ignore_To_Class_Type2>();
 
 			Ignore_To_Class_Type1 source = new Ignore_To_Class_Type1 {
 				Integer = 1234,
@@ -277,7 +277,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_To_Type() {
 
-			AutoMapper2.CreateMap<Ignore_To_Type_Type1, Ignore_To_Type_Type2>();
+			AutoMapper2.Config.CreateMap<Ignore_To_Type_Type1, Ignore_To_Type_Type2>();
 
 			Ignore_To_Type_Type1 source = new Ignore_To_Type_Type1 {
 				Property = new Ignore_To_Type_InnerType1 {
@@ -318,7 +318,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property_Partial() {
 
-			AutoMapper2.CreateMap<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>();
+			AutoMapper2.Config.CreateMap<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>();
 
 			Ignore_Property_Partial_Type source = new Ignore_Property_Partial_Type {
 				Integer = 1234,
@@ -376,7 +376,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property_Partial_Back() {
 
-			AutoMapper2.CreateMap<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>();
+			AutoMapper2.Config.CreateMap<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>();
 
 			Ignore_Property_Partial_Back_Type source = new Ignore_Property_Partial_Back_Type {
 				Integer = 1234,
@@ -433,7 +433,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property_Partial_Both() {
 
-			AutoMapper2.CreateMap<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>();
+			AutoMapper2.Config.CreateMap<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>();
 
 			Ignore_Property_Partial_Both_Type source = new Ignore_Property_Partial_Both_Type {
 				Integer = 1234,

@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NoChanges_NoDifferences() {
 
-			AutoMapper2.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type {
 				Integer = 1234,
@@ -44,7 +44,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void DestEmpty_YieldDifferences() {
 
-			AutoMapper2.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type {
 				Integer = 1234,
@@ -123,7 +123,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void SourceEmpty_YieldDifferences() {
 
-			AutoMapper2.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type();
 			Class_With_Properties_Type destination = new Class_With_Properties_Type {
@@ -208,7 +208,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSource_YieldDifferences() {
 
-			AutoMapper2.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = null;
 			Class_With_Properties_Type destination = new Class_With_Properties_Type {
@@ -256,7 +256,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullDestination_YieldDifferences() {
 
-			AutoMapper2.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type {
 				Integer = 1234,
@@ -318,7 +318,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void Dissimilar_Class_Changed() {
 
-			AutoMapper2.CreateMap<Dissimilar_Type1, Dissimilar_Type2>();
+			AutoMapper2.Config.CreateMap<Dissimilar_Type1, Dissimilar_Type2>();
 
 			Dissimilar_Type1 source = new Dissimilar_Type1 {
 				Integer = 4321,
@@ -390,7 +390,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void Dissimilar_Class_Unchanged() {
 
-			AutoMapper2.CreateMap<Dissimilar_Type1, Dissimilar_Type2>();
+			AutoMapper2.Config.CreateMap<Dissimilar_Type1, Dissimilar_Type2>();
 
 			Dissimilar_Type1 source = new Dissimilar_Type1 {
 				String = "a"

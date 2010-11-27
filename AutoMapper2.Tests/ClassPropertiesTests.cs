@@ -12,8 +12,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NotNull() {
 
-			AutoMapper2.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = new ClassWithPropertiesInner {
@@ -31,8 +31,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_Null() {
 
-			AutoMapper2.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = null
@@ -46,8 +46,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullDirectly() {
 
-			AutoMapper2.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = null
@@ -62,8 +62,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullToNonNull() {
 
-			AutoMapper2.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = null

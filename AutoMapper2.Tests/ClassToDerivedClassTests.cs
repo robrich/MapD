@@ -11,7 +11,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass1_NonNull() {
 
-			AutoMapper2.CreateMap<DerivedClass1, BaseClass1>();
+			AutoMapper2.Config.CreateMap<DerivedClass1, BaseClass1>();
 
 			DerivedClass1 source = new DerivedClass1 {
 				Property1 = 1,
@@ -29,7 +29,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass1_Null() {
 
-			AutoMapper2.CreateMap<DerivedClass1, BaseClass1>();
+			AutoMapper2.Config.CreateMap<DerivedClass1, BaseClass1>();
 
 			DerivedClass1 source = null;
 
@@ -49,7 +49,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass2_NonNull() {
 
-			AutoMapper2.CreateMap<BaseClass2, DerivedClass2>();
+			AutoMapper2.Config.CreateMap<BaseClass2, DerivedClass2>();
 
 			BaseClass2 source = new BaseClass2 {
 				Property1 = 1,
@@ -68,7 +68,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass2_Null() {
 
-			AutoMapper2.CreateMap<BaseClass2, DerivedClass2>();
+			AutoMapper2.Config.CreateMap<BaseClass2, DerivedClass2>();
 
 			DerivedClass2 source = null;
 

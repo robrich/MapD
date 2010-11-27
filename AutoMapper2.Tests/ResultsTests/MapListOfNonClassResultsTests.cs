@@ -13,7 +13,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSourceandDestList_NoChanges() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = null;
 			List<int> destination = null;
@@ -32,7 +32,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSourceFullDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = null;
 			List<int> destination = new List<int>() {
@@ -73,7 +73,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void FullSourceNullDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>() {
 				1,
@@ -115,7 +115,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void FullSourceEmptyDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>() {
 				1,
@@ -165,7 +165,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void EmptySourceFullDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>();
 			List<int> destination = new List<int>() {
@@ -215,7 +215,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void IdenticalSourceandDestList_NoDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>() {
 				1,
@@ -241,7 +241,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void ExtraSourceList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>() {
 				1,
@@ -293,7 +293,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void ExtraDestList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>() {
 				2
@@ -345,7 +345,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void DissimilarList_YieldDifferences() {
 
-			AutoMapper2.CreateMap<List<int>, List<double>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<double>>();
 
 			List<int> source = new List<int>() {
 				1,

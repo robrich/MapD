@@ -10,104 +10,112 @@ namespace AutoMapper2Lib {
 
 	public static class AutoMapper2 {
 
-		// Properties are enumerated when you call Map<> the first time, therefore you can't change this property after that
-		private static bool mappingPropertiesLocked;
+		public static class Config {
 
-		private static bool excludeLinqProperties;
-		public static bool ExcludeLinqProperties {
-			get { return excludeLinqProperties; }
-			set {
-				if ( mappingPropertiesLocked ) {
-					throw new NotSupportedException( "Once you call CreateMap(), you can't change ExcludeLinqProperties because the properties have already been mapped" );
-				}
-				excludeLinqProperties = value;
-			}
-		}
+			// Properties are enumerated when you call Map<> the first time, therefore you can't change this property after that
+			private static bool mappingPropertiesLocked;
 
-		private static PropertyIs ignorePropertiesIf;
-		public static PropertyIs IgnorePropertiesIf {
-			get { return ignorePropertiesIf; }
-			set {
-				if ( mappingPropertiesLocked ) {
-					throw new NotSupportedException( "Once you call CreateMap(), you can't change IgnorePropertiesIf because the properties have already been mapped" );
-				}
-				ignorePropertiesIf = value;
-			}
-		}
-
-		static AutoMapper2() {
-			ResetMap();
-		}
-
-		/// <summary>
-		/// Reset the AutoMapper -- for Unit Tests and initialization
-		/// </summary>
-		public static void ResetMap() {
-			mappingPropertiesLocked = false;
-			ExcludeLinqProperties = true;
-			IgnorePropertiesIf = PropertyIs.NotSet;
-			MapEntryManager.ResetMap();
-		}
-
-		public static void CreateMap<From, To>()
-			where From : class, new()
-			where To : class, new() {
-			Type fromType = typeof( From );
-			Type toType = typeof( To );
-			MapEntryManager.AssertTypesCanMap<From, To>();
-			MapEntryManager.AddMapEntry( fromType, toType );
-
-			/*
-			 * Though technically not "locked" until you .Map<>() or .MapBack<>(),
-			 * we lock it here to prevent stuff like:
-			 * .CreateMap<T,U>();
-			 * .ExcludeLinqProperties = true;
-			 * .CreateMap<T,U>();
-			 * .ExcludeLinqProperties = false;
-			 * which would produce unexpected results
-			 */
-			mappingPropertiesLocked = true;
-		}
-
-		/// <summary>
-		/// Reflect on the current assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
-		/// </summary>
-		public static void CreateMaps() {
-			CreateMaps( Assembly.GetCallingAssembly() );
-		}
-
-		/// <summary>
-		/// Reflect on all loaded assemblies to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
-		/// </summary>
-		public static void CreateAllMaps() {
-			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-			if ( assemblies != null && assemblies.Length > 0 ) {
-				foreach ( Assembly assembly in assemblies ) {
-					CreateMaps( assembly );
+			private static bool excludeLinqProperties;
+			public static bool ExcludeLinqProperties {
+				get { return excludeLinqProperties; }
+				set {
+					if ( mappingPropertiesLocked ) {
+						throw new NotSupportedException( "Once you call CreateMap(), you can't change ExcludeLinqProperties because the properties have already been mapped" );
+					}
+					excludeLinqProperties = value;
 				}
 			}
-		}
 
-		/// <summary>
-		/// Reflect on the specified assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
-		/// </summary>
-		/// <param name="Assembly"></param>
-		public static void CreateMaps( Assembly Assembly ) {
-			if ( Assembly == null ) {
-				Assembly = Assembly.GetCallingAssembly();
+			private static PropertyIs ignorePropertiesIf;
+			public static PropertyIs IgnorePropertiesIf {
+				get { return ignorePropertiesIf; }
+				set {
+					if ( mappingPropertiesLocked ) {
+						throw new NotSupportedException( "Once you call CreateMap(), you can't change IgnorePropertiesIf because the properties have already been mapped" );
+					}
+					ignorePropertiesIf = value;
+				}
+			}
+
+			static Config() {
+				ResetMap();
+			}
+
+			/// <summary>
+			/// Reset the AutoMapper -- for Unit Tests and initialization
+			/// </summary>
+			public static void ResetMap() {
+				mappingPropertiesLocked = false;
+				ExcludeLinqProperties = true;
+				IgnorePropertiesIf = PropertyIs.NotSet;
+				MapEntryManager.ResetMap();
+			}
+
+			public static void CreateMap<From, To>()
+				where From : class, new()
+				where To : class, new() {
+				Type fromType = typeof( From );
+				Type toType = typeof( To );
+				MapEntryManager.AssertTypesCanMap<From, To>();
+				MapEntryManager.AddMapEntry( fromType, toType );
+
+				/*
+				 * Though technically not "locked" until you .Map<>() or .MapBack<>(),
+				 * we lock it here to prevent stuff like:
+				 * .CreateMap<T,U>();
+				 * .ExcludeLinqProperties = true;
+				 * .CreateMap<T,U>();
+				 * .ExcludeLinqProperties = false;
+				 * which would produce unexpected results
+				 */
+				mappingPropertiesLocked = true;
+			}
+
+			/// <summary>
+			/// Reflect on the current assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
+			/// </summary>
+			public static void CreateMaps() {
+				CreateMaps( Assembly.GetCallingAssembly() );
+			}
+
+			/// <summary>
+			/// Reflect on all loaded assemblies to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
+			/// </summary>
+			public static void CreateAllMaps() {
+				Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+				if ( assemblies != null && assemblies.Length > 0 ) {
+					foreach ( Assembly assembly in assemblies ) {
+						CreateMaps( assembly );
+					}
+				}
+			}
+
+			/// <summary>
+			/// Reflect on the specified assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
+			/// </summary>
+			/// <param name="Assembly"></param>
+			public static void CreateMaps( Assembly Assembly ) {
 				if ( Assembly == null ) {
-					throw new ArgumentNullException( "Assembly" );
+					Assembly = Assembly.GetCallingAssembly();
+					if ( Assembly == null ) {
+						throw new ArgumentNullException( "Assembly" );
+					}
 				}
+
+				MapEntryManager.CreateMaps( Assembly );
 			}
 
-			MapEntryManager.CreateMaps( Assembly );
 		}
 
-		public static void AssertConfigurationIsValid() {
-			MapEntryManager.AssertConfigurationIsValid();
-		}
-		public static int AssertMapCount {
-			get { return MapEntryManager.MapCount; }
+		public static class Assert {
+
+			public static void AssertConfigurationIsValid() {
+				MapEntryManager.AssertConfigurationIsValid();
+			}
+			public static int MapCount {
+				get { return MapEntryManager.MapCount; }
+			}
+
 		}
 
 		public static To Map<From, To>( From Source )

@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListInt_Test() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>() {
 				123,
@@ -35,7 +35,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_Null_ListInt_Test() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = null;
 
@@ -52,7 +52,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_Empty_ListInt_Test() {
 
-			AutoMapper2.CreateMap<List<int>, List<int>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>();
 
@@ -69,7 +69,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListDouble_Test() {
 
-			AutoMapper2.CreateMap<List<double>, List<double>>();
+			AutoMapper2.Config.CreateMap<List<double>, List<double>>();
 
 			List<double> source = new List<double>() {
 				123.123,
@@ -89,7 +89,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListString_Test() {
 
-			AutoMapper2.CreateMap<List<string>, List<string>>();
+			AutoMapper2.Config.CreateMap<List<string>, List<string>>();
 
 			List<string> source = new List<string>() {
 				"String",
@@ -109,7 +109,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListString_PartiallyFilled_Test() {
 
-			AutoMapper2.CreateMap<List<string>, List<string>>();
+			AutoMapper2.Config.CreateMap<List<string>, List<string>>();
 
 			List<string> source = new List<string>() {
 				"String",
@@ -132,7 +132,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListDateTime_Test() {
 
-			AutoMapper2.CreateMap<List<DateTime>, List<DateTime>>();
+			AutoMapper2.Config.CreateMap<List<DateTime>, List<DateTime>>();
 
 			List<DateTime> source = new List<DateTime>() {
 				DateTime.Now,
@@ -152,7 +152,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListInt_to_ListDouble_Test() {
 
-			AutoMapper2.CreateMap<List<int>, List<double>>();
+			AutoMapper2.Config.CreateMap<List<int>, List<double>>();
 
 			List<int> source = new List<int>() {
 				123,
@@ -176,7 +176,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListString_to_ListDouble_Test() {
 
-			AutoMapper2.CreateMap<List<string>, List<double>>();
+			AutoMapper2.Config.CreateMap<List<string>, List<double>>();
 
 			List<string> source = new List<string>() {
 				"123",

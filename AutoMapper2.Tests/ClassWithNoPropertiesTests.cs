@@ -11,7 +11,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithNoProperties_NotNull() {
 
-			AutoMapper2.CreateMap<NoPropertiesClass,NoPropertiesClass>();
+			AutoMapper2.Config.CreateMap<NoPropertiesClass,NoPropertiesClass>();
 
 			NoPropertiesClass source = new NoPropertiesClass();
 
@@ -24,7 +24,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithNoProperties_NotNullDirectly() {
 
-			AutoMapper2.CreateMap<NoPropertiesClass, NoPropertiesClass>();
+			AutoMapper2.Config.CreateMap<NoPropertiesClass, NoPropertiesClass>();
 
 			NoPropertiesClass source = new NoPropertiesClass();
 
@@ -39,7 +39,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithNoProperties_NotNullBack() {
 
-			AutoMapper2.CreateMap<NoPropertiesClass, NoPropertiesClass>();
+			AutoMapper2.Config.CreateMap<NoPropertiesClass, NoPropertiesClass>();
 
 			NoPropertiesClass source = new NoPropertiesClass();
 
@@ -54,7 +54,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithNoProperties_Null() {
 
-			AutoMapper2.CreateMap<NoPropertiesClass, NoPropertiesClass>();
+			AutoMapper2.Config.CreateMap<NoPropertiesClass, NoPropertiesClass>();
 
 			NoPropertiesClass source = null;
 
@@ -67,7 +67,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithNoProperties_NullDirectly() {
 
-			AutoMapper2.CreateMap<NoPropertiesClass, NoPropertiesClass>();
+			AutoMapper2.Config.CreateMap<NoPropertiesClass, NoPropertiesClass>();
 
 			NoPropertiesClass source = null;
 
@@ -82,7 +82,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithNoProperties_NullBack() {
 
-			AutoMapper2.CreateMap<NoPropertiesClass, NoPropertiesClass>();
+			AutoMapper2.Config.CreateMap<NoPropertiesClass, NoPropertiesClass>();
 
 			NoPropertiesClass source = null;
 

@@ -11,7 +11,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Default_Write_Fails() {
 
-			AutoMapper2.CreateMap<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>();
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>();
 
 			try {
 				IgnorePropertiesIfWriteClass dest = AutoMapper2.Map<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>( new IgnorePropertiesIfWriteClass() );
@@ -29,7 +29,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Default_Read_Fails() {
 
-			AutoMapper2.CreateMap<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>();
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>();
 
 			try {
 				IgnorePropertiesIfReadClass dest = AutoMapper2.Map<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>( new IgnorePropertiesIfReadClass() );
@@ -47,8 +47,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_Write_Succeeds() {
 
-			AutoMapper2.IgnorePropertiesIf = PropertyIs.WriteOnly;
-			AutoMapper2.CreateMap<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>();
+			AutoMapper2.Config.IgnorePropertiesIf = PropertyIs.WriteOnly;
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>();
 
 			IgnorePropertiesIfWriteClass dest = AutoMapper2.Map<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>( new IgnorePropertiesIfWriteClass() );
 			// It worked
@@ -57,8 +57,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_Read_Succeeds() {
 
-			AutoMapper2.IgnorePropertiesIf = PropertyIs.ReadOnly;
-			AutoMapper2.CreateMap<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>();
+			AutoMapper2.Config.IgnorePropertiesIf = PropertyIs.ReadOnly;
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>();
 
 			IgnorePropertiesIfReadClass dest = AutoMapper2.Map<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>( new IgnorePropertiesIfReadClass() );
 			// It worked
@@ -68,8 +68,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_WriteAndRead_Succeeds() {
 
-			AutoMapper2.IgnorePropertiesIf = PropertyIs.WriteOnly | PropertyIs.ReadOnly;
-			AutoMapper2.CreateMap<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>();
+			AutoMapper2.Config.IgnorePropertiesIf = PropertyIs.WriteOnly | PropertyIs.ReadOnly;
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>();
 
 			IgnorePropertiesIfWriteClass dest = AutoMapper2.Map<IgnorePropertiesIfWriteClass, IgnorePropertiesIfWriteClass>( new IgnorePropertiesIfWriteClass() );
 			// It worked
@@ -78,8 +78,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_ReadAndWrite_Succeeds() {
 
-			AutoMapper2.IgnorePropertiesIf = PropertyIs.ReadOnly | PropertyIs.WriteOnly;
-			AutoMapper2.CreateMap<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>();
+			AutoMapper2.Config.IgnorePropertiesIf = PropertyIs.ReadOnly | PropertyIs.WriteOnly;
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>();
 
 			IgnorePropertiesIfReadClass dest = AutoMapper2.Map<IgnorePropertiesIfReadClass, IgnorePropertiesIfReadClass>( new IgnorePropertiesIfReadClass() );
 			// It worked
@@ -96,7 +96,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_Write_OnSourceClass_Succeeds() {
 
-			AutoMapper2.CreateMap<IgnorePropertiesIfWriteOnClass, IgnorePropertiesIfReadOnClass>();
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfWriteOnClass, IgnorePropertiesIfReadOnClass>();
 
 			IgnorePropertiesIfReadOnClass dest = AutoMapper2.Map<IgnorePropertiesIfWriteOnClass, IgnorePropertiesIfReadOnClass>( new IgnorePropertiesIfWriteOnClass() );
 			// It worked
@@ -105,7 +105,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_Read_OnSourceClass_Succeeds() {
 
-			AutoMapper2.CreateMap<IgnorePropertiesIfReadOnClass, IgnorePropertiesIfWriteOnClass>();
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfReadOnClass, IgnorePropertiesIfWriteOnClass>();
 
 			IgnorePropertiesIfWriteOnClass dest = AutoMapper2.Map<IgnorePropertiesIfReadOnClass, IgnorePropertiesIfWriteOnClass>( new IgnorePropertiesIfReadOnClass() );
 			// It worked
@@ -115,7 +115,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_Write_OnDestinationClass_Succeeds() {
 
-			AutoMapper2.CreateMap<IgnorePropertiesIfReadOnClass, IgnorePropertiesIfWriteOnClass>();
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfReadOnClass, IgnorePropertiesIfWriteOnClass>();
 
 			IgnorePropertiesIfWriteOnClass dest = AutoMapper2.Map<IgnorePropertiesIfReadOnClass, IgnorePropertiesIfWriteOnClass>( new IgnorePropertiesIfReadOnClass() );
 			// It worked
@@ -124,7 +124,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IgnoreIf_Read_OnDestinationClass_Succeeds() {
 
-			AutoMapper2.CreateMap<IgnorePropertiesIfWriteOnClass, IgnorePropertiesIfReadOnClass>();
+			AutoMapper2.Config.CreateMap<IgnorePropertiesIfWriteOnClass, IgnorePropertiesIfReadOnClass>();
 
 			IgnorePropertiesIfReadOnClass dest = AutoMapper2.Map<IgnorePropertiesIfWriteOnClass, IgnorePropertiesIfReadOnClass>( new IgnorePropertiesIfWriteOnClass() );
 			// It worked

@@ -16,7 +16,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingMap_Fails() {
 
-			// No call to AutoMapper2.CreateMap<MissingMapType, MissingMapType>() blows up nicely
+			// No call to AutoMapper2.Config.CreateMap<MissingMapType, MissingMapType>() blows up nicely
 			try {
 				MissingMapType dest = AutoMapper2.Map<MissingMapType, MissingMapType>( new MissingMapType() );
 				Assert.Fail( "Missing map should fail" );
@@ -38,9 +38,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void DuplicateMap_Works() {
 
-			AutoMapper2.CreateMap<InnerClass, InnerClass>();
-			AutoMapper2.CreateMap<InnerClass, InnerClass>();
-			Assert.AreEqual( 1, AutoMapper2.AssertMapCount );
+			AutoMapper2.Config.CreateMap<InnerClass, InnerClass>();
+			AutoMapper2.Config.CreateMap<InnerClass, InnerClass>();
+			Assert.AreEqual( 1, AutoMapper2.Assert.MapCount );
 			
 		}
 		#endregion
@@ -49,8 +49,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingInnerMap_Fails() {
 
-			AutoMapper2.CreateMap<MissingInnerMapType, MissingInnerMapType>();
-			// No call to AutoMapper2.CreateMap<MissingInnerMapInnerType, MissingInnerMapInnerType>() blows up nicely
+			AutoMapper2.Config.CreateMap<MissingInnerMapType, MissingInnerMapType>();
+			// No call to AutoMapper2.Config.CreateMap<MissingInnerMapInnerType, MissingInnerMapInnerType>() blows up nicely
 			try {
 				MissingInnerMapType dest = AutoMapper2.Map<MissingInnerMapType, MissingInnerMapType>( new MissingInnerMapType() );
 				Assert.Fail( "Missing property is a class map should fail" );
@@ -75,8 +75,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfNonClassMap_Works() {
 
-			AutoMapper2.CreateMap<MissingListOfNonClassMapType, MissingListOfNonClassMapType>();
-			// No call to AutoMapper2.CreateMap<List<int>, List<int>>() works fine -- they're not classes
+			AutoMapper2.Config.CreateMap<MissingListOfNonClassMapType, MissingListOfNonClassMapType>();
+			// No call to AutoMapper2.Config.CreateMap<List<int>, List<int>>() works fine -- they're not classes
 			MissingListOfNonClassMapType dest = AutoMapper2.Map<MissingListOfNonClassMapType, MissingListOfNonClassMapType>(
 				new MissingListOfNonClassMapType {
 					Property1 = new List<int> {
@@ -95,9 +95,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfClassMap_Fails() {
 
-			AutoMapper2.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
-			// No call to AutoMapper2.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>()
-			// or to AutoMapper2.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() blows up nicely
+			AutoMapper2.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
+			// No call to AutoMapper2.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>()
+			// or to AutoMapper2.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() blows up nicely
 			try {
 				MissingListOfClassMapType dest = AutoMapper2.Map<MissingListOfClassMapType, MissingListOfClassMapType>(
 					new MissingListOfClassMapType {
@@ -118,9 +118,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfClassMapWithInnerClassMap_Fails() {
 
-			AutoMapper2.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
-			// No call to AutoMapper2.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>() works because we know how to map from List<> to List<>
-			AutoMapper2.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>();
+			AutoMapper2.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
+			// No call to AutoMapper2.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>() works because we know how to map from List<> to List<>
+			AutoMapper2.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>();
 			try {
 				MissingListOfClassMapType dest = AutoMapper2.Map<MissingListOfClassMapType, MissingListOfClassMapType>(
 					new MissingListOfClassMapType {
@@ -141,9 +141,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfClassInnerClassMap_Works() {
 
-			AutoMapper2.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
-			AutoMapper2.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>();
-			// No call to AutoMapper2.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() works because it's auto-created
+			AutoMapper2.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
+			AutoMapper2.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>();
+			// No call to AutoMapper2.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() works because it's auto-created
 			MissingListOfClassMapType dest = AutoMapper2.Map<MissingListOfClassMapType, MissingListOfClassMapType>(
 				new MissingListOfClassMapType {
 					Property1 = new List<MissingListOfClassMapListOfClassType> {
@@ -166,9 +166,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingPrimaryKey_Fails() {
 
-			AutoMapper2.CreateMap<MissingPrimaryKeyType, MissingPrimaryKeyType>();
-			AutoMapper2.CreateMap<List<MissingPrimaryKeyListOfClassType>, List<MissingPrimaryKeyListOfClassType>>();
-			// No call to AutoMapper2.CreateMap<MissingPrimaryKeyListOfClassType, MissingPrimaryKeyListOfClassType>() blows up nicely
+			AutoMapper2.Config.CreateMap<MissingPrimaryKeyType, MissingPrimaryKeyType>();
+			AutoMapper2.Config.CreateMap<List<MissingPrimaryKeyListOfClassType>, List<MissingPrimaryKeyListOfClassType>>();
+			// No call to AutoMapper2.Config.CreateMap<MissingPrimaryKeyListOfClassType, MissingPrimaryKeyListOfClassType>() blows up nicely
 			try {
 				MissingPrimaryKeyType dest = AutoMapper2.Map<MissingPrimaryKeyType, MissingPrimaryKeyType>( new MissingPrimaryKeyType {
 					Property1 = new List<MissingPrimaryKeyListOfClassType> {
@@ -198,7 +198,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingProperty_Fails() {
 
-			AutoMapper2.CreateMap<MissingPropertyType1, MissingPropertyType2>();
+			AutoMapper2.Config.CreateMap<MissingPropertyType1, MissingPropertyType2>();
 			try {
 				MissingPropertyType2 dest = AutoMapper2.Map<MissingPropertyType1, MissingPropertyType2>( new MissingPropertyType1() );
 				Assert.Fail( "Missing property should fail to map" );
@@ -224,7 +224,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void RedirectedProperty_Fails() {
 
-			AutoMapper2.CreateMap<RedirectedPropertyType1, RedirectedPropertyType2>();
+			AutoMapper2.Config.CreateMap<RedirectedPropertyType1, RedirectedPropertyType2>();
 			try {
 				RedirectedPropertyType2 dest = AutoMapper2.Map<RedirectedPropertyType1, RedirectedPropertyType2>( new RedirectedPropertyType1() );
 				Assert.Fail( "Missing redirected property should fail to map" );
@@ -250,7 +250,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ReadOnlySourceProperty_Fails() {
 
-			AutoMapper2.CreateMap<ReadOnlySourcePropertyType1, ReadOnlySourcePropertyType2>();
+			AutoMapper2.Config.CreateMap<ReadOnlySourcePropertyType1, ReadOnlySourcePropertyType2>();
 			try {
 				ReadOnlySourcePropertyType2 dest = AutoMapper2.Map<ReadOnlySourcePropertyType1, ReadOnlySourcePropertyType2>( new ReadOnlySourcePropertyType1() );
 				Assert.Fail( "read-only property should fail to map" );
@@ -275,7 +275,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ReadOnlyDestinationProperty_Fails() {
 
-			AutoMapper2.CreateMap<ReadOnlyDestinationPropertyType1, ReadOnlyDestinationPropertyType2>();
+			AutoMapper2.Config.CreateMap<ReadOnlyDestinationPropertyType1, ReadOnlyDestinationPropertyType2>();
 			try {
 				ReadOnlyDestinationPropertyType2 dest = AutoMapper2.Map<ReadOnlyDestinationPropertyType1, ReadOnlyDestinationPropertyType2>( new ReadOnlyDestinationPropertyType1() );
 				Assert.Fail( "read-only property should fail to map" );
@@ -300,7 +300,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void WriteOnlySourceProperty_Fails() {
 
-			AutoMapper2.CreateMap<WriteOnlySourcePropertyType1, WriteOnlySourcePropertyType2>();
+			AutoMapper2.Config.CreateMap<WriteOnlySourcePropertyType1, WriteOnlySourcePropertyType2>();
 			try {
 				WriteOnlySourcePropertyType2 dest = AutoMapper2.Map<WriteOnlySourcePropertyType1, WriteOnlySourcePropertyType2>( new WriteOnlySourcePropertyType1() );
 				Assert.Fail( "write-only property should fail to map" );
@@ -325,7 +325,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void WriteOnlyDestinationProperty_Fails() {
 
-			AutoMapper2.CreateMap<WriteOnlyDestinationPropertyType1, WriteOnlyDestinationPropertyType2>();
+			AutoMapper2.Config.CreateMap<WriteOnlyDestinationPropertyType1, WriteOnlyDestinationPropertyType2>();
 			try {
 				WriteOnlyDestinationPropertyType2 dest = AutoMapper2.Map<WriteOnlyDestinationPropertyType1, WriteOnlyDestinationPropertyType2>( new WriteOnlyDestinationPropertyType1() );
 				Assert.Fail( "write-only property should fail to map" );
@@ -350,7 +350,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListToNonList_Fails() {
 
-			AutoMapper2.CreateMap<ListToNonListType1, ListToNonListType2>();
+			AutoMapper2.Config.CreateMap<ListToNonListType1, ListToNonListType2>();
 			try {
 				ListToNonListType2 dest = AutoMapper2.Map<ListToNonListType1, ListToNonListType2>( new ListToNonListType1() );
 				Assert.Fail( "List to NonList property should fail to map" );
@@ -376,7 +376,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NonListToList_Fails() {
 
-			AutoMapper2.CreateMap<NonListToListType1, NonListToListType2>();
+			AutoMapper2.Config.CreateMap<NonListToListType1, NonListToListType2>();
 			try {
 				NonListToListType2 dest = AutoMapper2.Map<NonListToListType1, NonListToListType2>( new NonListToListType1() );
 				Assert.Fail( "NonList to List property should fail to map" );
@@ -402,7 +402,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToNonClass_Fails() {
 
-			AutoMapper2.CreateMap<ClassToNonClassType1, ClassToNonClassType2>();
+			AutoMapper2.Config.CreateMap<ClassToNonClassType1, ClassToNonClassType2>();
 			try {
 				ClassToNonClassType2 dest = AutoMapper2.Map<ClassToNonClassType1, ClassToNonClassType2>( new ClassToNonClassType1() );
 				Assert.Fail( "Class to NonClass property should fail to map" );
@@ -428,7 +428,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NonClassToClass_Fails() {
 
-			AutoMapper2.CreateMap<NonClassToClassType1, NonClassToClassType2>();
+			AutoMapper2.Config.CreateMap<NonClassToClassType1, NonClassToClassType2>();
 			try {
 				NonClassToClassType2 dest = AutoMapper2.Map<NonClassToClassType1, NonClassToClassType2>( new NonClassToClassType1() );
 				Assert.Fail( "NonClass to Class property should fail to map" );
@@ -454,7 +454,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IncompatibleProperty_Fails() {
 
-			AutoMapper2.CreateMap<IncompatiblePropertyType1, IncompatiblePropertyType2>();
+			AutoMapper2.Config.CreateMap<IncompatiblePropertyType1, IncompatiblePropertyType2>();
 			IncompatiblePropertyType2 dest = null;
 			IncompatiblePropertyType1 source = new IncompatiblePropertyType1();
 			try {
@@ -485,7 +485,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IncompatibleListProperty_Fails() {
 
-			AutoMapper2.CreateMap<IncompatibleListPropertyType1, IncompatibleListPropertyType2>();
+			AutoMapper2.Config.CreateMap<IncompatibleListPropertyType1, IncompatibleListPropertyType2>();
 			try {
 				IncompatibleListPropertyType2 dest = AutoMapper2.Map<IncompatibleListPropertyType1, IncompatibleListPropertyType2>( new IncompatibleListPropertyType1() {
 					Property1 = new List<DateTime>() {
@@ -513,8 +513,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IncompatibleListClassProperty_Fails() {
 
-			AutoMapper2.CreateMap<IncompatibleListClassPropertyType1, IncompatibleListClassPropertyType2>();
-			AutoMapper2.CreateMap<IncompatibleListClassInnerType1, IncompatibleListClassInnerType2>();
+			AutoMapper2.Config.CreateMap<IncompatibleListClassPropertyType1, IncompatibleListClassPropertyType2>();
+			AutoMapper2.Config.CreateMap<IncompatibleListClassInnerType1, IncompatibleListClassInnerType2>();
 			try {
 				IncompatibleListClassPropertyType2 dest = AutoMapper2.Map<IncompatibleListClassPropertyType1, IncompatibleListClassPropertyType2>( new IncompatibleListClassPropertyType1 {
 					Property1 = new IncompatibleListClassInnerType1()
@@ -549,8 +549,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Duplicate_Source_PrimaryKey_Class_Fails() {
 
-			AutoMapper2.CreateMap<DuplicatePrimaryKeyType, DuplicatePrimaryKeyType>();
-			AutoMapper2.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
+			AutoMapper2.Config.CreateMap<DuplicatePrimaryKeyType, DuplicatePrimaryKeyType>();
+			AutoMapper2.Config.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
 			try {
 				DuplicatePrimaryKeyType dest = AutoMapper2.Map<DuplicatePrimaryKeyType, DuplicatePrimaryKeyType>( new DuplicatePrimaryKeyType {
 					Property1 = new List<DuplicatePrimaryKeyInnerType>() {
@@ -576,8 +576,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Duplicate_Destination_PrimaryKey_Class_Fails() {
 
-			AutoMapper2.CreateMap<DuplicatePrimaryKeyType, DuplicatePrimaryKeyType>();
-			AutoMapper2.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
+			AutoMapper2.Config.CreateMap<DuplicatePrimaryKeyType, DuplicatePrimaryKeyType>();
+			AutoMapper2.Config.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
 			try {
 				DuplicatePrimaryKeyType source = new DuplicatePrimaryKeyType {
 					Property1 = new List<DuplicatePrimaryKeyInnerType>() {
@@ -611,7 +611,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Duplicate_Source_PrimaryKey_List_Fails() {
 
-			AutoMapper2.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
+			AutoMapper2.Config.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
 			try {
 				List<DuplicatePrimaryKeyInnerType> dest = AutoMapper2.Map<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>(
 					new List<DuplicatePrimaryKeyInnerType> {
@@ -636,7 +636,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Duplicate_Destination_PrimaryKey_List_Fails() {
 
-			AutoMapper2.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
+			AutoMapper2.Config.CreateMap<List<DuplicatePrimaryKeyInnerType>, List<DuplicatePrimaryKeyInnerType>>();
 			try {
 				List<DuplicatePrimaryKeyInnerType> source = new List<DuplicatePrimaryKeyInnerType>() {
 					new DuplicatePrimaryKeyInnerType {

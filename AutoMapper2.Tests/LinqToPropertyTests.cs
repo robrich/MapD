@@ -12,8 +12,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void LinqToSqlPropertyIncluded() {
 
-			AutoMapper2.ExcludeLinqProperties = false;
-			AutoMapper2.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
+			AutoMapper2.Config.ExcludeLinqProperties = false;
+			AutoMapper2.Config.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
 
 			LinqToSqlPropertyClass source = new LinqToSqlPropertyClass {
 				RegularProperty = 5,
@@ -31,8 +31,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void LinqToSqlPropertyExcluded() {
 
-			AutoMapper2.ExcludeLinqProperties = true;
-			AutoMapper2.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
+			AutoMapper2.Config.ExcludeLinqProperties = true;
+			AutoMapper2.Config.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
 
 			LinqToSqlPropertyClass source = new LinqToSqlPropertyClass {
 				RegularProperty = 5,
@@ -58,10 +58,10 @@ namespace AutoMapper2Lib.Tests {
 		[Ignore("This test fails as the properties on EntityCollection<> and EntitySet<> are not all Get/Set")]
 		public void LinqToEntitiesPropertyIncluded() {
 
-			AutoMapper2.ExcludeLinqProperties = false;
-			AutoMapper2.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
-			AutoMapper2.CreateMap<EntityCollection<LinqToEntitiesRelatedClass>, EntityCollection<LinqToEntitiesRelatedClass>>();
-			AutoMapper2.CreateMap<EntityReference<LinqToEntitiesRelatedClass>, EntityReference<LinqToEntitiesRelatedClass>>();
+			AutoMapper2.Config.ExcludeLinqProperties = false;
+			AutoMapper2.Config.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
+			AutoMapper2.Config.CreateMap<EntityCollection<LinqToEntitiesRelatedClass>, EntityCollection<LinqToEntitiesRelatedClass>>();
+			AutoMapper2.Config.CreateMap<EntityReference<LinqToEntitiesRelatedClass>, EntityReference<LinqToEntitiesRelatedClass>>();
 
 			// TODO: Find a way to populate the LinqToEntities properties and verify they get copied
 
@@ -121,8 +121,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void LinqToEntitiesPropertyExcluded() {
 
-			AutoMapper2.ExcludeLinqProperties = true;
-			AutoMapper2.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
+			AutoMapper2.Config.ExcludeLinqProperties = true;
+			AutoMapper2.Config.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
 
 			LinqToEntitiesPropertyClass source = new LinqToEntitiesPropertyClass {
 				RegularProperty = 5,

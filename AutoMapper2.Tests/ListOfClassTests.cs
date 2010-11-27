@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test() {
 
-			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -65,7 +65,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test() {
 
-			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -115,7 +115,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>();
 			List<InnerClassType> destination = new List<InnerClassType>();
@@ -143,7 +143,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Back_Properties() {
 
-			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>();
 			List<InnerClassType> destination = new List<InnerClassType>();
@@ -171,7 +171,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_PartiallyFilled_Test() {
 
-			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -228,7 +228,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_TooFull_Test() {
 
-			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -297,7 +297,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_TooFull_Back_Test() {
 
-			AutoMapper2.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -378,7 +378,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Class() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>() {
 					new InnerClassType1a {
@@ -446,7 +446,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Back_Class() {
 
-			AutoMapper2.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>() {
 					new InnerClassType1a {
@@ -514,7 +514,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>();
 
@@ -544,7 +544,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Class_With_Null_Properties_Back() {
 
-			AutoMapper2.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>();
 
@@ -593,7 +593,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>() {
 					new InnerClassType1b {
@@ -661,7 +661,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_Back() {
 
-			AutoMapper2.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>() {
 					new InnerClassType1b {
@@ -730,7 +730,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>();
 
@@ -760,7 +760,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_With_Null_Properties_Back() {
 
-			AutoMapper2.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>();
 
@@ -809,7 +809,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_MultiKey_Test() {
 
-			AutoMapper2.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
 
 			List<InnerClassType2> source = new List<InnerClassType2>() {
 				new InnerClassType2 {
@@ -859,7 +859,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_MultiKey_Test_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
 
 			List<InnerClassType2> source = new List<InnerClassType2>();
 			List<InnerClassType2> destination = new List<InnerClassType2>();
@@ -887,7 +887,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_PartiallyFilled_MultiKey_Test() {
 
-			AutoMapper2.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
 
 			List<InnerClassType2> source = new List<InnerClassType2>() {
 				new InnerClassType2 {
@@ -957,7 +957,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_MultiKey_Class() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
 
 			List<InnerClassType1c> source = new List<InnerClassType1c>() {
 					new InnerClassType1c {
@@ -1025,7 +1025,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_MultiKey_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
 
 			List<InnerClassType1c> source = new List<InnerClassType1c>();
 
@@ -1074,7 +1074,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_MultiKey_Class() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
 
 			List<InnerClassType1d> source = new List<InnerClassType1d>() {
 					new InnerClassType1d {
@@ -1142,7 +1142,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_MultiKey_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
+			AutoMapper2.Config.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
 
 			List<InnerClassType1d> source = new List<InnerClassType1d>();
 
@@ -1190,7 +1190,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NoPrimaryKey_Fails() {
 
-			AutoMapper2.CreateMap<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>();
+			AutoMapper2.Config.CreateMap<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>();
 
 			List<NoPrimaryKeyClass> source = new List<NoPrimaryKeyClass>();
 			List<NoPrimaryKeyClass> destination = new List<NoPrimaryKeyClass>();
@@ -1218,7 +1218,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NoProperties_Fails() {
 
-			AutoMapper2.CreateMap<List<NoPropertiesType>, List<NoPropertiesType>>();
+			AutoMapper2.Config.CreateMap<List<NoPropertiesType>, List<NoPropertiesType>>();
 
 			List<NoPropertiesType> source = new List<NoPropertiesType>();
 			List<NoPropertiesType> destination = new List<NoPropertiesType>();
@@ -1245,7 +1245,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NullPrimaryKey_Source_Fails() {
 
-			AutoMapper2.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
+			AutoMapper2.Config.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
 
 			List<NullPrimaryKeyClass> source = new List<NullPrimaryKeyClass> {
 				new NullPrimaryKeyClass {
@@ -1271,7 +1271,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NullPrimaryKey_Destination_Fails() {
 
-			AutoMapper2.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
+			AutoMapper2.Config.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
 
 			List<NullPrimaryKeyClass> source = new List<NullPrimaryKeyClass> {
 				new NullPrimaryKeyClass {

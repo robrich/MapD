@@ -14,8 +14,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Same_Class() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Same_Class_Type<OfType> source = new Class_To_Same_Class_Type<OfType> {
 				Integer = 1234,
@@ -38,8 +38,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Same_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Same_Class_Type<OfType> source = new Class_To_Same_Class_Type<OfType>();
 			Class_To_Same_Class_Type<OfType> destination = AutoMapper2.Map<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>( source );
@@ -76,8 +76,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Similar_Class() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_Type1<OfType> source = new Class_To_Similar_Class_Type1<OfType> {
 				Integer = 4321,
@@ -100,8 +100,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Similar_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_Type1<OfType> source = new Class_To_Similar_Class_Type1<OfType>();
 			Class_To_Similar_Class_Type2<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>( source );
@@ -146,8 +146,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class() {
 
-			AutoMapper2.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_DifferentProperties_Class_Type1<OfType> source = new Class_To_DifferentProperties_Class_Type1<OfType> {
 				Integer = 4321,
@@ -171,8 +171,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_DifferentProperties_Class_Type1<OfType> source = new Class_To_DifferentProperties_Class_Type1<OfType>();
 			Class_To_DifferentProperties_Class_Type2<OfType> destination = AutoMapper2.Map<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>( source );
@@ -226,8 +226,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_LessProperties_Class() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_MoreProps_Type<OfType> source = new Class_To_Similar_Class_MoreProps_Type<OfType> {
 				Integer = 4321,
@@ -255,8 +255,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_LessProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_MoreProps_Type<OfType> source = new Class_To_Similar_Class_MoreProps_Type<OfType>();
 			Class_To_Similar_Class_LessProps_Type<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source );
@@ -267,8 +267,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_MoreProperties_Class() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType> {
 				Integer = 4321,
@@ -295,8 +295,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_MoreProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType>();
 			Class_To_Similar_Class_MoreProps_Type<OfType> destination = new Class_To_Similar_Class_MoreProps_Type<OfType>();
@@ -308,9 +308,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_MoreProperties_With_Template_Class() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType> {
 				Integer = 4321,
@@ -353,9 +353,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_MoreProperties_With_Template_Class_With_Null_Properties() {
 
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
-			AutoMapper2.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.CreateMap<OfType, OfType>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			AutoMapper2.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType>();
 			Class_To_Similar_Class_MoreProps_Type<OfType> destTemplate = new Class_To_Similar_Class_MoreProps_Type<OfType> {

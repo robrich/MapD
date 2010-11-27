@@ -239,7 +239,7 @@ namespace AutoMapper2Lib {
 		}
 		#endregion
 
-		#region MapCount - for AssertMapCount
+		#region MapCount - for Assert.MapCount
 		public static int MapCount {
 			get { return mapList == null ? 0 : mapList.Count; }
 		}
