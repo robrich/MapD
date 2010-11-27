@@ -86,7 +86,7 @@ namespace AutoMapper2Lib {
 				if ( assemblies != null && assemblies.Length > 0 ) {
 					foreach ( Assembly assembly in assemblies ) {
 #if NET_4
-						if ( Assembly.IsDynamic ) {
+						if ( assembly.IsDynamic ) {
 							continue; // Can't reflect on dynamic-only assemblies
 						}
 #endif
