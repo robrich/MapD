@@ -106,8 +106,8 @@ namespace AutoMapper2Lib {
 		public static void AssertConfigurationIsValid() {
 			MapEntryManager.AssertConfigurationIsValid();
 		}
-		public static void AssertMapCount( int Count ) {
-			MapEntryManager.AssertMapCount( Count );
+		public static int AssertMapCount {
+			get { return MapEntryManager.MapCount; }
 		}
 
 		public static To Map<From, To>( From Source )
@@ -308,6 +308,9 @@ namespace AutoMapper2Lib {
 			return changes;
 		}
 
+		/// <summary>
+		/// For non-class types, convert type from/to
+		/// </summary>
 		public static To MapType<From, To>( From Source ) {
 			Type fromType = typeof( From );
 			Type toType = typeof( To );

@@ -239,17 +239,9 @@ namespace AutoMapper2Lib {
 		}
 		#endregion
 
-		#region AssertMapCount
-		public static void AssertMapCount( int Count ) {
-			if ( mapList.Count != Count ) {
-				throw new ArgumentOutOfRangeException(
-					string.Format(
-						"The number of mapped entities should be {0} but it is {1}",
-						Count,
-						( mapList == null ? 0 : mapList.Count )
-					)
-				);
-			}
+		#region MapCount - for AssertMapCount
+		public static int MapCount {
+			get { return mapList == null ? 0 : mapList.Count; }
 		}
 		#endregion
 

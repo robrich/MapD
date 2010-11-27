@@ -64,7 +64,7 @@ namespace AutoMapper2Lib.Tests {
 			AutoMapper2.CreateMap<MissingListOfNonClassMapType, MissingListOfNonClassMapType>();
 			// No call to AutoMapper2.CreateMap<List<int>, List<int>>() works fine -- they're not classes
 			AutoMapper2.AssertConfigurationIsValid();
-			AutoMapper2.AssertMapCount( 1 );
+			Assert.AreEqual( 1, AutoMapper2.AssertMapCount );
 
 		}
 
@@ -117,7 +117,7 @@ namespace AutoMapper2Lib.Tests {
 			AutoMapper2.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>();
 			// No call to AutoMapper2.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() works because it's auto-created
 			AutoMapper2.AssertConfigurationIsValid();
-			AutoMapper2.AssertMapCount( 3 );
+			Assert.AreEqual( 3, AutoMapper2.AssertMapCount );
 
 		}
 
@@ -500,18 +500,9 @@ namespace AutoMapper2Lib.Tests {
 		#region AssertMapCount_Works
 		[Test]
 		public void AssertMapCount_Works() {
-			AutoMapper2.AssertMapCount( 0 );
+			Assert.AreEqual( 0, AutoMapper2.AssertMapCount );
 			AutoMapper2.CreateMap<InnerClass, InnerClass>();
-
-			try {
-				AutoMapper2.AssertMapCount( 0 );
-				Assert.Fail( "The map count should now be 1, not 0" );
-			} catch ( ArgumentOutOfRangeException ex ) {
-				Assert.IsNotNull( ex );
-				Assert.IsNotNull( ex.Message );
-			}
-
-			AutoMapper2.AssertMapCount( 1 );
+			Assert.AreEqual( 1, AutoMapper2.AssertMapCount );
 		}
 		#endregion
 

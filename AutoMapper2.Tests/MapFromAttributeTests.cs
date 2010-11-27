@@ -20,7 +20,7 @@ namespace AutoMapper2Lib.Tests {
 
 			AutoMapper2.CreateMaps();
 
-			AutoMapper2.AssertMapCount( MappedClassesCount );
+			Assert.AreEqual( MappedClassesCount, AutoMapper2.AssertMapCount );
 
 		}
 
@@ -32,7 +32,7 @@ namespace AutoMapper2Lib.Tests {
 
 			AutoMapper2.CreateAllMaps();
 
-			AutoMapper2.AssertMapCount( MappedClassesCount + MappedResourceClassesCount );
+			Assert.AreEqual( MappedClassesCount + MappedResourceClassesCount, AutoMapper2.AssertMapCount );
 
 		}
 

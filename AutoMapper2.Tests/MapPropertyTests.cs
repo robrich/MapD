@@ -40,7 +40,7 @@ namespace AutoMapper2Lib.Tests {
 
 			AutoMapper2.CreateMap<InnerClass, InnerClass>();
 			AutoMapper2.CreateMap<InnerClass, InnerClass>();
-			AutoMapper2.AssertMapCount( 1 );
+			Assert.AreEqual( 1, AutoMapper2.AssertMapCount );
 			
 		}
 		#endregion

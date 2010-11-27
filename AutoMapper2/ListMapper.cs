@@ -56,6 +56,23 @@ namespace AutoMapper2Lib {
 						return changes;
 					}
 					if ( Destination == null ) {
+						changes.Add(
+							new PropertyChangedResults {
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = "this",
+									PropertyType = FromType,
+									PropertyValue = Source
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = "this",
+									PropertyType = ToType,
+									PropertyValue = Destination
+								}
+							} );
 						Destination = (IList)Activator.CreateInstance( ToType );
 					}
 					break;
@@ -87,7 +104,27 @@ namespace AutoMapper2Lib {
 					throw new ArgumentOutOfRangeException( "ExecutionType" );
 			}
 
-			foreach ( object from in Source ) {
+
+			// Copy source to validate there are no duplicates
+			IList sourceCopy = new List<object>();
+			foreach ( object s in Source ) {
+				if ( sourceCopy.Contains( s ) ) {
+					throw new MapFailureException( null, Source, s, MapFailureReason.DuplicateFromPrimaryKey, null );
+				}
+				sourceCopy.Add( s );
+			}
+
+			// Copy destination so I can keep track of which items were extra
+			IList destinationCopy = new List<object>();
+			foreach ( object d in Destination ) {
+				if ( destinationCopy.Contains( d ) ) {
+					throw new MapFailureException( null, Destination, d, MapFailureReason.DuplicateToPrimaryKey, null );
+				}
+				destinationCopy.Add( d );
+			}
+
+
+			foreach ( object from in sourceCopy ) {
 
 				object to = null;
 				try {
@@ -99,15 +136,15 @@ namespace AutoMapper2Lib {
 					changes.Add(
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
-								Object = from,
-								ObjectType = fromInnerType,
+								Object = Source,
+								ObjectType = FromType,
 								PropertyName = "index",
 								PropertyType = fromInnerType,
 								PropertyValue = from
 							},
 							Destination = new PropertyChangedResult {
-								Object = to,
-								ObjectType = toInnerType,
+								Object = Destination,
+								ObjectType = ToType,
 								PropertyName = "index",
 								PropertyType = toInnerType,
 								PropertyValue = null // we created it
@@ -124,16 +161,46 @@ namespace AutoMapper2Lib {
 						default:
 							throw new ArgumentOutOfRangeException( "ExecutionType" );
 					}
+				} else {
+					// It already exists, we're good
+					destinationCopy.Remove( to );
 				}
 
 			}
 
-			if ( MapDirection == MapDirection.SourceToDestination /* TODO: && destinationMap.Count > 0 */ ) {
+			if ( MapDirection == MapDirection.SourceToDestination && destinationCopy.Count > 0 ) {
 				// These existed in dest but don't exist in source
 				// Remove them from destination
-				
-				// TODO: Check for stuff in destinationPropertyValue not in sourcePropertyValue and remove them
-				// TODO: Note that they exist in dest but not in source
+				foreach ( object destEntry in destinationCopy ) {
+					changes.Add(
+						new PropertyChangedResults {
+							Source = new PropertyChangedResult {
+								Object = Source,
+								ObjectType = FromType,
+								PropertyName = "index",
+								PropertyType = fromInnerType,
+								PropertyValue = null
+							},
+							Destination = new PropertyChangedResult {
+								Object = Destination,
+								ObjectType = ToType,
+								PropertyName = "index",
+								PropertyType = toInnerType,
+								PropertyValue = destEntry
+							}
+						} );
+
+					switch ( ExecutionType ) {
+						case ExecutionType.Copy:
+							Destination.Remove( destEntry );
+							break;
+						case ExecutionType.Compare:
+							// We've already done so
+							break;
+						default:
+							throw new ArgumentOutOfRangeException( "ExecutionType" );
+					}
+				}
 			}
 
 
@@ -222,8 +289,26 @@ namespace AutoMapper2Lib {
 						return changes;
 					}
 					if ( Destination == null ) {
+						changes.Add(
+							new PropertyChangedResults {
+								Source = new PropertyChangedResult {
+									Object = Source,
+									ObjectType = FromType,
+									PropertyName = "this",
+									PropertyType = FromType,
+									PropertyValue = Source
+								},
+								Destination = new PropertyChangedResult {
+									Object = Destination,
+									ObjectType = ToType,
+									PropertyName = "this",
+									PropertyType = ToType,
+									PropertyValue = Destination
+								}
+							} );
 						Destination = (IList)Activator.CreateInstance( ToType );
 					}
+					/* Easier, but defeats accurate tracking of changes
 					if ( Source.Count == 0 ) {
 						if ( MapDirection != MapDirection.DestinationToSource ) {
 							Destination = (IList)Activator.CreateInstance( ToType ); // Easier than emptying the list
@@ -232,6 +317,7 @@ namespace AutoMapper2Lib {
 						}
 						return changes;
 					}
+					*/
 					break;
 
 				case ExecutionType.Compare:
@@ -262,88 +348,19 @@ namespace AutoMapper2Lib {
 			}
 
 			// Map source and destination objects to avoid reflecting against them too many times
-			Dictionary<List<object>, object> sourceMap = new Dictionary<List<object>, object>();
-			Dictionary<List<object>, object> destinationMap = new Dictionary<List<object>, object>();
 
-			// Map source list
-			foreach ( object from in Source ) {
-
-				List<object> fromKeys = new List<object>();
-
-				for ( int i = 0; i < sourcePrimaryKeys.Count; i++ ) {
-					PropertyInfo sourcePrimaryKey = sourcePrimaryKeys[i];
-					object fromKey = null;
-					try {
-						fromKey = sourcePrimaryKey.GetValue( from, null );
-					} catch ( Exception ex ) {
-						throw new MapFailureException( sourcePrimaryKey, from, null, MapFailureReason.GetSourceFailure, ex );
-					}
-					if ( fromKey == null ) {
-						throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.FromPrimaryKeyBlank, sourcePrimaryKey );
-					}
-					// Convert to destination primary key type
-					object toKey = TypeConvert.Convert( fromKey, destinationPrimaryKeys[i].PropertyType );
-					if ( toKey == null ) {
+			Dictionary<List<object>, object> sourceMap = MapListOfObject(
+				Source, sourcePrimaryKeys, InvalidPropertyReason.FromPrimaryKeyBlank, MapFailureReason.DuplicateFromPrimaryKey, 
+				( fromKey, index, sourcePrimaryKey ) => {
+					object convertedKey = TypeConvert.Convert( fromKey, destinationPrimaryKeys[index].PropertyType );
+					if ( convertedKey == null ) {
 						throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.FromPrimaryKeyConversionFailure, sourcePrimaryKey );
 					}
-					fromKeys.Add( toKey );
-				}
+					return convertedKey;
+				},
+				FromType, ToType );
 
-				// Does it already exist?
-				if ( sourceMap.Where(
-					d => {
-						for ( int i = 0; i < d.Key.Count; i++ ) {
-							if ( !fromKeys[i].Equals( d.Key[i] ) ) {
-								return false;
-							}
-						}
-						return true;
-					} ).Any() ) {
-					throw new MapFailureException( sourcePrimaryKeys[0], from, null, MapFailureReason.DuplicateFromPrimaryKey, null );
-				}
-
-				// It's unique, add it
-				sourceMap.Add( fromKeys, from );
-
-			}
-
-			if ( Destination != null && Destination.Count > 0 ) {
-				// Map destination list
-				foreach ( object to in Destination ) {
-
-					List<object> toKeys = new List<object>();
-
-					foreach ( PropertyInfo destinationPrimaryKey in destinationPrimaryKeys ) {
-						object toKey = null;
-						try {
-							toKey = destinationPrimaryKey.GetValue( to, null );
-						} catch ( Exception ex ) {
-							throw new MapFailureException( destinationPrimaryKey, to, null, MapFailureReason.GetDestinationFailure, ex );
-						}
-						if ( toKey == null ) {
-							throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.ToPrimaryKeyBlank, destinationPrimaryKey );
-						}
-						toKeys.Add( toKey );
-					}
-
-					// Does it already exist?
-					if ( destinationMap.Where(
-						d => {
-							for ( int i = 0; i < d.Key.Count; i++ ) {
-								if ( !toKeys[i].Equals( d.Key[i] ) ) {
-									return false;
-								}
-							}
-							return true;
-						} ).Any() ) {
-						throw new MapFailureException( destinationPrimaryKeys[0], to, null, MapFailureReason.DuplicateToPrimaryKey, null );
-					}
-
-					// It's unique, add it
-					destinationMap.Add( toKeys, to );
-
-				}
-			}
+			Dictionary<List<object>, object> destinationMap = MapListOfObject( Destination, destinationPrimaryKeys, InvalidPropertyReason.ToPrimaryKeyBlank, MapFailureReason.DuplicateToPrimaryKey, ( keyObj, i, key ) => keyObj, FromType, ToType );
 
 
 			foreach ( KeyValuePair<List<object>, object> fromEntry in sourceMap ) {
@@ -370,7 +387,6 @@ namespace AutoMapper2Lib {
 
 				// If destination object isn't found, create one
 				if ( to == null ) {
-					to = Activator.CreateInstance( toInnerType );
 					changes.Add(
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
@@ -391,6 +407,7 @@ namespace AutoMapper2Lib {
 
 					switch ( ExecutionType ) {
 						case ExecutionType.Copy:
+							to = Activator.CreateInstance( toInnerType );
 							Destination.Add( to );
 							break;
 						case ExecutionType.Compare:
@@ -401,15 +418,21 @@ namespace AutoMapper2Lib {
 					}
 				}
 
-				// Map the source object to the destination object
-				List<PropertyChangedResults> changeListStep = PropertyMapper.CopyProperties( fromInnerType, toInnerType, from, ref to, MapDirection, ExecutionType );
-				if ( changeListStep != null && changeListStep.Count > 0 ) {
-					changes.AddRange( changeListStep );
+				// If we're in compare mode and we just noticed dest is missing but didn't create one, we're good
+				List<PropertyChangedResults> changeListStep = null;
+				if ( to != null ) {
+					// Map the source object to the destination object
+					changeListStep = PropertyMapper.CopyProperties( fromInnerType, toInnerType, from, ref to, MapDirection, ExecutionType );
 				}
 
 				if ( toEntry.Key != null ) {
+					// If we created it, "created it" is all that we need to document for changes
+					// That we set every property (recursively) to match the original is irrelevant
+					if ( changeListStep != null && changeListStep.Count > 0 ) {
+						changes.AddRange( changeListStep );
+					}
 					// We've successfully mapped this one
-					// Remove it from the list
+					// Remove it from the "to map" list
 					// so it'll be faster to map subsequent entries
 					// and so we know which are in Destination but not in Source
 					destinationMap.Remove( toEntry.Key );
@@ -435,7 +458,7 @@ namespace AutoMapper2Lib {
 								ObjectType = ToType,
 								PropertyName = "index",
 								PropertyType = toInnerType,
-								PropertyValue = destEntry
+								PropertyValue = destEntry.Value
 							}
 						} );
 
@@ -453,6 +476,54 @@ namespace AutoMapper2Lib {
 			}
 
 			return changes;
+		}
+
+		private static Dictionary<List<object>, object> MapListOfObject( IList Source, List<PropertyInfo> PrimaryKeys, InvalidPropertyReason KeyBlankReason, MapFailureReason DuplicateReason, 
+			Func<object, int, PropertyInfo, object> ConvertKeyFunc, Type FromType, Type ToType ) {
+
+			Dictionary<List<object>, object> results = new Dictionary<List<object>, object>();
+
+			if ( Source != null && Source.Count > 0 ) {
+				foreach ( object from in Source ) {
+
+					List<object> fromKeys = new List<object>();
+
+					for ( int i = 0; i < PrimaryKeys.Count; i++ ) {
+						PropertyInfo primaryKey = PrimaryKeys[i];
+						object keyObj = null;
+						try {
+							keyObj = primaryKey.GetValue( from, null );
+						} catch ( Exception ex ) {
+							throw new MapFailureException( primaryKey, Source, from, MapFailureReason.GetSourceFailure, ex );
+						}
+						if ( keyObj == null ) {
+							throw new InvalidTypeConversionException( FromType, ToType, KeyBlankReason, primaryKey );
+						}
+						// Convert to destination primary key type
+						object convertedKey = ConvertKeyFunc( keyObj, i, primaryKey );
+						fromKeys.Add( convertedKey );
+					}
+
+					// Does it already exist?
+					if ( results.Where(
+						d => {
+							for ( int i = 0; i < d.Key.Count; i++ ) {
+								if ( !fromKeys[i].Equals( d.Key[i] ) ) {
+									return false;
+								}
+							}
+							return true;
+						} ).Any() ) {
+						throw new MapFailureException( PrimaryKeys[0], Source, from, DuplicateReason, null );
+					}
+
+					// It's unique, add it
+					results.Add( fromKeys, from );
+
+				}
+			}
+
+			return results;
 		}
 
 	}

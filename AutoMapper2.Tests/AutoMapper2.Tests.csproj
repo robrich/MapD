@@ -94,7 +94,13 @@
     <Compile Include="ListOfNonClassTests.cs" />
     <Compile Include="ClassWithWeirdPropertiesTests.cs" />
     <Compile Include="IgnoreAttributeTests.cs" />
+    <Compile Include="ResultsTests\CompareListOfClassResultsTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ResultsTests\CompareListOfNonClassResultsTests.cs" />
     <Compile Include="ResultsTests\MapBackClassResultsTests.cs" />
+    <Compile Include="ResultsTests\MapBackListOfClassResultsTests.cs" />
+    <Compile Include="ResultsTests\MapBackListOfNonClassResultsTests.cs" />
     <Compile Include="ResultsTests\MapClassResultsTests.cs" />
     <Compile Include="MapFromAttributeTests.cs" />
     <Compile Include="MapperParameterTests.cs" />
@@ -104,6 +110,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RemapPropertyTests.cs" />
     <Compile Include="ResetMapTests.cs" />
+    <Compile Include="ResultsTests\MapListOfClassResultsTests.cs" />
+    <Compile Include="ResultsTests\MapListOfNonClassResultsTests.cs" />
     <Compile Include="SettingExcludeLinqPropertiesTests.cs" />
     <Compile Include="TestTheTests.cs" />
   </ItemGroup>
