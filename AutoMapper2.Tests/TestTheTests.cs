@@ -90,7 +90,8 @@ namespace AutoMapper2Lib.Tests {
 							|| attribute is TearDownAttribute
 							|| attribute is SetUpFixtureAttribute
 							|| attribute is TestFixtureTearDownAttribute
-							|| attribute is IgnoreAttribute ) {
+							|| attribute is IgnoreAttribute
+							|| attribute is TestFixtureSetUpAttribute ) {
 							testAttribute = true;
 							break;
 						}

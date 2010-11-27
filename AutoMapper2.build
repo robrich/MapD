@@ -8,6 +8,7 @@
 	<property name="Configuration" value="Release" overwrite="false" />
 	<property name="Debug" value="false" />
 	<property name="DebugConditional" value="" />
+	<property name="FrameworkConditional" value="" />
 	<property name="MSBuildXmlLoggerPath" value="C:\ci\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll" />
 
 
@@ -165,11 +166,15 @@
 	<target name="BuildAndTestSolutions">
 	
 		<property name="nant.settings.currentframework" value="net-3.5" />
+		<property name="FrameworkConditional" value="" />
+
 		<call target="RevertProjectVersion" />
 		
 		<call target="BuildAndTestSolution" />
 	
 		<property name="nant.settings.currentframework" value="net-4.0" />
+		<property name="FrameworkConditional" value="NET_4" />
+
 		<call target="SetProjectVersion" />
 		
 		<call target="BuildAndTestSolution" />
@@ -257,7 +262,7 @@
 			<property name="MSBuildConsoleLogger" value="/noconsolelogger" />
 		</if>
 
-		<echo message="Building ${Solution} for ${Platform}: ${nant.settings.currentframework} ${Configuration} ${DebugConditional}"/>
+		<echo message="Building ${Solution} for ${Platform}: ${nant.settings.currentframework} ${Configuration} ${DebugConditional}${FrameworkConditional}"/>
 		<msbuild
 			project="${Solution}"
 			verbosity="Normal"
@@ -266,7 +271,7 @@
 			<property name="Platform" value="${Platform}" />
 			<property name="debug" value="${Debug}" />
 			<property name="trace" value="${Debug}" />
-			<arg value='/p:DefineConstants="${DebugConditional}"' />
+			<arg value='/p:DefineConstants="${DebugConditional}${FrameworkConditional}"' />
 			<arg value='${MSBuildLogger}' />
 			<arg value='${MSBuildConsoleLogger}' />
 		</msbuild>

@@ -85,6 +85,11 @@ namespace AutoMapper2Lib {
 				Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 				if ( assemblies != null && assemblies.Length > 0 ) {
 					foreach ( Assembly assembly in assemblies ) {
+#if NET_4
+						if ( Assembly.IsDynamic ) {
+							continue; // Can't reflect on dynamic-only assemblies
+						}
+#endif
 						CreateMaps( assembly );
 					}
 				}
