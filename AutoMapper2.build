@@ -164,23 +164,23 @@
 
 
 	<target name="BuildAndTestSolutions">
-	
+
 		<property name="nant.settings.currentframework" value="net-3.5" />
 		<property name="FrameworkConditional" value="" />
 
 		<call target="RevertProjectVersion" />
-		
+
 		<call target="BuildAndTestSolution" />
-	
+
 		<property name="nant.settings.currentframework" value="net-4.0" />
 		<property name="FrameworkConditional" value="NET_4" />
 
 		<call target="SetProjectVersion" />
-		
+
 		<call target="BuildAndTestSolution" />
 
 		<call target="RevertProjectVersion" />
-	
+
 	</target>
 
 	<target name="RevertProjectVersion">
@@ -219,7 +219,27 @@
 				<items refid="Csprojs" />
 			</in>
 			<do>
+				<loadfile file="${file}" property="filecontents">
+					<filterchain>
+						<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+					</filterchain>
+				</loadfile>
+				<echo file="${file}" message="${string::trim-end(filecontents)}"/>
+			</do>
+		</foreach>
 
+
+		<!-- This isn't a regular expression, this is a hard-coded string -->
+		<property name="content-from" value="&lt;Reference Include=&quot;System&quot; /&gt;" />
+		<property name="content-to" value="&lt;Reference Include=&quot;System&quot; /&gt;&lt;Reference Include=&quot;System.ComponentModel.DataAnnotations&quot; /&gt;" />
+
+		<echo message="Changing from ${content-from} to ${content-to} in csproj files" />
+
+		<foreach item="File" property="file">
+			<in>
+				<items refid="Csprojs" />
+			</in>
+			<do>
 				<loadfile file="${file}" property="filecontents">
 					<filterchain>
 						<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
@@ -238,7 +258,7 @@
 
 		<property name="PlatformNoSpace" value="${string::replace(Platform,' ','')}" />
 		<property name="FrameworkNoSpace" value="${string::replace(nant.settings.currentframework,'net-','net')}" />
-		
+
 		<call target="NUnit" />
 
 		<property name="Project" value="AutoMapper2/AutoMapper2.csproj" />

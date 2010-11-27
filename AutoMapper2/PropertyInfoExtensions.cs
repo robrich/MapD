@@ -7,7 +7,6 @@ namespace AutoMapper2Lib {
 	using System.Data.Objects.DataClasses;
 	using System.Linq;
 	using System.Reflection;
-
 	#endregion
 
 	internal static class PropertyInfoExtensions {
@@ -70,30 +69,40 @@ namespace AutoMapper2Lib {
 
 		public static bool IsPrimaryKeyPropertyViaMapAttribute( this PropertyInfo Property ) {
 			bool results = false;
-			PrimaryKeyAttribute ignore = (PrimaryKeyAttribute)Attribute.GetCustomAttribute( Property, typeof( PrimaryKeyAttribute ) );
-			if ( ignore != null ) {
+			PrimaryKeyAttribute key = (PrimaryKeyAttribute)Attribute.GetCustomAttribute( Property, typeof( PrimaryKeyAttribute ) );
+			if ( key != null ) {
 				results = true;
 			}
 			return results;
 		}
 
+		public static bool IsPrimaryKeyPropertyViaDataAnnotation( this PropertyInfo Property ) {
+			bool results = false;
+#if NET_4
+			// KeyAttribute primary key
+			System.ComponentModel.DataAnnotations.KeyAttribute key = (System.ComponentModel.DataAnnotations.KeyAttribute)Attribute.GetCustomAttribute( Property, typeof( System.ComponentModel.DataAnnotations.KeyAttribute ) );
+			if ( key != null ) {
+				results = true;
+			}
+#endif
+			return results;
+		}
+
 		public static bool IsPrimaryKeyPropertyViaLinq( this PropertyInfo Property ) {
 			bool results = false;
+			
 			// ColumnAttribute primary key
 			ColumnAttribute linqToSql = (ColumnAttribute)Attribute.GetCustomAttribute( Property, typeof( ColumnAttribute ) );
 			if ( linqToSql != null && linqToSql.IsPrimaryKey ) {
 				results = true;
 			}
+
 			// EdmScalarPropertyAttribute primary key
 			EdmScalarPropertyAttribute linqToEntities = (EdmScalarPropertyAttribute)Attribute.GetCustomAttribute( Property, typeof( EdmScalarPropertyAttribute ) );
 			if ( linqToEntities != null && linqToEntities.EntityKeyProperty ) {
 				results = true;
 			}
-			// AutoMapper2 PrimaryKey
-			PrimaryKeyAttribute primaryKeyAttribute = (PrimaryKeyAttribute)Attribute.GetCustomAttribute( Property, typeof( PrimaryKeyAttribute ) );
-			if ( primaryKeyAttribute != null ) {
-				results = true;
-			}
+
 			return results;
 		}
 
@@ -109,6 +118,14 @@ namespace AutoMapper2Lib {
 				results = (
 					from p in Properties
 					where p.IsPrimaryKeyPropertyViaMapAttribute()
+					select p
+					).ToList();
+			}
+
+			if ( results.Count == 0 ) {
+				results = (
+					from p in Properties
+					where p.IsPrimaryKeyPropertyViaDataAnnotation()
 					select p
 					).ToList();
 			}

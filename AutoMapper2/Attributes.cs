@@ -8,6 +8,9 @@ namespace AutoMapper2Lib {
 	/// <summary>
 	/// This property/ies are the primary key when mapping lists
 	/// </summary>
+#if NET_4
+	[Obsolete( "Use System.ComponentModel.DataAnnotations.Key instead" )]
+#endif
 	[AttributeUsage( AttributeTargets.Property )]
 	public class PrimaryKeyAttribute : Attribute {
 	}
