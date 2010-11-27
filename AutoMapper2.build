@@ -265,7 +265,7 @@
 		<call target="CopyProject" />
 
 		<zip zipfile="build/AutoMapper2-${FrameworkNoSpace}.zip">
-			<fileset basedir="build/${nant.settings.currentframework}">
+			<fileset basedir="build/${FrameworkNoSpace}">
 				<include name="**/**" />
 			</fileset>
 		</zip>
