@@ -261,7 +261,7 @@
 
 		<call target="NUnit" />
 
-		<property name="Project" value="AutoMapper2/MapD.csproj" />
+		<property name="Project" value="MapDLib/MapD.csproj" />
 		<call target="CopyProject" />
 
 		<zip zipfile="build/MapD-${FrameworkNoSpace}.zip">
@@ -298,7 +298,7 @@
 	</target>
 
 	<target name="NUnit">
-		<exec program="nunit-console.exe" failonerror="true" workingdir="AutoMapper2.Tests/bin/${Configuration}/">
+		<exec program="nunit-console.exe" failonerror="true" workingdir="MapDLib.Tests/bin/${Configuration}/">
 			<arg value="/nodots" />
 			<!--arg value="/nologo" /-->
 			<arg value="/xml:${project::get-base-directory()}\NUnit-${FrameworkNoSpace}-results.xml" />
