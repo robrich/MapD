@@ -130,7 +130,7 @@ namespace MapDLib {
 			Type to = typeof(To);
 			AssertTypesCanMap(from, to);
 		}
-		public static void AssertTypesCanMap(Type From, Type To) {
+		public static void AssertTypesCanMap( Type From, Type To ) {
 			if ( From.IsListOfT() != To.IsListOfT() ) {
 				if ( From.IsListOfT() ) {
 					throw new InvalidTypeConversionException( From, To, InvalidPropertyReason.ListTypeToNonListType );
@@ -167,8 +167,8 @@ namespace MapDLib {
 				// This flexes the "null to null" case, which is pretty much not helpful
 				// But it does flex MapBuilder.BuildMap(m), which is quite helpful
 
-				object source = Activator.CreateInstance( m.From );
-				object destination = Activator.CreateInstance( m.To );
+				object source = Instantiator.CreateInstance( m.From );
+				object destination = Instantiator.CreateInstance( m.To );
 
 				// Populate class and list properties so copying will recurse as needed
 				FillObjectWithDefaults( m.From, m.To, source, destination );
@@ -201,14 +201,14 @@ namespace MapDLib {
 
 				if ( sourceType.IsListOfT() || destinationType.IsListOfT() ) {
 					MapEntryManager.AssertTypesCanMap( sourceType, destinationType );
-					IList sourceList = (IList)Activator.CreateInstance( sourceType );
-					IList destinationList = (IList)Activator.CreateInstance( destinationType );
+					IList sourceList = (IList)Instantiator.CreateInstance( sourceType );
+					IList destinationList = (IList)Instantiator.CreateInstance( destinationType );
 					Type sourceBaseType = sourceType.GetGenericBaseType();
 					Type destinationBaseType = destinationType.GetGenericBaseType();
 					// Add an object to the list
-					object sourceChild = Activator.CreateInstance( sourceBaseType );
+					object sourceChild = Instantiator.CreateInstance( sourceBaseType );
 					sourceList.Add( sourceChild );
-					object destinationChild = Activator.CreateInstance( destinationBaseType );
+					object destinationChild = Instantiator.CreateInstance( destinationBaseType );
 					destinationList.Add( destinationChild );
 					if ( sourceBaseType.IsClassType() || destinationBaseType.IsClassType() ) {
 						// Fill the child with default values
@@ -218,8 +218,8 @@ namespace MapDLib {
 					destinationValue = destinationList;
 				} else if ( sourceType.IsClassType() ) {
 					MapEntryManager.AssertTypesCanMap( sourceType, destinationType );
-					sourceValue = Activator.CreateInstance( sourceType );
-					destinationValue = Activator.CreateInstance( destinationType );
+					sourceValue = Instantiator.CreateInstance( sourceType );
+					destinationValue = Instantiator.CreateInstance( destinationType );
 					FillObjectWithDefaults( sourceType, destinationType, sourceValue, destinationValue ); // Recurse to populate this object
 				} else {
 					// Creating the object set it to the appropriate default value

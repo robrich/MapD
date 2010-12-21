@@ -38,6 +38,17 @@ namespace MapDLib {
 				}
 			}
 
+			private static Func<Type,object> creationStrategy;
+			public static Func<Type, object> CreationStrategy {
+				get { return creationStrategy; }
+				set {
+					if ( mappingPropertiesLocked ) {
+						throw new NotSupportedException( "Once you call CreateMap(), you can't change the CreationStrategy because the properties have already been mapped" );
+					}
+					creationStrategy = value;
+				}
+			}
+
 			static Config() {
 				ResetMap();
 			}
@@ -49,12 +60,13 @@ namespace MapDLib {
 				mappingPropertiesLocked = false;
 				ExcludeLinqProperties = true;
 				IgnorePropertiesIf = PropertyIs.NotSet;
+				CreationStrategy = type => Activator.CreateInstance( type );
 				MapEntryManager.ResetMap();
 			}
 
 			public static void CreateMap<From, To>()
-				where From : class, new()
-				where To : class, new() {
+				where From : class
+				where To : class {
 				Type fromType = typeof( From );
 				Type toType = typeof( To );
 				MapEntryManager.AssertTypesCanMap<From, To>();
@@ -127,8 +139,8 @@ namespace MapDLib {
 		}
 
 		public static To Copy<From, To>( From Source )
-			where From : class, new()
-			where To : class, new() {
+			where From : class
+			where To : class {
 
 			Type fromType = typeof( From );
 			Type toType = typeof( To );
@@ -137,14 +149,14 @@ namespace MapDLib {
 			if ( Source == null ) {
 				return null;
 			}
-			To destination = (To)Activator.CreateInstance( typeof( To ) );
+			To destination = (To)Instantiator.CreateInstance( typeof( To ) );
 			List<PropertyChangedResults> changes = Copy<From, To>( Source, ref destination );
 			return destination;
 		}
 
 		public static List<PropertyChangedResults> Copy<From, To>( From Source, ref To Destination )
-			where From : class, new()
-			where To : class, new() {
+			where From : class
+			where To : class {
 
 			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
@@ -193,7 +205,7 @@ namespace MapDLib {
 							PropertyValue = Destination
 						}
 					} );
-				Destination = (To)Activator.CreateInstance( typeof( To ) );
+				Destination = (To)Instantiator.CreateInstance( typeof( To ) );
 			}
 
 			object destinationObject = Destination;
@@ -203,8 +215,8 @@ namespace MapDLib {
 		}
 
 		public static List<PropertyChangedResults> CopyBack<From, To>( To Source, ref From Destination )
-			where From : class, new()
-			where To : class, new() {
+			where From : class
+			where To : class {
 
 			// In CopyBack, "fromType" is type of From, which is the Destination
 			// Therefore calling *Mapper.Copy*() passes in toType first
@@ -256,7 +268,7 @@ namespace MapDLib {
 							PropertyValue = Destination
 						}
 					} );
-				Destination = (From)Activator.CreateInstance( typeof( From ) );
+				Destination = (From)Instantiator.CreateInstance( typeof( From ) );
 			}
 
 			object destinationObject = Destination;
@@ -266,8 +278,8 @@ namespace MapDLib {
 		}
 
 		public static List<PropertyChangedResults> Compare<From, To>( From Source, To Destination )
-			where From : class, new()
-			where To : class, new() {
+			where From : class
+			where To : class {
 
 
 			Type fromType = typeof(From);
@@ -331,7 +343,7 @@ namespace MapDLib {
 			Type fromType = typeof( From );
 			Type toType = typeof( To );
 			MapEntryManager.AssertTypesCanMap<From, To>();
-			if ( fromType.IsClassType() ) {
+			if ( fromType.IsClassType() || toType.IsClassType() ) {
 				throw new NotSupportedException( "Can't call this with a class type, call Copy() instead" );
 			}
 			return (To)TypeConvert.Convert( Source, toType );

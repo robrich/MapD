@@ -3,6 +3,7 @@ namespace MapDLib {
 	#region using
 	using System;
 	using System.Reflection;
+	using System.Runtime.Serialization;
 
 	#endregion
 
@@ -102,7 +103,8 @@ namespace MapDLib {
 		FromPrimaryKeyBlank,
 		FromPrimaryKeyConversionFailure,
 		ToPrimaryKeyBlank,
-		MissingProperty
+		MissingProperty,
+		CantMapValueTypes
 	}
 
 	// Using the map failed, building the map succeeded previously
@@ -116,7 +118,7 @@ namespace MapDLib {
 		public MapFailureException( PropertyInfo PropertyInfo, object Target, object Value, MapFailureReason MapFailureReason, Exception innerException )
 			// FRAGILE: Assumes PropertyInfo isn't null
 			: base( string.Format( "Failed to map {0} on {1}{2} because {3}: {4}",
-				(PropertyInfo != null ? PropertyInfo.Name : ""),
+				( PropertyInfo != null ? PropertyInfo.Name : "" ),
 				Target.ObjectToString(),
 				( Value != null ? ( "to " + Value.ObjectToString() ) : null ),
 				MapFailureReason,
@@ -150,6 +152,27 @@ namespace MapDLib {
 		DuplicateFromPrimaryKey,
 		DuplicateToPrimaryKey,
 		ConvertTypeFailure
+	}
+
+	public class InstantiationException : Exception {
+
+		public Type InstanceType { get; private set; }
+
+		public InstantiationException( string Message, Type InstanceType, Exception inner )
+			: base( Message, inner ) {
+			if ( InstanceType == null ) {
+				throw new ArgumentNullException( "InstanceType" );
+			}
+			this.InstanceType = InstanceType;
+		}
+		public InstantiationException( string Message, Type InstanceType )
+			: base( Message ) {
+			if ( InstanceType == null ) {
+				throw new ArgumentNullException( "InstanceType" );
+			}
+			this.InstanceType = InstanceType;
+		}
+
 	}
 
 }

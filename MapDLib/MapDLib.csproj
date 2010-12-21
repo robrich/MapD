@@ -74,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes.cs" />
+    <Compile Include="Instantiator.cs" />
     <Compile Include="MapD.cs" />
     <Compile Include="MapBuilder.cs" />
     <Compile Include="ListMapper.cs" />

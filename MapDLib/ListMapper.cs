@@ -73,7 +73,7 @@ namespace MapDLib {
 									PropertyValue = Destination
 								}
 							} );
-						Destination = (IList)Activator.CreateInstance( ToType );
+						Destination = (IList)Instantiator.CreateInstance( ToType );
 					}
 					break;
 
@@ -306,12 +306,12 @@ namespace MapDLib {
 									PropertyValue = Destination
 								}
 							} );
-						Destination = (IList)Activator.CreateInstance( ToType );
+						Destination = (IList)Instantiator.CreateInstance( ToType );
 					}
 					/* Easier, but defeats accurate tracking of changes
 					if ( Source.Count == 0 ) {
 						if ( MapDirection != MapDirection.DestinationToSource ) {
-							Destination = (IList)Activator.CreateInstance( ToType ); // Easier than emptying the list
+							Destination = (IList)Instantiator.CreateInstance( ToType ); // Easier than emptying the list
 						} else {
 							// Leave it be
 						}
@@ -407,7 +407,7 @@ namespace MapDLib {
 
 					switch ( ExecutionType ) {
 						case ExecutionType.Copy:
-							to = Activator.CreateInstance( toInnerType );
+							to = Instantiator.CreateInstance( toInnerType );
 							Destination.Add( to );
 							break;
 						case ExecutionType.Compare:

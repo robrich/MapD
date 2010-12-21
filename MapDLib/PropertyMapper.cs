@@ -34,10 +34,10 @@ namespace MapDLib {
 				// Create one
 				switch ( MapDirection ) {
 					case MapDirection.SourceToDestination:
-						Destination = Activator.CreateInstance( ToType );
+						Destination = Instantiator.CreateInstance( ToType );
 						break;
 					case MapDirection.DestinationToSource:
-						Destination = Activator.CreateInstance( FromType );
+						Destination = Instantiator.CreateInstance( FromType );
 						break;
 					default:
 						throw new ArgumentOutOfRangeException( "MapDirection" );
@@ -238,7 +238,7 @@ namespace MapDLib {
 				} else if ( sourcePropertyValue == null ) {
 					// It's null
 					if ( destinationProperty.PropertyType.IsValueType ) {
-						destinationPropertyValue = Activator.CreateInstance( destinationProperty.PropertyType );
+						destinationPropertyValue = Instantiator.CreateInstance( destinationProperty.PropertyType );
 					} else {
 						destinationPropertyValue = null;
 					}

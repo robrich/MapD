@@ -17,7 +17,7 @@ namespace MapDLib {
 
 			if ( Value == null ) {
 				if ( DestinationType.IsValueType ) {
-					return Activator.CreateInstance( DestinationType );
+					return Instantiator.CreateInstance( DestinationType );
 				} else {
 					return null;
 				}
@@ -84,7 +84,7 @@ namespace MapDLib {
 					return Value; // It already is
 				}
 				if ( Type.IsValueType ) {
-					return Activator.CreateInstance( Type );
+					return Instantiator.CreateInstance( Type );
 				}
 				return null;
 			}

@@ -12,7 +12,7 @@ namespace MapDLib {
 			if ( Type == null ) {
 				throw new ArgumentNullException( "Type" );
 			}
-			if ( Type.IsGenericType ) {
+			if ( Type.IsNullable() ) {
 				// Really what we're after is the base type, not the generic type
 				return Type.GetGenericBaseType().IsClassType();
 			}
