@@ -43,7 +43,7 @@ namespace MapDLib {
 			}
 
 			/// <summary>
-			/// Reset the AutoMapper -- for Unit Tests and initialization
+			/// Reset the MapD maps -- for Unit Tests and initialization
 			/// </summary>
 			public static void ResetMap() {
 				mappingPropertiesLocked = false;
