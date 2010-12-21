@@ -74,6 +74,7 @@ namespace AutoMapper2Lib {
 			/// <summary>
 			/// Reflect on the current assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 			/// </summary>
+			[MethodImpl(MethodImplOptions.NoInlining)]
 			public static void CreateMaps() {
 				CreateMaps( Assembly.GetCallingAssembly() );
 			}
@@ -99,6 +100,7 @@ namespace AutoMapper2Lib {
 			/// Reflect on the specified assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 			/// </summary>
 			/// <param name="Assembly"></param>
+			[MethodImpl(MethodImplOptions.NoInlining)]
 			public static void CreateMaps( Assembly Assembly ) {
 				if ( Assembly == null ) {
 					Assembly = Assembly.GetCallingAssembly();

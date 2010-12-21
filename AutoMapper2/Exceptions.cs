@@ -11,6 +11,7 @@ namespace AutoMapper2Lib {
 		private Type fromType;
 		private Type toType;
 
+		// FRAGILE: ASSUME: both From and To aren't null
 		public MissingMapException( Type FromType, Type ToType )
 			: base( string.Format( "Can't convert from {0} to {1} because there is no map to do so",
 			FromType.FullName, ToType.FullName ) ) {
@@ -34,11 +35,11 @@ namespace AutoMapper2Lib {
 		private readonly InvalidPropertyReason invalidPropertyReason;
 		private PropertyInfo propertyInfo;
 
-		// FRAGILE: ASSUME: both From and To aren't null
 		public InvalidTypeConversionException( Type From, Type To, InvalidPropertyReason InvalidPropertyReason )
 			: this( From, To, InvalidPropertyReason, null ) {
 		}
 
+		// FRAGILE: ASSUME: both From and To aren't null
 		public InvalidTypeConversionException( Type From, Type To, InvalidPropertyReason InvalidPropertyReason, PropertyInfo PropertyInfo )
 			: base( string.Format( "Can't convert{0} from {1} to {2} because {3}",
 			( PropertyInfo != null ? ( " " + PropertyInfo.Name ) : "" ), From.FullName, To.FullName, InvalidPropertyReason ) ) {
