@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests.ResultsTests {
+namespace MapDLib.Tests.ResultsTests {
 
 	#region using
 	using System.Collections.Generic;
@@ -13,12 +13,12 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSourceandDestList_NoChanges() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = null;
 			List<SimplePrimaryClass> destination = null;
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 0, changes.Count );
@@ -32,7 +32,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSourceFullDestList_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = null;
 			List<SimplePrimaryClass> destination = new List<SimplePrimaryClass>() {
@@ -46,7 +46,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				}
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 1, changes.Count );
@@ -79,7 +79,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void FullSourceNullDestList_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -93,7 +93,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			};
 			List<SimplePrimaryClass> destination = null;
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 1, changes.Count );
@@ -125,7 +125,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void FullSourceEmptyDestList_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -139,7 +139,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			};
 			List<SimplePrimaryClass> destination = new List<SimplePrimaryClass>();
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 2, changes.Count );
@@ -181,7 +181,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void EmptySourceFullDestList_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>();
 			List<SimplePrimaryClass> destination = new List<SimplePrimaryClass>() {
@@ -195,7 +195,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				}
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 2, changes.Count );
@@ -237,7 +237,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void IdenticalSourceandDestList_NoDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -260,7 +260,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				}
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 0, changes.Count );
@@ -275,7 +275,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void ExtraSourceList_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -294,7 +294,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				}
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 1, changes.Count );
@@ -336,7 +336,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void ExtraDestList_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -356,7 +356,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			};
 			SimplePrimaryClass destOne = destination[0];
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 1, changes.Count );
@@ -398,7 +398,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void DissimilarList_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass2>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass2>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -414,7 +414,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				}
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass2>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass2>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 1, changes.Count );
@@ -456,7 +456,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void DissimilarObject_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
+			MapD.Config.CreateMap<List<SimplePrimaryClass>, List<SimplePrimaryClass>>();
 
 			List<SimplePrimaryClass> source = new List<SimplePrimaryClass>() {
 				new SimplePrimaryClass() {
@@ -473,7 +473,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			SimplePrimaryClass sourceOne = source[0];
 			SimplePrimaryClass destinationOne = destination[0];
 
-			List<PropertyChangedResults> changes = AutoMapper2.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
+			List<PropertyChangedResults> changes = MapD.Compare<List<SimplePrimaryClass>, List<SimplePrimaryClass>>( source, destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 1, changes.Count );

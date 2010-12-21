@@ -1,0 +1,152 @@
+﻿Features:
+[IgnoreMap]
+[RemapProperty("SourceProperty")]
+If you have Map of List<T> to List<U>, no need T to U
+[IgnorePropertiesIf(PropertyIs.ReadOnly)]
+[MapFrom(type)]
+[MapListFromListOf(type)]
+[MapFromSelf]
+[MapListFromListOfSelf]
+
+
+Gotchas:
+.Create*Map*() only gets loaded assemblies -- use it first
+.Create*Map*() only gets public types because Assembly.GetExportedTypes() only exposes public types
+Doesn't compare order in lists, only presence
+List<Class> requires each item to have a Key
+
+
+
+// Done:
+// class to class
+// class with null properties
+// class to similarly named props
+// class to similarly named props with different property types
+// class to similarly named props class with fewer properties
+// class to similarly named props class with more properties
+// null to class, class to null
+// class with property to property? and back
+// class with enum property
+// List<val> to Lis<disimilar-val>
+// class with nested list
+// Linq2- properties incl / excl
+// class.Property is List<int>, List<class>, Class
+// Nested properties
+// class with nested class
+// with LinqToSql properties
+// with LinqToEntities proeprties
+// class to derived type
+// MapBack<> with null, non-null, etc
+// class with 0 properties
+// Insure ResetMaps really does
+// Use all primary keys when looping
+// Cache object values so we need not look again
+// List<Class> with more than 1 primary key property
+// Generic<class> (not a list) resolves properties correctly
+	- e.g. EntitySet<T>, EntityRef<T> but a class I can control
+// MapBack: if source is null, don't null destination
+// List<class or non-class> with extra in dest:
+	- MapBack: leave them
+	- Map: remove them
+// [IgnorePropertiesIf(PropertyType.ReadOnly | PropertyType.WriteOnly)]
+	And property on MapD
+	?? And parameters in .CreateMap<>()?
+	then ResetMapTests flexes it gets reset
+// [IgnorePropertiesIf(...)]
+// List<>: If we find redundant primary keys in source or destination, barf
+// Test that mapping fails if .......
+	- Missing property
+	- Extra property
+	- Property that's List<> to non-List<> (and vice-versa)
+	- Property that's class to non-class (and vice-versa)
+	- No map for the mapped type
+	- error getting property
+	- Property can't read or write
+	- Property types aren't compatible
+	- List<class> but class has no primary key
+// GetPrimaryKeys() on a class with zero properties
+// dest list has too many items and they get removed
+// dest list partially filled with matching primary key
+// dest list partially filled with more than one object
+// dest list partially filled with duplicate primary key
+// List with null primary key field
+// non-class to non-class (int to double)
+// Insure AssertIsValid() matches mapping failures
+	- for List<T>, populate the list with default(T);
+	- for class, populate properties with default(T)
+// [MapFrom(typeof(blah))]
+	then reflect on assembly to make the map happen
+// [MapListFrom(typeof(blah))]
+	to get List<this> from List<blah>
+// If the from type and to type are the same, do we need a map?
+	Yes, because otherwise the "flex configuration" wouldn't be complete
+/*
+* analyzing change results:
+* - foreach ( Compare, Map, MapBack
+*   - Both objects are null
+*   - Source is null, dest isn't
+*   - Dest is null, source isn't
+*   - Source is populated, dest isn't
+*   - Dest is populated, source isn't
+*   - Dissimilar objects
+*   - foreach ( List of objects, List of non-objects:
+*     - foreach ( source & destination:
+*       - null
+*       - empty
+*       - populated identically
+*       - missing objects
+*       - extra objects
+*       - object changes captured correctly
+*       - dissimilar objects
+*/
+
+
+
+Think:
+- MapD Property that says "can't serialize class.Property type, don't die" (e.g. LinqToEntity's EntitySet<T> where T isn't serialializable)
+- Can I have a prperty that says "how to map this" that is a Lambda? (for T<U> to V<W> scenarios)
+	e.g.: [MapInstructions( (from,to) => { to.Property1 = from.Property1 }, (to,from) => { from.Property1 = to.Property1 } )]
+If no parameterless constructor when serializing, fail
+	(or just let it throw the exception on serialization)
+Find a way to avoid magic string in RemapPropertyAttribute
+Support List<List<T>>?
+
+Allow more than one [MapFrom(...)] on a class
+- Loop through each [MapFrom]
+- Create a [RemapProperty("name", type)]
+
+How to unit test NET_4 content?
+
+
+TODO:
+Create a method to "not copy anything and don't even try":
+	.Ignore<T,U>() that creates a map with properties set as resolved with no properties
+
+
+
+// When serializing / deserializing, if asked to add/strip namespaces, also add/strip <?xml[^>]*?>
+
+// Wacky property types: DateTime, TimeSpan, Single, uint
+// Bounds conditions:
+//		string with more than 1 char to char
+//		double with decimal to int
+
+// If double with decimal to int (or any larger decimal to type that doesn't support it) round or throw?
+//		If data type doesn't fit (e.g. 10000000 into short) then blow seems appropriate
+//		Therefore double with decimal to int blowing seems ok
+// MapType<> with random non-class types
+//		value type is a compile-time fail
+
+
+TO TEST: .MapType()
+
+
+NCover says also test:
+// PropertyInfo.IsPrimaryKeyPropertyViaLinq()
+// .CreateMap<> with:
+	- List and non-list
+	- List of class and non-class
+	- class and non-class (compile time error?)
+
+
+// TODO: Check for any publics that shouldn't be

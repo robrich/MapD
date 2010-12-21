@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper2Lib", "AutoMapper2\AutoMapper2Lib.csproj", "{1FCBE9B5-B7CD-4598-9EB3-4F14A6FB5546}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapDLib", "AutoMapper2\MapDLib.csproj", "{1FCBE9B5-B7CD-4598-9EB3-4F14A6FB5546}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper2.Tests", "AutoMapper2.Tests\AutoMapper2.Tests.csproj", "{85D1FEC0-C10D-47D4-88F9-6D7E68D67704}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapDLib.Tests", "AutoMapper2.Tests\MapDLib.Tests.csproj", "{85D1FEC0-C10D-47D4-88F9-6D7E68D67704}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapper2.TestsResource", "AutoMapper2.TestsResource\AutoMapper2.TestsResource.csproj", "{A8CC8EE3-B443-4B44-A3B1-78BCFCFD2606}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapDLib.TestsResource", "AutoMapper2.TestsResource\MapDLib.TestsResource.csproj", "{A8CC8EE3-B443-4B44-A3B1-78BCFCFD2606}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

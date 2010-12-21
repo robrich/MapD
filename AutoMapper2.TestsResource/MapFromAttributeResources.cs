@@ -1,7 +1,7 @@
-﻿namespace AutoMapper2Lib.TestsResource {
+﻿namespace MapDLib.TestsResource {
 
 	#region using
-	using AutoMapper2Lib;
+	using MapDLib;
 	using NUnit.Framework;
 	#endregion
 

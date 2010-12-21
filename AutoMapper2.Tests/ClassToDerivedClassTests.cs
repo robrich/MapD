@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using NUnit.Framework;
@@ -11,7 +11,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass1_NonNull() {
 
-			AutoMapper2.Config.CreateMap<DerivedClass1, BaseClass1>();
+			MapD.Config.CreateMap<DerivedClass1, BaseClass1>();
 
 			DerivedClass1 source = new DerivedClass1 {
 				Property1 = 1,
@@ -19,7 +19,7 @@ namespace AutoMapper2Lib.Tests {
 				Property3 = 3
 			};
 
-			BaseClass1 destination = AutoMapper2.Map<DerivedClass1, BaseClass1>( source );
+			BaseClass1 destination = MapD.Copy<DerivedClass1, BaseClass1>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Property1, destination.Property1 );
@@ -29,11 +29,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass1_Null() {
 
-			AutoMapper2.Config.CreateMap<DerivedClass1, BaseClass1>();
+			MapD.Config.CreateMap<DerivedClass1, BaseClass1>();
 
 			DerivedClass1 source = null;
 
-			BaseClass1 destination = AutoMapper2.Map<DerivedClass1, BaseClass1>( source );
+			BaseClass1 destination = MapD.Copy<DerivedClass1, BaseClass1>( source );
 
 			Assert.IsNull( destination );
 		}
@@ -49,14 +49,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass2_NonNull() {
 
-			AutoMapper2.Config.CreateMap<BaseClass2, DerivedClass2>();
+			MapD.Config.CreateMap<BaseClass2, DerivedClass2>();
 
 			BaseClass2 source = new BaseClass2 {
 				Property1 = 1,
 				Property2 = 2
 			};
 
-			DerivedClass2 destination = AutoMapper2.Map<BaseClass2, DerivedClass2>( source );
+			DerivedClass2 destination = MapD.Copy<BaseClass2, DerivedClass2>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Property1, destination.Property1 );
@@ -68,11 +68,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToDerivedClass2_Null() {
 
-			AutoMapper2.Config.CreateMap<BaseClass2, DerivedClass2>();
+			MapD.Config.CreateMap<BaseClass2, DerivedClass2>();
 
 			DerivedClass2 source = null;
 
-			DerivedClass2 destination = AutoMapper2.Map<BaseClass2, DerivedClass2>( source );
+			DerivedClass2 destination = MapD.Copy<BaseClass2, DerivedClass2>( source );
 
 			Assert.IsNull( destination );
 		}

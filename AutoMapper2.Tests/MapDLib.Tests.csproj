@@ -8,13 +8,13 @@
     <ProjectGuid>{85D1FEC0-C10D-47D4-88F9-6D7E68D67704}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AutoMapper2Lib.Tests</RootNamespace>
-    <AssemblyName>AutoMapper2Lib.Tests</AssemblyName>
+    <RootNamespace>MapDLib.Tests</RootNamespace>
+    <AssemblyName>MapDLib.Tests</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>..\AutoMapper2.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>..\MapD.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,7 +39,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Debug\AutoMapper2.Tests.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisLogFile>bin\Debug\MapD.Tests.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -55,7 +55,7 @@
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
-    <CodeAnalysisLogFile>bin\Release\AutoMapper2.Tests.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
+    <CodeAnalysisLogFile>bin\Release\MapD.Tests.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
@@ -114,17 +114,17 @@
     <Compile Include="TestTheTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\AutoMapper2.TestsResource\AutoMapper2.TestsResource.csproj">
-      <Project>{A8CC8EE3-B443-4B44-A3B1-78BCFCFD2606}</Project>
-      <Name>AutoMapper2.TestsResource</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\AutoMapper2\AutoMapper2Lib.csproj">
-      <Project>{1FCBE9B5-B7CD-4598-9EB3-4F14A6FB5546}</Project>
-      <Name>AutoMapper2Lib</Name>
-    </ProjectReference>
+    <Content Include="Tests to do.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Tests to do.txt" />
+    <ProjectReference Include="..\AutoMapper2.TestsResource\MapDLib.TestsResource.csproj">
+      <Project>{A8CC8EE3-B443-4B44-A3B1-78BCFCFD2606}</Project>
+      <Name>MapDLib.TestsResource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\AutoMapper2\MapDLib.csproj">
+      <Project>{1FCBE9B5-B7CD-4598-9EB3-4F14A6FB5546}</Project>
+      <Name>MapDLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

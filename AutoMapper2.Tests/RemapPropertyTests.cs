@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using NUnit.Framework;
@@ -11,14 +11,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NotNull() {
 
-			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
+			MapD.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = "one",
 				Property2 = "two"
 			};
 
-			RemapClass2 destination = AutoMapper2.Map<RemapClass1, RemapClass2>( source );
+			RemapClass2 destination = MapD.Copy<RemapClass1, RemapClass2>( source );
 
 			source.AssertEqual( destination );
 		}
@@ -26,13 +26,13 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_Null() {
 
-			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
+			MapD.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = null
 			};
 
-			RemapClass2 destination = AutoMapper2.Map<RemapClass1, RemapClass2>( source );
+			RemapClass2 destination = MapD.Copy<RemapClass1, RemapClass2>( source );
 
 			source.AssertEqual( destination );
 		}
@@ -40,7 +40,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullDirectly() {
 
-			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
+			MapD.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = null,
@@ -48,7 +48,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			RemapClass2 destination = null;
 
-			var changes = AutoMapper2.Map<RemapClass1, RemapClass2>( source, ref destination );
+			var changes = MapD.Copy<RemapClass1, RemapClass2>( source, ref destination );
 
 			source.AssertEqual( destination );
 		}
@@ -56,7 +56,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullToNonNull() {
 
-			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
+			MapD.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass1 source = new RemapClass1 {
 				Property1 = null,
@@ -68,7 +68,7 @@ namespace AutoMapper2Lib.Tests {
 				Property2a = "two"
 			};
 
-			var changed = AutoMapper2.Map<RemapClass1, RemapClass2>( source, ref destination );
+			var changed = MapD.Copy<RemapClass1, RemapClass2>( source, ref destination );
 
 			source.AssertEqual( destination );
 		}
@@ -76,7 +76,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullBack() {
 
-			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
+			MapD.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = null;
 
@@ -85,7 +85,7 @@ namespace AutoMapper2Lib.Tests {
 				Property2 = "two"
 			};
 
-			var changed = AutoMapper2.MapBack<RemapClass1, RemapClass2>( source, ref destination );
+			var changed = MapD.CopyBack<RemapClass1, RemapClass2>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( "one", destination.Property1 );
@@ -95,7 +95,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullToNonNullBack() {
 
-			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
+			MapD.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = new RemapClass2 {
 				Property1a = null,
@@ -107,7 +107,7 @@ namespace AutoMapper2Lib.Tests {
 				Property2 = "two"
 			};
 
-			var changed = AutoMapper2.MapBack<RemapClass1, RemapClass2>( source, ref destination );
+			var changed = MapD.CopyBack<RemapClass1, RemapClass2>( source, ref destination );
 
 			source.AssertEqual( destination );
 		}
@@ -115,7 +115,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NotNullBack() {
 
-			AutoMapper2.Config.CreateMap<RemapClass1, RemapClass2>();
+			MapD.Config.CreateMap<RemapClass1, RemapClass2>();
 
 			RemapClass2 source = new RemapClass2 {
 				Property1a = "one",
@@ -123,7 +123,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			RemapClass1 destination = null;
 
-			var changes = AutoMapper2.MapBack<RemapClass1, RemapClass2>( source, ref destination );
+			var changes = MapD.CopyBack<RemapClass1, RemapClass2>( source, ref destination );
 
 			source.AssertEqual( destination );
 		}

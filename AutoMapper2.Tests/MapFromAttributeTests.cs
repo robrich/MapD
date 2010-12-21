@@ -1,9 +1,9 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System.Collections.Generic;
 	using System.Reflection;
-	using AutoMapper2Lib.TestsResource;
+	using MapDLib.TestsResource;
 	using NUnit.Framework;
 
 	#endregion
@@ -18,9 +18,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MapFromAttribute_Works() {
 
-			AutoMapper2.Config.CreateMaps();
+			MapD.Config.CreateMaps();
 
-			Assert.AreEqual( MappedClassesCount, AutoMapper2.Assert.MapCount );
+			Assert.AreEqual( MappedClassesCount, MapD.Assert.MapCount );
 
 		}
 
@@ -30,9 +30,9 @@ namespace AutoMapper2Lib.Tests {
 			// TODO: Why do I have to use each assembly before this works?
 			MapFromAttributeResourceType t = new MapFromAttributeResourceType();
 
-			AutoMapper2.Config.CreateAllMaps();
+			MapD.Config.CreateAllMaps();
 
-			Assert.AreEqual( MappedClassesCount + MappedResourceClassesCount, AutoMapper2.Assert.MapCount );
+			Assert.AreEqual( MappedClassesCount + MappedResourceClassesCount, MapD.Assert.MapCount );
 
 		}
 
@@ -46,9 +46,9 @@ namespace AutoMapper2Lib.Tests {
 			};
 
 			// TODO: Why do I have to use each assembly before this works?
-			AutoMapper2.Config.CreateAllMaps();
+			MapD.Config.CreateAllMaps();
 
-			MapFromAttributeResourceType destination = AutoMapper2.Map<MapFromAttributeResourceType, MapFromAttributeResourceType>( source );
+			MapFromAttributeResourceType destination = MapD.Copy<MapFromAttributeResourceType, MapFromAttributeResourceType>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -56,7 +56,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Can_Map_SameType_Via_Attribute() {
 
-			AutoMapper2.Config.CreateMaps();
+			MapD.Config.CreateMaps();
 
 			MapFromAttributeType source = new MapFromAttributeType {
 				Property1 = 1,
@@ -64,7 +64,7 @@ namespace AutoMapper2Lib.Tests {
 				Property3 = 3
 			};
 
-			MapFromAttributeType destination = AutoMapper2.Map<MapFromAttributeType, MapFromAttributeType>( source );
+			MapFromAttributeType destination = MapD.Copy<MapFromAttributeType, MapFromAttributeType>( source );
 			source.AssertEqual( destination );
 			
 		}
@@ -72,7 +72,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Can_Map_FromSelf_Via_Attribute() {
 
-			AutoMapper2.Config.CreateMaps();
+			MapD.Config.CreateMaps();
 
 			MapFromSelfAttributeType source = new MapFromSelfAttributeType {
 				Property1 = 1,
@@ -80,7 +80,7 @@ namespace AutoMapper2Lib.Tests {
 				Property3 = 3
 			};
 
-			MapFromSelfAttributeType destination = AutoMapper2.Map<MapFromSelfAttributeType, MapFromSelfAttributeType>( source );
+			MapFromSelfAttributeType destination = MapD.Copy<MapFromSelfAttributeType, MapFromSelfAttributeType>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -88,7 +88,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Can_Map_SameType_Via_Passed_Assembly() {
 
-			AutoMapper2.Config.CreateMaps( Assembly.GetExecutingAssembly() );
+			MapD.Config.CreateMaps( Assembly.GetExecutingAssembly() );
 
 			MapFromAttributeType source = new MapFromAttributeType {
 				Property1 = 1,
@@ -96,7 +96,7 @@ namespace AutoMapper2Lib.Tests {
 				Property3 = 3
 			};
 
-			MapFromAttributeType destination = AutoMapper2.Map<MapFromAttributeType, MapFromAttributeType>( source );
+			MapFromAttributeType destination = MapD.Copy<MapFromAttributeType, MapFromAttributeType>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -104,7 +104,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Can_Map_List_SameType_Via_Attribute() {
 
-			AutoMapper2.Config.CreateMaps();
+			MapD.Config.CreateMaps();
 
 			List<MapFromAttributeType> source = new List<MapFromAttributeType> {
 				new MapFromAttributeType {
@@ -119,7 +119,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<MapFromAttributeType> destination = AutoMapper2.Map<List<MapFromAttributeType>, List<MapFromAttributeType>>( source );
+			List<MapFromAttributeType> destination = MapD.Copy<List<MapFromAttributeType>, List<MapFromAttributeType>>( source );
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( 2, destination.Count );
 			source[0].AssertEqual( destination[0] );
@@ -130,7 +130,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Can_Map_List_Self_Via_Attribute() {
 
-			AutoMapper2.Config.CreateMaps();
+			MapD.Config.CreateMaps();
 
 			List<MapFromSelfAttributeType> source = new List<MapFromSelfAttributeType> {
 				new MapFromSelfAttributeType {
@@ -145,7 +145,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<MapFromSelfAttributeType> destination = AutoMapper2.Map<List<MapFromSelfAttributeType>, List<MapFromSelfAttributeType>>( source );
+			List<MapFromSelfAttributeType> destination = MapD.Copy<List<MapFromSelfAttributeType>, List<MapFromSelfAttributeType>>( source );
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( 2, destination.Count );
 			source[0].AssertEqual( destination[0] );
@@ -188,7 +188,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Can_Map_DifferentTypes_Via_Attribute() {
 
-			AutoMapper2.Config.CreateMaps();
+			MapD.Config.CreateMaps();
 
 			MapFromAttributeType2 source = new MapFromAttributeType2 {
 				Property1 = 1,
@@ -196,7 +196,7 @@ namespace AutoMapper2Lib.Tests {
 				Property3 = 3
 			};
 
-			MapFromAttributeType3 destination = AutoMapper2.Map<MapFromAttributeType2, MapFromAttributeType3>( source );
+			MapFromAttributeType3 destination = MapD.Copy<MapFromAttributeType2, MapFromAttributeType3>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -204,7 +204,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Can_Map_List_DifferentTypes_Via_Attribute() {
 
-			AutoMapper2.Config.CreateMaps();
+			MapD.Config.CreateMaps();
 
 			List<MapFromAttributeType2> source = new List<MapFromAttributeType2> {
 				new MapFromAttributeType2 {
@@ -219,7 +219,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<MapFromAttributeType3> destination = AutoMapper2.Map<List<MapFromAttributeType2>, List<MapFromAttributeType3>>( source );
+			List<MapFromAttributeType3> destination = MapD.Copy<List<MapFromAttributeType2>, List<MapFromAttributeType3>>( source );
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( 2, destination.Count );
 			source[0].AssertEqual( destination[0] );

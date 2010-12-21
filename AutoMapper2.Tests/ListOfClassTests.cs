@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System.Collections.Generic;
@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			MapD.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -39,7 +39,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			List<InnerClassType> destination = new List<InnerClassType>();
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -65,7 +65,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			MapD.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -89,7 +89,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			List<InnerClassType> destination = new List<InnerClassType>();
 
-			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.CopyBack<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -115,11 +115,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			MapD.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>();
 			List<InnerClassType> destination = new List<InnerClassType>();
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -143,11 +143,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Back_Properties() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			MapD.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>();
 			List<InnerClassType> destination = new List<InnerClassType>();
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -171,7 +171,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_PartiallyFilled_Test() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			MapD.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -202,7 +202,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -228,7 +228,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_TooFull_Test() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			MapD.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -271,7 +271,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -297,7 +297,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_TooFull_Back_Test() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
+			MapD.Config.CreateMap<List<InnerClassType>, List<InnerClassType>>();
 
 			List<InnerClassType> source = new List<InnerClassType>() {
 				new InnerClassType {
@@ -340,7 +340,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.CopyBack<List<InnerClassType>, List<InnerClassType>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( 4, destination.Count );
@@ -378,7 +378,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Class() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
+			MapD.Config.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>() {
 					new InnerClassType1a {
@@ -421,7 +421,7 @@ namespace AutoMapper2Lib.Tests {
 					}
 			};
 
-			List<InnerClassType2a> destination = AutoMapper2.Map<List<InnerClassType1a>, List<InnerClassType2a>>( source );
+			List<InnerClassType2a> destination = MapD.Copy<List<InnerClassType1a>, List<InnerClassType2a>>( source );
 
 
 			Assert.IsNotNull( destination );
@@ -446,7 +446,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Back_Class() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
+			MapD.Config.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>() {
 					new InnerClassType1a {
@@ -490,7 +490,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 
 			List<InnerClassType2a> destination = new List<InnerClassType2a>();
-			var results = AutoMapper2.MapBack<List<InnerClassType2a>, List<InnerClassType1a>>( source, ref destination );
+			var results = MapD.CopyBack<List<InnerClassType2a>, List<InnerClassType1a>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -514,13 +514,13 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
+			MapD.Config.CreateMap<List<InnerClassType1a>, List<InnerClassType2a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>();
 
 			List<InnerClassType2a> destinationTemplate = new List<InnerClassType2a>();
 
-			List<InnerClassType2a> destination = AutoMapper2.Map<List<InnerClassType1a>, List<InnerClassType2a>>( source );
+			List<InnerClassType2a> destination = MapD.Copy<List<InnerClassType1a>, List<InnerClassType2a>>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -544,14 +544,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_Class_With_Null_Properties_Back() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
+			MapD.Config.CreateMap<List<InnerClassType2a>, List<InnerClassType1a>>();
 
 			List<InnerClassType1a> source = new List<InnerClassType1a>();
 
 			List<InnerClassType2a> destinationTemplate = new List<InnerClassType2a>();
 
 			List<InnerClassType2a> destination = new List<InnerClassType2a>();
-			var results = AutoMapper2.MapBack<List<InnerClassType2a>, List<InnerClassType1a>>( source, ref destination );
+			var results = MapD.CopyBack<List<InnerClassType2a>, List<InnerClassType1a>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -593,7 +593,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
+			MapD.Config.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>() {
 					new InnerClassType1b {
@@ -636,7 +636,7 @@ namespace AutoMapper2Lib.Tests {
 					}
 			};
 
-			List<InnerClassType2b> destination = AutoMapper2.Map<List<InnerClassType1b>, List<InnerClassType2b>>( source );
+			List<InnerClassType2b> destination = MapD.Copy<List<InnerClassType1b>, List<InnerClassType2b>>( source );
 
 
 			Assert.IsNotNull( destination );
@@ -661,7 +661,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_Back() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
+			MapD.Config.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>() {
 					new InnerClassType1b {
@@ -705,7 +705,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 
 			List<InnerClassType2b> destination = new List<InnerClassType2b>();
-			var results = AutoMapper2.MapBack<List<InnerClassType2b>, List<InnerClassType1b>>( source, ref destination );
+			var results = MapD.CopyBack<List<InnerClassType2b>, List<InnerClassType1b>>( source, ref destination );
 
 
 			Assert.IsNotNull( destination );
@@ -730,13 +730,13 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
+			MapD.Config.CreateMap<List<InnerClassType1b>, List<InnerClassType2b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>();
 
 			List<InnerClassType2b> destinationTemplate = new List<InnerClassType2b>();
 
-			List<InnerClassType2b> destination = AutoMapper2.Map<List<InnerClassType1b>, List<InnerClassType2b>>( source );
+			List<InnerClassType2b> destination = MapD.Copy<List<InnerClassType1b>, List<InnerClassType2b>>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -760,14 +760,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_With_Null_Properties_Back() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
+			MapD.Config.CreateMap<List<InnerClassType2b>, List<InnerClassType1b>>();
 
 			List<InnerClassType1b> source = new List<InnerClassType1b>();
 
 			List<InnerClassType2b> destinationTemplate = new List<InnerClassType2b>();
 
 			List<InnerClassType2b> destination = new List<InnerClassType2b>();
-			var results = AutoMapper2.MapBack<List<InnerClassType2b>, List<InnerClassType1b>>( source, ref destination );
+			var results = MapD.CopyBack<List<InnerClassType2b>, List<InnerClassType1b>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -809,7 +809,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_MultiKey_Test() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
+			MapD.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
 
 			List<InnerClassType2> source = new List<InnerClassType2>() {
 				new InnerClassType2 {
@@ -833,7 +833,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			List<InnerClassType2> destination = new List<InnerClassType2>();
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -859,11 +859,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_MultiKey_Test_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
+			MapD.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
 
 			List<InnerClassType2> source = new List<InnerClassType2>();
 			List<InnerClassType2> destination = new List<InnerClassType2>();
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -887,7 +887,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_PartiallyFilled_MultiKey_Test() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
+			MapD.Config.CreateMap<List<InnerClassType2>, List<InnerClassType2>>();
 
 			List<InnerClassType2> source = new List<InnerClassType2>() {
 				new InnerClassType2 {
@@ -918,7 +918,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<List<InnerClassType2>, List<InnerClassType2>>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -957,7 +957,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_MultiKey_Class() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
+			MapD.Config.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
 
 			List<InnerClassType1c> source = new List<InnerClassType1c>() {
 					new InnerClassType1c {
@@ -1000,7 +1000,7 @@ namespace AutoMapper2Lib.Tests {
 					}
 			};
 
-			List<InnerClassType2c> destination = AutoMapper2.Map<List<InnerClassType1c>, List<InnerClassType2c>>( source );
+			List<InnerClassType2c> destination = MapD.Copy<List<InnerClassType1c>, List<InnerClassType2c>>( source );
 
 
 			Assert.IsNotNull( destination );
@@ -1025,13 +1025,13 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_DestKey_MultiKey_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
+			MapD.Config.CreateMap<List<InnerClassType1c>, List<InnerClassType2c>>();
 
 			List<InnerClassType1c> source = new List<InnerClassType1c>();
 
 			List<InnerClassType2c> destinationTemplate = new List<InnerClassType2c>();
 
-			List<InnerClassType2c> destination = AutoMapper2.Map<List<InnerClassType1c>, List<InnerClassType2c>>( source );
+			List<InnerClassType2c> destination = MapD.Copy<List<InnerClassType1c>, List<InnerClassType2c>>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -1074,7 +1074,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_MultiKey_Class() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
+			MapD.Config.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
 
 			List<InnerClassType1d> source = new List<InnerClassType1d>() {
 					new InnerClassType1d {
@@ -1117,7 +1117,7 @@ namespace AutoMapper2Lib.Tests {
 					}
 			};
 
-			List<InnerClassType2d> destination = AutoMapper2.Map<List<InnerClassType1d>, List<InnerClassType2d>>( source );
+			List<InnerClassType2d> destination = MapD.Copy<List<InnerClassType1d>, List<InnerClassType2d>>( source );
 
 
 			Assert.IsNotNull( destination );
@@ -1142,13 +1142,13 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_SourceKey_Class_MultiKey_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
+			MapD.Config.CreateMap<List<InnerClassType1d>, List<InnerClassType2d>>();
 
 			List<InnerClassType1d> source = new List<InnerClassType1d>();
 
 			List<InnerClassType2d> destinationTemplate = new List<InnerClassType2d>();
 
-			List<InnerClassType2d> destination = AutoMapper2.Map<List<InnerClassType1d>, List<InnerClassType2d>>( source );
+			List<InnerClassType2d> destination = MapD.Copy<List<InnerClassType1d>, List<InnerClassType2d>>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.Count, destination.Count );
@@ -1190,13 +1190,13 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NoPrimaryKey_Fails() {
 
-			AutoMapper2.Config.CreateMap<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>();
+			MapD.Config.CreateMap<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>();
 
 			List<NoPrimaryKeyClass> source = new List<NoPrimaryKeyClass>();
 			List<NoPrimaryKeyClass> destination = new List<NoPrimaryKeyClass>();
 
 			try {
-				var changes = AutoMapper2.Map<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>( source, ref destination );
+				var changes = MapD.Copy<List<NoPrimaryKeyClass>, List<NoPrimaryKeyClass>>( source, ref destination );
 				Assert.Fail("A list of class with no primary keys can't map");
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -1218,13 +1218,13 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NoProperties_Fails() {
 
-			AutoMapper2.Config.CreateMap<List<NoPropertiesType>, List<NoPropertiesType>>();
+			MapD.Config.CreateMap<List<NoPropertiesType>, List<NoPropertiesType>>();
 
 			List<NoPropertiesType> source = new List<NoPropertiesType>();
 			List<NoPropertiesType> destination = new List<NoPropertiesType>();
 
 			try {
-				var changes = AutoMapper2.Map<List<NoPropertiesType>, List<NoPropertiesType>>( source, ref destination );
+				var changes = MapD.Copy<List<NoPropertiesType>, List<NoPropertiesType>>( source, ref destination );
 				Assert.Fail( "A list of class with no properties can't map" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -1245,7 +1245,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NullPrimaryKey_Source_Fails() {
 
-			AutoMapper2.Config.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
+			MapD.Config.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
 
 			List<NullPrimaryKeyClass> source = new List<NullPrimaryKeyClass> {
 				new NullPrimaryKeyClass {
@@ -1255,7 +1255,7 @@ namespace AutoMapper2Lib.Tests {
 			List<NullPrimaryKeyClass> destination = new List<NullPrimaryKeyClass>();
 
 			try {
-				var changes = AutoMapper2.Map<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>( source, ref destination );
+				var changes = MapD.Copy<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>( source, ref destination );
 				Assert.Fail( "A list of class with no primary keys can't map" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -1271,7 +1271,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListOf_NullPrimaryKey_Destination_Fails() {
 
-			AutoMapper2.Config.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
+			MapD.Config.CreateMap<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>();
 
 			List<NullPrimaryKeyClass> source = new List<NullPrimaryKeyClass> {
 				new NullPrimaryKeyClass {
@@ -1285,7 +1285,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 
 			try {
-				var changes = AutoMapper2.Map<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>( source, ref destination );
+				var changes = MapD.Copy<List<NullPrimaryKeyClass>, List<NullPrimaryKeyClass>>( source, ref destination );
 				Assert.Fail( "A list of class with no primary keys can't map" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );

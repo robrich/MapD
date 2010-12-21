@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System.Data.Linq.Mapping;
@@ -12,15 +12,15 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void LinqToSqlPropertyIncluded() {
 
-			AutoMapper2.Config.ExcludeLinqProperties = false;
-			AutoMapper2.Config.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
+			MapD.Config.ExcludeLinqProperties = false;
+			MapD.Config.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
 
 			LinqToSqlPropertyClass source = new LinqToSqlPropertyClass {
 				RegularProperty = 5,
 				LinqProperty = 10
 			};
 
-			LinqToSqlPropertyClass destination = AutoMapper2.Map<LinqToSqlPropertyClass, LinqToSqlPropertyClass>( source );
+			LinqToSqlPropertyClass destination = MapD.Copy<LinqToSqlPropertyClass, LinqToSqlPropertyClass>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.RegularProperty, destination.RegularProperty );
@@ -31,15 +31,15 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void LinqToSqlPropertyExcluded() {
 
-			AutoMapper2.Config.ExcludeLinqProperties = true;
-			AutoMapper2.Config.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
+			MapD.Config.ExcludeLinqProperties = true;
+			MapD.Config.CreateMap<LinqToSqlPropertyClass, LinqToSqlPropertyClass>();
 
 			LinqToSqlPropertyClass source = new LinqToSqlPropertyClass {
 				RegularProperty = 5,
 				LinqProperty = 10
 			};
 
-			LinqToSqlPropertyClass destination = AutoMapper2.Map<LinqToSqlPropertyClass, LinqToSqlPropertyClass>( source );
+			LinqToSqlPropertyClass destination = MapD.Copy<LinqToSqlPropertyClass, LinqToSqlPropertyClass>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.RegularProperty, destination.RegularProperty );
@@ -58,10 +58,10 @@ namespace AutoMapper2Lib.Tests {
 		[Ignore("This test fails as the properties on EntityCollection<> and EntitySet<> are not all Get/Set")]
 		public void LinqToEntitiesPropertyIncluded() {
 
-			AutoMapper2.Config.ExcludeLinqProperties = false;
-			AutoMapper2.Config.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
-			AutoMapper2.Config.CreateMap<EntityCollection<LinqToEntitiesRelatedClass>, EntityCollection<LinqToEntitiesRelatedClass>>();
-			AutoMapper2.Config.CreateMap<EntityReference<LinqToEntitiesRelatedClass>, EntityReference<LinqToEntitiesRelatedClass>>();
+			MapD.Config.ExcludeLinqProperties = false;
+			MapD.Config.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
+			MapD.Config.CreateMap<EntityCollection<LinqToEntitiesRelatedClass>, EntityCollection<LinqToEntitiesRelatedClass>>();
+			MapD.Config.CreateMap<EntityReference<LinqToEntitiesRelatedClass>, EntityReference<LinqToEntitiesRelatedClass>>();
 
 			// TODO: Find a way to populate the LinqToEntities properties and verify they get copied
 
@@ -88,7 +88,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			LinqToEntitiesPropertyClass destination = null;
 
-			var results = AutoMapper2.Map<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>( source, ref destination );
+			var results = MapD.Copy<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.RegularProperty, destination.RegularProperty );
@@ -121,8 +121,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void LinqToEntitiesPropertyExcluded() {
 
-			AutoMapper2.Config.ExcludeLinqProperties = true;
-			AutoMapper2.Config.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
+			MapD.Config.ExcludeLinqProperties = true;
+			MapD.Config.CreateMap<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>();
 
 			LinqToEntitiesPropertyClass source = new LinqToEntitiesPropertyClass {
 				RegularProperty = 5,
@@ -146,7 +146,7 @@ namespace AutoMapper2Lib.Tests {
 				} */
 			};
 
-			LinqToEntitiesPropertyClass destination = AutoMapper2.Map<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>( source );
+			LinqToEntitiesPropertyClass destination = MapD.Copy<LinqToEntitiesPropertyClass, LinqToEntitiesPropertyClass>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.AreEqual( source.RegularProperty, destination.RegularProperty );

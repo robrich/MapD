@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
@@ -13,7 +13,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void No_Ignore_Class() {
 
-			AutoMapper2.Config.CreateMap<No_Ignore_Class_Type, No_Ignore_Class_Type>();
+			MapD.Config.CreateMap<No_Ignore_Class_Type, No_Ignore_Class_Type>();
 
 			No_Ignore_Class_Type source = new No_Ignore_Class_Type {
 				Integer = 1234,
@@ -23,7 +23,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = Guid.NewGuid()
 			};
 
-			No_Ignore_Class_Type destination = AutoMapper2.Map<No_Ignore_Class_Type, No_Ignore_Class_Type>( source );
+			No_Ignore_Class_Type destination = MapD.Copy<No_Ignore_Class_Type, No_Ignore_Class_Type>( source );
 
 			source.AssertEqual( destination );
 
@@ -53,7 +53,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property() {
 
-			AutoMapper2.Config.CreateMap<Ignore_Property_Type, Ignore_Property_Type>();
+			MapD.Config.CreateMap<Ignore_Property_Type, Ignore_Property_Type>();
 
 			Ignore_Property_Type source = new Ignore_Property_Type {
 				Integer = 1234,
@@ -63,7 +63,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = Guid.NewGuid()
 			};
 
-			Ignore_Property_Type destination = AutoMapper2.Map<Ignore_Property_Type, Ignore_Property_Type>( source );
+			Ignore_Property_Type destination = MapD.Copy<Ignore_Property_Type, Ignore_Property_Type>( source );
 
 			source.AssertEqual( destination );
 
@@ -98,7 +98,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Type() {
 
-			AutoMapper2.Config.CreateMap<Ignore_Type_Type, Ignore_Type_Type>();
+			MapD.Config.CreateMap<Ignore_Type_Type, Ignore_Type_Type>();
 
 			Ignore_Type_Type source = new Ignore_Type_Type {
 				Property = new Ignore_Type_InnerType {
@@ -106,7 +106,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			Ignore_Type_Type destination = AutoMapper2.Map<Ignore_Type_Type, Ignore_Type_Type>( source );
+			Ignore_Type_Type destination = MapD.Copy<Ignore_Type_Type, Ignore_Type_Type>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.IsNull( destination.Property );
@@ -130,7 +130,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_From_Class() {
 
-			AutoMapper2.Config.CreateMap<Ignore_From_Class_Type1, Ignore_From_Class_Type2>();
+			MapD.Config.CreateMap<Ignore_From_Class_Type1, Ignore_From_Class_Type2>();
 
 			Ignore_From_Class_Type1 source = new Ignore_From_Class_Type1 {
 				Integer = 1234,
@@ -140,7 +140,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = Guid.NewGuid()
 			};
 
-			Ignore_From_Class_Type2 destination = AutoMapper2.Map<Ignore_From_Class_Type1, Ignore_From_Class_Type2>( source );
+			Ignore_From_Class_Type2 destination = MapD.Copy<Ignore_From_Class_Type1, Ignore_From_Class_Type2>( source );
 
 			source.AssertEqual( destination );
 
@@ -183,7 +183,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_From_Type() {
 
-			AutoMapper2.Config.CreateMap<Ignore_From_Type_Type1, Ignore_From_Type_Type2>();
+			MapD.Config.CreateMap<Ignore_From_Type_Type1, Ignore_From_Type_Type2>();
 
 			Ignore_From_Type_Type1 source = new Ignore_From_Type_Type1 {
 				Property = new Ignore_From_Type_InnerType1 {
@@ -191,7 +191,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			Ignore_From_Type_Type2 destination = AutoMapper2.Map<Ignore_From_Type_Type1, Ignore_From_Type_Type2>( source );
+			Ignore_From_Type_Type2 destination = MapD.Copy<Ignore_From_Type_Type1, Ignore_From_Type_Type2>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.IsNull( destination.Property );
@@ -224,7 +224,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_To_Class() {
 
-			AutoMapper2.Config.CreateMap<Ignore_To_Class_Type1, Ignore_To_Class_Type2>();
+			MapD.Config.CreateMap<Ignore_To_Class_Type1, Ignore_To_Class_Type2>();
 
 			Ignore_To_Class_Type1 source = new Ignore_To_Class_Type1 {
 				Integer = 1234,
@@ -234,7 +234,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = Guid.NewGuid()
 			};
 
-			Ignore_To_Class_Type2 destination = AutoMapper2.Map<Ignore_To_Class_Type1, Ignore_To_Class_Type2>( source );
+			Ignore_To_Class_Type2 destination = MapD.Copy<Ignore_To_Class_Type1, Ignore_To_Class_Type2>( source );
 
 			source.AssertEqual( destination );
 
@@ -277,7 +277,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_To_Type() {
 
-			AutoMapper2.Config.CreateMap<Ignore_To_Type_Type1, Ignore_To_Type_Type2>();
+			MapD.Config.CreateMap<Ignore_To_Type_Type1, Ignore_To_Type_Type2>();
 
 			Ignore_To_Type_Type1 source = new Ignore_To_Type_Type1 {
 				Property = new Ignore_To_Type_InnerType1 {
@@ -285,7 +285,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			Ignore_To_Type_Type2 destination = AutoMapper2.Map<Ignore_To_Type_Type1, Ignore_To_Type_Type2>( source );
+			Ignore_To_Type_Type2 destination = MapD.Copy<Ignore_To_Type_Type1, Ignore_To_Type_Type2>( source );
 
 			Assert.IsNotNull( destination );
 			Assert.IsNull( destination.Property );
@@ -318,7 +318,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property_Partial() {
 
-			AutoMapper2.Config.CreateMap<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>();
+			MapD.Config.CreateMap<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>();
 
 			Ignore_Property_Partial_Type source = new Ignore_Property_Partial_Type {
 				Integer = 1234,
@@ -328,12 +328,12 @@ namespace AutoMapper2Lib.Tests {
 				Guid = Guid.NewGuid()
 			};
 
-			Ignore_Property_Partial_Type destination = AutoMapper2.Map<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>( source );
+			Ignore_Property_Partial_Type destination = MapD.Copy<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>( source );
 
 			source.AssertEqual( destination );
 
 			Ignore_Property_Partial_Type source2 = new Ignore_Property_Partial_Type();
-			AutoMapper2.MapBack<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>( destination, ref source2 );
+			MapD.CopyBack<Ignore_Property_Partial_Type, Ignore_Property_Partial_Type>( destination, ref source2 );
 
 			destination.AssertEqualBack( source2 );
 
@@ -376,7 +376,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property_Partial_Back() {
 
-			AutoMapper2.Config.CreateMap<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>();
+			MapD.Config.CreateMap<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>();
 
 			Ignore_Property_Partial_Back_Type source = new Ignore_Property_Partial_Back_Type {
 				Integer = 1234,
@@ -386,12 +386,12 @@ namespace AutoMapper2Lib.Tests {
 				Guid = Guid.NewGuid()
 			};
 
-			Ignore_Property_Partial_Back_Type destination = AutoMapper2.Map<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>( source );
+			Ignore_Property_Partial_Back_Type destination = MapD.Copy<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>( source );
 
 			source.AssertEqual( destination );
 
 			Ignore_Property_Partial_Back_Type source2 = new Ignore_Property_Partial_Back_Type();
-			AutoMapper2.MapBack<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>( source, ref source2 );
+			MapD.CopyBack<Ignore_Property_Partial_Back_Type, Ignore_Property_Partial_Back_Type>( source, ref source2 );
 
 			source.AssertEqualBack( source2 );
 
@@ -433,7 +433,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Ignore_Property_Partial_Both() {
 
-			AutoMapper2.Config.CreateMap<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>();
+			MapD.Config.CreateMap<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>();
 
 			Ignore_Property_Partial_Both_Type source = new Ignore_Property_Partial_Both_Type {
 				Integer = 1234,
@@ -443,12 +443,12 @@ namespace AutoMapper2Lib.Tests {
 				Guid = Guid.NewGuid()
 			};
 
-			Ignore_Property_Partial_Both_Type destination = AutoMapper2.Map<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>( source );
+			Ignore_Property_Partial_Both_Type destination = MapD.Copy<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>( source );
 
 			source.AssertEqual( destination );
 
 			Ignore_Property_Partial_Both_Type source2 = new Ignore_Property_Partial_Both_Type();
-			AutoMapper2.MapBack<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>( source, ref source2 );
+			MapD.CopyBack<Ignore_Property_Partial_Both_Type, Ignore_Property_Partial_Both_Type>( source, ref source2 );
 
 			source.AssertEqual( source2 );
 

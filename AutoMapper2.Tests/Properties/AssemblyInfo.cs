@@ -4,11 +4,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle( "AutoMapper2.Tests" )]
+[assembly: AssemblyTitle( "MapD.Tests" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
 [assembly: AssemblyCompany( "Richardson & Sons, LLC" )]
-[assembly: AssemblyProduct( "AutoMapper2.Tests" )]
+[assembly: AssemblyProduct( "MapD.Tests" )]
 [assembly: AssemblyCopyright( "Copyright © Richardson & Sons, LLC 2010" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]

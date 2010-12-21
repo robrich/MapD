@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
@@ -14,8 +14,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Same_Class() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Same_Class_Type<OfType> source = new Class_To_Same_Class_Type<OfType> {
 				Integer = 1234,
@@ -29,7 +29,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			Class_To_Same_Class_Type<OfType> destination = AutoMapper2.Map<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>( source );
+			Class_To_Same_Class_Type<OfType> destination = MapD.Copy<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>( source );
 
 			source.AssertEqual( destination );
 
@@ -38,11 +38,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Same_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Same_Class_Type<OfType> source = new Class_To_Same_Class_Type<OfType>();
-			Class_To_Same_Class_Type<OfType> destination = AutoMapper2.Map<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>( source );
+			Class_To_Same_Class_Type<OfType> destination = MapD.Copy<Class_To_Same_Class_Type<OfType>, Class_To_Same_Class_Type<OfType>>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -76,8 +76,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Similar_Class() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_Type1<OfType> source = new Class_To_Similar_Class_Type1<OfType> {
 				Integer = 4321,
@@ -91,7 +91,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			Class_To_Similar_Class_Type2<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>( source );
+			Class_To_Similar_Class_Type2<OfType> destination = MapD.Copy<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>( source );
 
 			source.AssertEqual( destination );
 
@@ -100,11 +100,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_Similar_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_Type1<OfType> source = new Class_To_Similar_Class_Type1<OfType>();
-			Class_To_Similar_Class_Type2<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>( source );
+			Class_To_Similar_Class_Type2<OfType> destination = MapD.Copy<Class_To_Similar_Class_Type1<OfType>, Class_To_Similar_Class_Type2<OfType>>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -146,8 +146,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_DifferentProperties_Class_Type1<OfType> source = new Class_To_DifferentProperties_Class_Type1<OfType> {
 				Integer = 4321,
@@ -162,7 +162,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			Class_To_DifferentProperties_Class_Type2<OfType> destination = AutoMapper2.Map<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>( source );
+			Class_To_DifferentProperties_Class_Type2<OfType> destination = MapD.Copy<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>( source );
 
 			source.AssertEqual( destination );
 
@@ -171,11 +171,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_DifferentProperties_Class_Type1<OfType> source = new Class_To_DifferentProperties_Class_Type1<OfType>();
-			Class_To_DifferentProperties_Class_Type2<OfType> destination = AutoMapper2.Map<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>( source );
+			Class_To_DifferentProperties_Class_Type2<OfType> destination = MapD.Copy<Class_To_DifferentProperties_Class_Type1<OfType>, Class_To_DifferentProperties_Class_Type2<OfType>>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -226,8 +226,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_LessProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_MoreProps_Type<OfType> source = new Class_To_Similar_Class_MoreProps_Type<OfType> {
 				Integer = 4321,
@@ -246,7 +246,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			Class_To_Similar_Class_LessProps_Type<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source );
+			Class_To_Similar_Class_LessProps_Type<OfType> destination = MapD.Copy<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source );
 
 			source.AssertEqual( destination );
 
@@ -255,11 +255,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_LessProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_MoreProps_Type<OfType> source = new Class_To_Similar_Class_MoreProps_Type<OfType>();
-			Class_To_Similar_Class_LessProps_Type<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source );
+			Class_To_Similar_Class_LessProps_Type<OfType> destination = MapD.Copy<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -267,8 +267,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_MoreProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType> {
 				Integer = 4321,
@@ -283,7 +283,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			Class_To_Similar_Class_MoreProps_Type<OfType> destination = new Class_To_Similar_Class_MoreProps_Type<OfType>();
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
+			var changeList = MapD.CopyBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
 			source.AssertEqual( destination, new Class_To_Similar_Class_MoreProps_Type<OfType>() {
 				OfType = new OfType {
 					SomethingIrrelevant1 = "something",
@@ -295,22 +295,22 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_MoreProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType>();
 			Class_To_Similar_Class_MoreProps_Type<OfType> destination = new Class_To_Similar_Class_MoreProps_Type<OfType>();
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
+			var changeList = MapD.CopyBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
 			source.AssertEqual( destination, new Class_To_Similar_Class_MoreProps_Type<OfType>() );
 		}
 
 		[Test]
 		public void Class_To_MoreProperties_With_Template_Class() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType> {
 				Integer = 4321,
@@ -341,10 +341,10 @@ namespace AutoMapper2Lib.Tests {
 			};
 			// Copy destTemplate since to avoid changing the base comparison
 			// If this doesn't work, other tests would've failed too
-			Class_To_Similar_Class_MoreProps_Type<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>( destTemplate );
+			Class_To_Similar_Class_MoreProps_Type<OfType> destination = MapD.Copy<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>( destTemplate );
 			Assert.IsNotNull( destination );
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
+			var changeList = MapD.CopyBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
 
 			source.AssertEqual( destination, destTemplate );
 
@@ -353,9 +353,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_MoreProperties_With_Template_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
-			AutoMapper2.Config.CreateMap<OfType, OfType>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>();
+			MapD.Config.CreateMap<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>();
+			MapD.Config.CreateMap<OfType, OfType>();
 
 			Class_To_Similar_Class_LessProps_Type<OfType> source = new Class_To_Similar_Class_LessProps_Type<OfType>();
 			Class_To_Similar_Class_MoreProps_Type<OfType> destTemplate = new Class_To_Similar_Class_MoreProps_Type<OfType> {
@@ -376,11 +376,11 @@ namespace AutoMapper2Lib.Tests {
 			};
 			// Copy destTemplate since to avoid changing the base comparison
 			// If this doesn't work, other tests would've failed too
-			Class_To_Similar_Class_MoreProps_Type<OfType> destination = AutoMapper2.Map<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>( destTemplate );
+			Class_To_Similar_Class_MoreProps_Type<OfType> destination = MapD.Copy<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_MoreProps_Type<OfType>>( destTemplate );
 			Assert.IsNotNull( destination );
 			Assert.IsNotNull( destination.OfType );
 
-			var changeList = AutoMapper2.MapBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
+			var changeList = MapD.CopyBack<Class_To_Similar_Class_MoreProps_Type<OfType>, Class_To_Similar_Class_LessProps_Type<OfType>>( source, ref destination );
 			source.AssertEqual( destination, destTemplate );
 
 		}

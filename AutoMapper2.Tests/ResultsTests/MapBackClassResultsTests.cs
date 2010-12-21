@@ -1,9 +1,9 @@
-namespace AutoMapper2Lib.Tests.ResultsTests {
+namespace MapDLib.Tests.ResultsTests {
 
 	#region using
 	using System;
 	using System.Collections.Generic;
-	using AutoMapper2Lib;
+	using MapDLib;
 	using NUnit.Framework;
 
 	#endregion
@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NoChanges_NoDifferences() {
 
-			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			MapD.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type {
 				Integer = 1234,
@@ -32,7 +32,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				Guid = new Guid( source.Guid.ToString() ) // Avoid shared object reference
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.MapBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
+			List<PropertyChangedResults> changes = MapD.CopyBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 0, changes.Count );
@@ -44,7 +44,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void DestEmpty_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			MapD.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type {
 				Integer = 1234,
@@ -56,7 +56,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			Class_With_Properties_Type destination = new Class_With_Properties_Type();
 			Class_With_Properties_Type destinationReference = new Class_With_Properties_Type();
 
-			List<PropertyChangedResults> changes = AutoMapper2.MapBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
+			List<PropertyChangedResults> changes = MapD.CopyBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 5, changes.Count ); // One for each property
@@ -123,7 +123,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void SourceEmpty_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			MapD.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type();
 			Class_With_Properties_Type destination = new Class_With_Properties_Type {
@@ -141,7 +141,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				Guid = new Guid( destination.Guid.ToString() ) // Avoid shared object reference
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.MapBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
+			List<PropertyChangedResults> changes = MapD.CopyBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 5, changes.Count ); // One for each property
@@ -208,7 +208,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullSource_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			MapD.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = null;
 			Class_With_Properties_Type destination = new Class_With_Properties_Type {
@@ -227,7 +227,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			};
 			Class_With_Properties_Type destinationRef = destination;
 
-			List<PropertyChangedResults> changes = AutoMapper2.MapBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
+			List<PropertyChangedResults> changes = MapD.CopyBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 1, changes.Count ); // The object
@@ -258,7 +258,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void NullDestination_YieldDifferences() {
 
-			AutoMapper2.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
+			MapD.Config.CreateMap<Class_With_Properties_Type, Class_With_Properties_Type>();
 
 			Class_With_Properties_Type source = new Class_With_Properties_Type {
 				Integer = 1234,
@@ -269,7 +269,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			};
 			Class_With_Properties_Type destination = null;
 
-			List<PropertyChangedResults> changes = AutoMapper2.MapBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
+			List<PropertyChangedResults> changes = MapD.CopyBack<Class_With_Properties_Type, Class_With_Properties_Type>( source, ref destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 6, changes.Count ); // The object and each property in it
@@ -320,7 +320,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void Dissimilar_Class_Changed() {
 
-			AutoMapper2.Config.CreateMap<Dissimilar_Type2, Dissimilar_Type1>();
+			MapD.Config.CreateMap<Dissimilar_Type2, Dissimilar_Type1>();
 
 			Dissimilar_Type1 source = new Dissimilar_Type1 {
 				Integer = 4321,
@@ -331,7 +331,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 			Dissimilar_Type2 destination = new Dissimilar_Type2();
 			Dissimilar_Type2 destinationReference = new Dissimilar_Type2();
 
-			List<PropertyChangedResults> changes = AutoMapper2.MapBack<Dissimilar_Type2, Dissimilar_Type1>( source, ref destination );
+			List<PropertyChangedResults> changes = MapD.CopyBack<Dissimilar_Type2, Dissimilar_Type1>( source, ref destination );
 
 			// Assert the object did change
 			source.AssertEqual( destination );
@@ -392,7 +392,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 		[Test]
 		public void Dissimilar_Class_Unchanged() {
 
-			AutoMapper2.Config.CreateMap<Dissimilar_Type2, Dissimilar_Type1>();
+			MapD.Config.CreateMap<Dissimilar_Type2, Dissimilar_Type1>();
 
 			Dissimilar_Type1 source = new Dissimilar_Type1 {
 				String = "a"
@@ -404,7 +404,7 @@ namespace AutoMapper2Lib.Tests.ResultsTests {
 				String = 'a'
 			};
 
-			List<PropertyChangedResults> changes = AutoMapper2.MapBack<Dissimilar_Type2, Dissimilar_Type1>( source, ref destination );
+			List<PropertyChangedResults> changes = MapD.CopyBack<Dissimilar_Type2, Dissimilar_Type1>( source, ref destination );
 
 			Assert.IsNotNull( changes );
 			Assert.AreEqual( 0, changes.Count );

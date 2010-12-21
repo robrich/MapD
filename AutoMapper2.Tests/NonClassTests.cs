@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests {
 			double dest = 0;
 			double destTemplate = 1.0;
 
-			dest = AutoMapper2.MapType<int, double>( source );
+			dest = MapD.CopyType<int, double>( source );
 
 			Assert.AreEqual( destTemplate, dest );
 		}
@@ -26,7 +26,7 @@ namespace AutoMapper2Lib.Tests {
 			string dest = null;
 			string destTemplate = source.ToString();
 
-			dest = AutoMapper2.MapType<double, string>( source );
+			dest = MapD.CopyType<double, string>( source );
 
 			Assert.AreEqual( destTemplate, dest );
 		}
@@ -35,12 +35,12 @@ namespace AutoMapper2Lib.Tests {
 		public void Cant_Map_ValueTypes_With_MapType() {
 
 			try {
-				ValueTypeClass dest = AutoMapper2.MapType<ValueTypeClass, ValueTypeClass>( new ValueTypeClass() );
-				Assert.Fail("Class types can't use MapType<>");
+				ValueTypeClass dest = MapD.CopyType<ValueTypeClass, ValueTypeClass>( new ValueTypeClass() );
+				Assert.Fail("Class types can't use CopyType<>");
 			} catch (NotSupportedException ex) {
 				Assert.IsNotNull( ex );
 				Assert.IsNotNull( ex.Message );
-				Assert.IsTrue( ex.Message.Contains( "call Map()" ) );
+				Assert.IsTrue( ex.Message.Contains( "call Copy()" ) );
 			}
 
 		}

@@ -1,9 +1,9 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
 	using System.Collections.Generic;
-	using AutoMapper2Lib;
+	using MapDLib;
 	using NUnit.Framework;
 
 	#endregion
@@ -15,7 +15,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -26,7 +26,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type();
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -35,7 +35,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_PartiallyFilled_Test() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -52,7 +52,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = new List<Guid> { source.Guid[0] }
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -61,7 +61,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Equal_Test() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -78,7 +78,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = new List<Guid> { source.Guid[0], source.Guid[1] }
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 			Assert.IsNotNull( changeList );
@@ -89,7 +89,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Test_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type();
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
@@ -99,7 +99,7 @@ namespace AutoMapper2Lib.Tests {
 				Integer = new List<int>(),
 				String = new List<string>()
 			};
-			List<PropertyChangedResults> changeList = AutoMapper2.Map<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.Copy<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -108,7 +108,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -119,7 +119,7 @@ namespace AutoMapper2Lib.Tests {
 			};
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type();
 
-			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.CopyBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -128,7 +128,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_PartiallyFilled_Test() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -145,7 +145,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = new List<Guid> { source.Guid[0] }
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.CopyBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 
@@ -154,7 +154,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Equal_Test() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type {
 				Integer = new List<int> { 1234, 4321 },
@@ -171,7 +171,7 @@ namespace AutoMapper2Lib.Tests {
 				Guid = new List<Guid> { source.Guid[0], source.Guid[1] }
 			};
 
-			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.CopyBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			source.AssertEqual( destination );
 			Assert.IsNotNull( changeList );
@@ -182,7 +182,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = new Class_To_Same_Class_Type();
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
@@ -192,7 +192,7 @@ namespace AutoMapper2Lib.Tests {
 				Integer = new List<int>(),
 				String = new List<string>()
 			};
-			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.CopyBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.IsNotNull( destination.Char );
@@ -206,7 +206,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ChangeList_Contains_Changes_SameClass_Back_Test_With_Null_Objects() {
 
-			AutoMapper2.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
+			MapD.Config.CreateMap<Class_To_Same_Class_Type, Class_To_Same_Class_Type>();
 
 			Class_To_Same_Class_Type source = null;
 			Class_To_Same_Class_Type destination = new Class_To_Same_Class_Type() {
@@ -216,7 +216,7 @@ namespace AutoMapper2Lib.Tests {
 				Integer = new List<int>(),
 				String = new List<string>()
 			};
-			List<PropertyChangedResults> changeList = AutoMapper2.MapBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
+			List<PropertyChangedResults> changeList = MapD.CopyBack<Class_To_Same_Class_Type, Class_To_Same_Class_Type>( source, ref destination );
 
 			Assert.IsNotNull( destination );
 			Assert.IsNotNull( destination.Char );
@@ -251,7 +251,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
+			MapD.Config.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
 
 			Class_To_DifferentProperties_Class_Type1 source = new Class_To_DifferentProperties_Class_Type1 {
 				Integer = new List<int> { 1234, 4321 },
@@ -270,7 +270,7 @@ namespace AutoMapper2Lib.Tests {
 				Number = new List<string> { "12345", "54321" }
 			};
 
-			Class_To_DifferentProperties_Class_Type2 destination = AutoMapper2.Map<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>( source );
+			Class_To_DifferentProperties_Class_Type2 destination = MapD.Copy<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>( source );
 
 			destinationTemplate.AssertEqual( destination );
 
@@ -279,12 +279,12 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Class_To_DifferentProperties_Class_With_Null_Properties() {
 
-			AutoMapper2.Config.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
+			MapD.Config.CreateMap<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>();
 
 			Class_To_DifferentProperties_Class_Type1 source = new Class_To_DifferentProperties_Class_Type1();
 			Class_To_DifferentProperties_Class_Type2 destinationTemplate = new Class_To_DifferentProperties_Class_Type2();
 
-			Class_To_DifferentProperties_Class_Type2 destination = AutoMapper2.Map<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>( source );
+			Class_To_DifferentProperties_Class_Type2 destination = MapD.Copy<Class_To_DifferentProperties_Class_Type1, Class_To_DifferentProperties_Class_Type2>( source );
 			destinationTemplate.AssertEqual( destination );
 
 		}

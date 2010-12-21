@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
@@ -14,9 +14,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingMap_Fails() {
 
-			// No call to AutoMapper2.Config.CreateMap<MissingMapType, MissingMapType>() blows up nicely
+			// No call to MapD.Config.CreateMap<MissingMapType, MissingMapType>() blows up nicely
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Missing map should fail" );
 			} catch ( ArgumentNullException ex ) {
 				Assert.IsNotNull( ex );
@@ -35,10 +35,10 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingInnerMap_Fails() {
 
-			AutoMapper2.Config.CreateMap<MissingInnerMapType, MissingInnerMapType>();
-			// No call to AutoMapper2.Config.CreateMap<MissingInnerMapInnerType, MissingInnerMapInnerType>() blows up nicely
+			MapD.Config.CreateMap<MissingInnerMapType, MissingInnerMapType>();
+			// No call to MapD.Config.CreateMap<MissingInnerMapInnerType, MissingInnerMapInnerType>() blows up nicely
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Missing property is a class map should fail" );
 			} catch ( MissingMapException ex ) {
 				Assert.IsNotNull( ex );
@@ -61,10 +61,10 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfNonClassMap_Works() {
 
-			AutoMapper2.Config.CreateMap<MissingListOfNonClassMapType, MissingListOfNonClassMapType>();
-			// No call to AutoMapper2.Config.CreateMap<List<int>, List<int>>() works fine -- they're not classes
-			AutoMapper2.Assert.AssertConfigurationIsValid();
-			Assert.AreEqual( 1, AutoMapper2.Assert.MapCount );
+			MapD.Config.CreateMap<MissingListOfNonClassMapType, MissingListOfNonClassMapType>();
+			// No call to MapD.Config.CreateMap<List<int>, List<int>>() works fine -- they're not classes
+			MapD.Assert.AssertConfigurationIsValid();
+			Assert.AreEqual( 1, MapD.Assert.MapCount );
 
 		}
 
@@ -77,11 +77,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfClassMap_Fails() {
 
-			AutoMapper2.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
-			// No call to AutoMapper2.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>()
-			// or to AutoMapper2.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() blows up nicely
+			MapD.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
+			// No call to MapD.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>()
+			// or to MapD.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() blows up nicely
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Missing map for List<class> should fail" );
 			} catch ( MissingMapException ex ) {
 				Assert.IsNotNull( ex );
@@ -95,11 +95,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfClassMapWithInnerClassMap_Fails() {
 
-			AutoMapper2.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
-			// No call to AutoMapper2.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>() works because we know how to map from List<> to List<>
-			AutoMapper2.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>();
+			MapD.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
+			// No call to MapD.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>() works because we know how to map from List<> to List<>
+			MapD.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Missing map for List<class> should fail" );
 			} catch ( MissingMapException ex ) {
 				Assert.IsNotNull( ex );
@@ -113,11 +113,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingListOfClassInnerClassMap_Works() {
 
-			AutoMapper2.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
-			AutoMapper2.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>();
-			// No call to AutoMapper2.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() works because it's auto-created
-			AutoMapper2.Assert.AssertConfigurationIsValid();
-			Assert.AreEqual( 3, AutoMapper2.Assert.MapCount );
+			MapD.Config.CreateMap<MissingListOfClassMapType, MissingListOfClassMapType>();
+			MapD.Config.CreateMap<List<MissingListOfClassMapListOfClassType>, List<MissingListOfClassMapListOfClassType>>();
+			// No call to MapD.Config.CreateMap<MissingListOfClassMapListOfClassType, MissingListOfClassMapListOfClassType>() works because it's auto-created
+			MapD.Assert.AssertConfigurationIsValid();
+			Assert.AreEqual( 3, MapD.Assert.MapCount );
 
 		}
 
@@ -134,11 +134,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingPrimaryKey_Fails() {
 
-			AutoMapper2.Config.CreateMap<MissingPrimaryKeyType, MissingPrimaryKeyType>();
-			AutoMapper2.Config.CreateMap<List<MissingPrimaryKeyListOfClassType>, List<MissingPrimaryKeyListOfClassType>>();
-			// No call to AutoMapper2.Config.CreateMap<MissingPrimaryKeyListOfClassType, MissingPrimaryKeyListOfClassType>() blows up nicely
+			MapD.Config.CreateMap<MissingPrimaryKeyType, MissingPrimaryKeyType>();
+			MapD.Config.CreateMap<List<MissingPrimaryKeyListOfClassType>, List<MissingPrimaryKeyListOfClassType>>();
+			// No call to MapD.Config.CreateMap<MissingPrimaryKeyListOfClassType, MissingPrimaryKeyListOfClassType>() blows up nicely
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Missing map for List<class> should fail" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -162,9 +162,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void MissingProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<MissingPropertyType1, MissingPropertyType2>();
+			MapD.Config.CreateMap<MissingPropertyType1, MissingPropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Missing property should fail to map" );
 			} catch ( InvalidPropertyException ex ) {
 				Assert.IsNotNull( ex );
@@ -188,9 +188,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void RedirectedProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<RedirectedPropertyType1, RedirectedPropertyType2>();
+			MapD.Config.CreateMap<RedirectedPropertyType1, RedirectedPropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Missing redirected property should fail to map" );
 			} catch ( InvalidPropertyException ex ) {
 				Assert.IsNotNull( ex );
@@ -214,9 +214,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ReadOnlySourceProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<ReadOnlySourcePropertyType1, ReadOnlySourcePropertyType2>();
+			MapD.Config.CreateMap<ReadOnlySourcePropertyType1, ReadOnlySourcePropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "read-only property should fail to map" );
 			} catch ( InvalidPropertyException ex ) {
 				Assert.IsNotNull( ex );
@@ -239,9 +239,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ReadOnlyDestinationProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<ReadOnlyDestinationPropertyType1, ReadOnlyDestinationPropertyType2>();
+			MapD.Config.CreateMap<ReadOnlyDestinationPropertyType1, ReadOnlyDestinationPropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "read-only property should fail to map" );
 			} catch ( InvalidPropertyException ex ) {
 				Assert.IsNotNull( ex );
@@ -264,9 +264,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void WriteOnlySourceProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<WriteOnlySourcePropertyType1, WriteOnlySourcePropertyType2>();
+			MapD.Config.CreateMap<WriteOnlySourcePropertyType1, WriteOnlySourcePropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "write-only property should fail to map" );
 			} catch ( InvalidPropertyException ex ) {
 				Assert.IsNotNull( ex );
@@ -289,9 +289,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void WriteOnlyDestinationProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<WriteOnlyDestinationPropertyType1, WriteOnlyDestinationPropertyType2>();
+			MapD.Config.CreateMap<WriteOnlyDestinationPropertyType1, WriteOnlyDestinationPropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "write-only property should fail to map" );
 			} catch ( InvalidPropertyException ex ) {
 				Assert.IsNotNull( ex );
@@ -314,9 +314,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ListToNonList_Fails() {
 
-			AutoMapper2.Config.CreateMap<ListToNonListType1, ListToNonListType2>();
+			MapD.Config.CreateMap<ListToNonListType1, ListToNonListType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "List to NonList property should fail to map" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -340,9 +340,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NonListToList_Fails() {
 
-			AutoMapper2.Config.CreateMap<NonListToListType1, NonListToListType2>();
+			MapD.Config.CreateMap<NonListToListType1, NonListToListType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "NonList to List property should fail to map" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -366,9 +366,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassToNonClass_Fails() {
 
-			AutoMapper2.Config.CreateMap<ClassToNonClassType1, ClassToNonClassType2>();
+			MapD.Config.CreateMap<ClassToNonClassType1, ClassToNonClassType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Class to NonClass property should fail to map" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -392,9 +392,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NonClassToClass_Fails() {
 
-			AutoMapper2.Config.CreateMap<NonClassToClassType1, NonClassToClassType2>();
+			MapD.Config.CreateMap<NonClassToClassType1, NonClassToClassType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "NonClass to Class property should fail to map" );
 			} catch ( InvalidTypeConversionException ex ) {
 				Assert.IsNotNull( ex );
@@ -418,9 +418,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IncompatibleProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<IncompatiblePropertyType1, IncompatiblePropertyType2>();
+			MapD.Config.CreateMap<IncompatiblePropertyType1, IncompatiblePropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Incompatible property should fail to map" );
 			} catch ( MapFailureException ex ) {
 				Assert.IsNotNull( ex );
@@ -444,9 +444,9 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IncompatibleListProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<IncompatibleListPropertyType1, IncompatibleListPropertyType2>();
+			MapD.Config.CreateMap<IncompatibleListPropertyType1, IncompatibleListPropertyType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Incompatible property should fail to map" );
 			} catch ( MapFailureException ex ) {
 				Assert.IsNotNull( ex );
@@ -468,10 +468,10 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void IncompatibleListClassProperty_Fails() {
 
-			AutoMapper2.Config.CreateMap<IncompatibleListClassPropertyType1, IncompatibleListClassPropertyType2>();
-			AutoMapper2.Config.CreateMap<IncompatibleListClassInnerType1, IncompatibleListClassInnerType2>();
+			MapD.Config.CreateMap<IncompatibleListClassPropertyType1, IncompatibleListClassPropertyType2>();
+			MapD.Config.CreateMap<IncompatibleListClassInnerType1, IncompatibleListClassInnerType2>();
 			try {
-				AutoMapper2.Assert.AssertConfigurationIsValid();
+				MapD.Assert.AssertConfigurationIsValid();
 				Assert.Fail( "Incompatible property should fail to map" );
 			} catch ( MapFailureException ex ) {
 				Assert.IsNotNull( ex );
@@ -500,9 +500,9 @@ namespace AutoMapper2Lib.Tests {
 		#region AssertMapCount_Works
 		[Test]
 		public void AssertMapCount_Works() {
-			Assert.AreEqual( 0, AutoMapper2.Assert.MapCount );
-			AutoMapper2.Config.CreateMap<InnerClass, InnerClass>();
-			Assert.AreEqual( 1, AutoMapper2.Assert.MapCount );
+			Assert.AreEqual( 0, MapD.Assert.MapCount );
+			MapD.Config.CreateMap<InnerClass, InnerClass>();
+			Assert.AreEqual( 1, MapD.Assert.MapCount );
 		}
 		#endregion
 

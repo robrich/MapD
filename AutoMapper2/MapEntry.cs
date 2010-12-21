@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib {
+namespace MapDLib {
 
 	#region using
 	using System;

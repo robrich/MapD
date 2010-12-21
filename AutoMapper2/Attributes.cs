@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib {
+namespace MapDLib {
 
 	#region using
 	using System;
@@ -106,7 +106,7 @@ namespace AutoMapper2Lib {
 	}
 
 	/// <summary>
-	/// Map from the passed type to the current type when you call AutoMapper2.CreateMaps()
+	/// Map from the passed type to the current type when you call MapD.CreateMaps()
 	/// </summary>
 	[AttributeUsage( AttributeTargets.Class )]
 	public class MapFromAttribute : Attribute {
@@ -127,14 +127,14 @@ namespace AutoMapper2Lib {
 	}
 
 	/// <summary>
-	/// Map from the current type to the current type when you call AutoMapper2.CreateMaps()
+	/// Map from the current type to the current type when you call MapD.CreateMaps()
 	/// </summary>
 	[AttributeUsage( AttributeTargets.Class )]
 	public class MapFromSelfAttribute : Attribute {
 	}
 
 	/// <summary>
-	/// Map a List&lt;&gt; from the passed type to a List&lt;&gt; of the current type when you call AutoMapper2.CreateMaps()
+	/// Map a List&lt;&gt; from the passed type to a List&lt;&gt; of the current type when you call MapD.CreateMaps()
 	/// </summary>
 	[AttributeUsage( AttributeTargets.Class )]
 	public class MapListFromListOfAttribute : Attribute {
@@ -155,7 +155,7 @@ namespace AutoMapper2Lib {
 	}
 
 	/// <summary>
-	/// Map a List&lt;&gt; from the current type to a List&lt;&gt; of the current type when you call AutoMapper2.CreateMaps()
+	/// Map a List&lt;&gt; from the current type to a List&lt;&gt; of the current type when you call MapD.CreateMaps()
 	/// </summary>
 	[AttributeUsage( AttributeTargets.Class )]
 	public class MapListFromListOfSelfAttribute : Attribute {

@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System.Collections.Generic;
@@ -11,7 +11,7 @@ namespace AutoMapper2Lib.Tests {
 
 		[SetUp]
 		public void Init() {
-			AutoMapper2.Config.ResetMap();
+			MapD.Config.ResetMap();
 		}
 
 		protected static void AssertListsAreEqual<T>( List<T> Expected, List<T> Actual ) {

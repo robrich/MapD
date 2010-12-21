@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
@@ -12,8 +12,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NotNull() {
 
-			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			MapD.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			MapD.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = new ClassWithPropertiesInner {
@@ -23,7 +23,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			ClassWithProperties destination = AutoMapper2.Map<ClassWithProperties, ClassWithProperties>( source );
+			ClassWithProperties destination = MapD.Copy<ClassWithProperties, ClassWithProperties>( source );
 
 			source.AssertEqual( destination );
 		}
@@ -31,14 +31,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_Null() {
 
-			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			MapD.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			MapD.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = null
 			};
 
-			ClassWithProperties destination = AutoMapper2.Map<ClassWithProperties, ClassWithProperties>( source );
+			ClassWithProperties destination = MapD.Copy<ClassWithProperties, ClassWithProperties>( source );
 
 			source.AssertEqual( destination );
 		}
@@ -46,15 +46,15 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullDirectly() {
 
-			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			MapD.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			MapD.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = null
 			};
 			ClassWithProperties destination = null;
 
-			var changes = AutoMapper2.Map<ClassWithProperties, ClassWithProperties>( source, ref destination );
+			var changes = MapD.Copy<ClassWithProperties, ClassWithProperties>( source, ref destination );
 
 			source.AssertEqual( destination );
 		}
@@ -62,8 +62,8 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void ClassWithClassProperties_NullToNonNull() {
 
-			AutoMapper2.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
-			AutoMapper2.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
+			MapD.Config.CreateMap<ClassWithProperties, ClassWithProperties>();
+			MapD.Config.CreateMap<ClassWithPropertiesInner, ClassWithPropertiesInner>();
 
 			ClassWithProperties source = new ClassWithProperties {
 				Property1 = null
@@ -77,7 +77,7 @@ namespace AutoMapper2Lib.Tests {
 				}
 			};
 
-			var changed = AutoMapper2.Map<ClassWithProperties, ClassWithProperties>( source, ref destination );
+			var changed = MapD.Copy<ClassWithProperties, ClassWithProperties>( source, ref destination );
 
 			source.AssertEqual( destination );
 		}

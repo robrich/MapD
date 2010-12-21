@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib {
+namespace MapDLib {
 
 	#region using
 	using System;
@@ -9,11 +9,11 @@ namespace AutoMapper2Lib {
 
 	#endregion
 
-	public static class AutoMapper2 {
+	public static class MapD {
 
 		public static class Config {
 
-			// Properties are enumerated when you call Map<> the first time, therefore you can't change this property after that
+			// Properties are enumerated when you call Copy<> the first time, therefore you can't change this property after that
 			private static bool mappingPropertiesLocked;
 
 			private static bool excludeLinqProperties;
@@ -61,7 +61,7 @@ namespace AutoMapper2Lib {
 				MapEntryManager.AddMapEntry( fromType, toType );
 
 				/*
-				 * Though technically not "locked" until you .Map<>() or .MapBack<>(),
+				 * Though technically not "locked" until you .Copy<>() or .CopyBack<>(),
 				 * we lock it here to prevent stuff like:
 				 * .CreateMap<T,U>();
 				 * .ExcludeLinqProperties = true;
@@ -126,7 +126,7 @@ namespace AutoMapper2Lib {
 
 		}
 
-		public static To Map<From, To>( From Source )
+		public static To Copy<From, To>( From Source )
 			where From : class, new()
 			where To : class, new() {
 
@@ -138,11 +138,11 @@ namespace AutoMapper2Lib {
 				return null;
 			}
 			To destination = (To)Activator.CreateInstance( typeof( To ) );
-			List<PropertyChangedResults> changes = Map<From, To>( Source, ref destination );
+			List<PropertyChangedResults> changes = Copy<From, To>( Source, ref destination );
 			return destination;
 		}
 
-		public static List<PropertyChangedResults> Map<From, To>( From Source, ref To Destination )
+		public static List<PropertyChangedResults> Copy<From, To>( From Source, ref To Destination )
 			where From : class, new()
 			where To : class, new() {
 
@@ -202,11 +202,11 @@ namespace AutoMapper2Lib {
 			return changes;
 		}
 
-		public static List<PropertyChangedResults> MapBack<From, To>( To Source, ref From Destination )
+		public static List<PropertyChangedResults> CopyBack<From, To>( To Source, ref From Destination )
 			where From : class, new()
 			where To : class, new() {
 
-			// In MapBack, "fromType" is type of From, which is the Destination
+			// In CopyBack, "fromType" is type of From, which is the Destination
 			// Therefore calling *Mapper.Copy*() passes in toType first
 
 			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
@@ -327,12 +327,12 @@ namespace AutoMapper2Lib {
 		/// <summary>
 		/// For non-class types, convert type from/to
 		/// </summary>
-		public static To MapType<From, To>( From Source ) {
+		public static To CopyType<From, To>( From Source ) {
 			Type fromType = typeof( From );
 			Type toType = typeof( To );
 			MapEntryManager.AssertTypesCanMap<From, To>();
 			if ( fromType.IsClassType() ) {
-				throw new NotSupportedException( "Can't call this with a class type, call Map() instead" );
+				throw new NotSupportedException( "Can't call this with a class type, call Copy() instead" );
 			}
 			return (To)TypeConvert.Convert( Source, toType );
 		}

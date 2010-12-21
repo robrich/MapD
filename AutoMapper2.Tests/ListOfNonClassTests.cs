@@ -1,4 +1,4 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
@@ -15,14 +15,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListInt_Test() {
 
-			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
+			MapD.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>() {
 				123,
 				321
 			};
 
-			List<int> destination = AutoMapper2.Map<List<int>, List<int>>( source );
+			List<int> destination = MapD.Copy<List<int>, List<int>>( source );
 
 			AssertListsAreEqual( source, destination );
 
@@ -35,11 +35,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_Null_ListInt_Test() {
 
-			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
+			MapD.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = null;
 
-			List<int> destination = AutoMapper2.Map<List<int>, List<int>>( source );
+			List<int> destination = MapD.Copy<List<int>, List<int>>( source );
 
 			AssertListsAreEqual( source, destination );
 
@@ -52,11 +52,11 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_Empty_ListInt_Test() {
 
-			AutoMapper2.Config.CreateMap<List<int>, List<int>>();
+			MapD.Config.CreateMap<List<int>, List<int>>();
 
 			List<int> source = new List<int>();
 
-			List<int> destination = AutoMapper2.Map<List<int>, List<int>>( source );
+			List<int> destination = MapD.Copy<List<int>, List<int>>( source );
 
 			AssertListsAreEqual( source, destination );
 
@@ -69,14 +69,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListDouble_Test() {
 
-			AutoMapper2.Config.CreateMap<List<double>, List<double>>();
+			MapD.Config.CreateMap<List<double>, List<double>>();
 
 			List<double> source = new List<double>() {
 				123.123,
 				321.321
 			};
 
-			List<double> destination = AutoMapper2.Map<List<double>, List<double>>( source );
+			List<double> destination = MapD.Copy<List<double>, List<double>>( source );
 
 			AssertListsAreEqual( source, destination );
 
@@ -89,14 +89,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListString_Test() {
 
-			AutoMapper2.Config.CreateMap<List<string>, List<string>>();
+			MapD.Config.CreateMap<List<string>, List<string>>();
 
 			List<string> source = new List<string>() {
 				"String",
 				"gnirtS"
 			};
 
-			List<string> destination = AutoMapper2.Map<List<string>, List<string>>( source );
+			List<string> destination = MapD.Copy<List<string>, List<string>>( source );
 
 			AssertListsAreEqual( source, destination );
 
@@ -109,7 +109,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListString_PartiallyFilled_Test() {
 
-			AutoMapper2.Config.CreateMap<List<string>, List<string>>();
+			MapD.Config.CreateMap<List<string>, List<string>>();
 
 			List<string> source = new List<string>() {
 				"String",
@@ -119,7 +119,7 @@ namespace AutoMapper2Lib.Tests {
 				"String"
 			};
 
-			var changes = AutoMapper2.Map<List<string>, List<string>>( source, ref destination );
+			var changes = MapD.Copy<List<string>, List<string>>( source, ref destination );
 
 			AssertListsAreEqual( source, destination );
 
@@ -132,14 +132,14 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListDateTime_Test() {
 
-			AutoMapper2.Config.CreateMap<List<DateTime>, List<DateTime>>();
+			MapD.Config.CreateMap<List<DateTime>, List<DateTime>>();
 
 			List<DateTime> source = new List<DateTime>() {
 				DateTime.Now,
 				DateTime.Now.AddDays( 1 )
 			};
 
-			List<DateTime> destination = AutoMapper2.Map<List<DateTime>, List<DateTime>>( source );
+			List<DateTime> destination = MapD.Copy<List<DateTime>, List<DateTime>>( source );
 
 			AssertListsAreEqual( source, destination );
 
@@ -152,7 +152,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListInt_to_ListDouble_Test() {
 
-			AutoMapper2.Config.CreateMap<List<int>, List<double>>();
+			MapD.Config.CreateMap<List<int>, List<double>>();
 
 			List<int> source = new List<int>() {
 				123,
@@ -163,7 +163,7 @@ namespace AutoMapper2Lib.Tests {
 				321
 			};
 
-			List<double> destination = AutoMapper2.Map<List<int>, List<double>>( source );
+			List<double> destination = MapD.Copy<List<int>, List<double>>( source );
 
 			AssertListsAreEqual( expected, destination );
 
@@ -176,7 +176,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void Change_ListString_to_ListDouble_Test() {
 
-			AutoMapper2.Config.CreateMap<List<string>, List<double>>();
+			MapD.Config.CreateMap<List<string>, List<double>>();
 
 			List<string> source = new List<string>() {
 				"123",
@@ -187,7 +187,7 @@ namespace AutoMapper2Lib.Tests {
 				321
 			};
 
-			List<double> destination = AutoMapper2.Map<List<string>, List<double>>( source );
+			List<double> destination = MapD.Copy<List<string>, List<double>>( source );
 
 			AssertListsAreEqual( expected, destination );
 

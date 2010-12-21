@@ -1,8 +1,8 @@
-namespace AutoMapper2Lib.Tests {
+namespace MapDLib.Tests {
 
 	#region using
 	using System;
-	using AutoMapper2Lib;
+	using MapDLib;
 	using NUnit.Framework;
 
 	#endregion
@@ -14,7 +14,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void EnumProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<EnumProperties_Class_Type1, EnumProperties_Class_Type2>();
+			MapD.Config.CreateMap<EnumProperties_Class_Type1, EnumProperties_Class_Type2>();
 
 			EnumProperties_Class_Type1 source = new EnumProperties_Class_Type1 {
 				Enum1 = EnumProperties_Class_Enum.Item1,
@@ -24,7 +24,7 @@ namespace AutoMapper2Lib.Tests {
 				Enum5 = EnumProperties_Class_Enum.Item2
 			};
 
-			EnumProperties_Class_Type2 destination = AutoMapper2.Map<EnumProperties_Class_Type1, EnumProperties_Class_Type2>( source );
+			EnumProperties_Class_Type2 destination = MapD.Copy<EnumProperties_Class_Type1, EnumProperties_Class_Type2>( source );
 
 			source.AssertEqual( destination );
 
@@ -33,10 +33,10 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void EnumProperties_Class_SetToNull() {
 
-			AutoMapper2.Config.CreateMap<EnumProperties_Class_Type1, EnumProperties_Class_Type2>();
+			MapD.Config.CreateMap<EnumProperties_Class_Type1, EnumProperties_Class_Type2>();
 
 			EnumProperties_Class_Type1 source = new EnumProperties_Class_Type1();
-			EnumProperties_Class_Type2 destination = AutoMapper2.Map<EnumProperties_Class_Type1, EnumProperties_Class_Type2>( source );
+			EnumProperties_Class_Type2 destination = MapD.Copy<EnumProperties_Class_Type1, EnumProperties_Class_Type2>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -80,7 +80,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NullableIntProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>();
+			MapD.Config.CreateMap<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>();
 
 			NullableIntProperties_Class_Type1 source = new NullableIntProperties_Class_Type1 {
 				Int1 = 123,
@@ -89,7 +89,7 @@ namespace AutoMapper2Lib.Tests {
 				IntToString = "4321"
 			};
 
-			NullableIntProperties_Class_Type2 destination = AutoMapper2.Map<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>( source );
+			NullableIntProperties_Class_Type2 destination = MapD.Copy<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>( source );
 
 			source.AssertEqual( destination );
 
@@ -98,10 +98,10 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NullableIntProperties_Class_SetToNull() {
 
-			AutoMapper2.Config.CreateMap<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>();
+			MapD.Config.CreateMap<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>();
 
 			NullableIntProperties_Class_Type1 source = new NullableIntProperties_Class_Type1();
-			NullableIntProperties_Class_Type2 destination = AutoMapper2.Map<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>( source );
+			NullableIntProperties_Class_Type2 destination = MapD.Copy<NullableIntProperties_Class_Type1, NullableIntProperties_Class_Type2>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -141,7 +141,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NullableDoubleProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>();
+			MapD.Config.CreateMap<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>();
 
 			NullableDoubleProperties_Class_Type1 source = new NullableDoubleProperties_Class_Type1 {
 				Double1 = 123.123,
@@ -150,7 +150,7 @@ namespace AutoMapper2Lib.Tests {
 				DoubleToString = "4321.4321"
 			};
 
-			NullableDoubleProperties_Class_Type2 destination = AutoMapper2.Map<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>( source );
+			NullableDoubleProperties_Class_Type2 destination = MapD.Copy<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>( source );
 
 			source.AssertEqual( destination );
 
@@ -159,10 +159,10 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NullableDoubleProperties_Class_SetToNull() {
 
-			AutoMapper2.Config.CreateMap<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>();
+			MapD.Config.CreateMap<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>();
 
 			NullableDoubleProperties_Class_Type1 source = new NullableDoubleProperties_Class_Type1();
-			NullableDoubleProperties_Class_Type2 destination = AutoMapper2.Map<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>( source );
+			NullableDoubleProperties_Class_Type2 destination = MapD.Copy<NullableDoubleProperties_Class_Type1, NullableDoubleProperties_Class_Type2>( source );
 			source.AssertEqual( destination );
 
 		}
@@ -201,7 +201,7 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NullableDateTimeProperties_Class() {
 
-			AutoMapper2.Config.CreateMap<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>();
+			MapD.Config.CreateMap<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>();
 
 			NullableDateTimeProperties_Class_Type1 source = new NullableDateTimeProperties_Class_Type1 {
 				DateTime1 = DateTime.Now,
@@ -210,7 +210,7 @@ namespace AutoMapper2Lib.Tests {
 				DateTimeToString = DateTime.Now.AddDays( -1 ).ToString()
 			};
 
-			NullableDateTimeProperties_Class_Type2 destination = AutoMapper2.Map<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>( source );
+			NullableDateTimeProperties_Class_Type2 destination = MapD.Copy<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>( source );
 
 			source.AssertEqual( destination );
 
@@ -219,10 +219,10 @@ namespace AutoMapper2Lib.Tests {
 		[Test]
 		public void NullableDateTimeProperties_Class_SetToNull() {
 
-			AutoMapper2.Config.CreateMap<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>();
+			MapD.Config.CreateMap<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>();
 
 			NullableDateTimeProperties_Class_Type1 source = new NullableDateTimeProperties_Class_Type1();
-			NullableDateTimeProperties_Class_Type2 destination = AutoMapper2.Map<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>( source );
+			NullableDateTimeProperties_Class_Type2 destination = MapD.Copy<NullableDateTimeProperties_Class_Type1, NullableDateTimeProperties_Class_Type2>( source );
 			source.AssertEqual( destination );
 
 		}
