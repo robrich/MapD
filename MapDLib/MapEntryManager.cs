@@ -41,7 +41,7 @@ namespace MapDLib {
 			Type[] types = Assembly.GetExportedTypes();
 			foreach ( Type toType in types ) {
 
-				if ( !toType.IsClass || toType.IsNotPublic ) {
+				if ( toType.IsNotPublic ) {
 					continue;
 				}
 
