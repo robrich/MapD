@@ -19,6 +19,7 @@ namespace MapDLib {
 					throw new InstantiationException( "Error creating a " + Type.Name, Type, ex );
 				}
 				if ( instance == null ) {
+					// TODO: If it's a concrete type with a no-arg constructor, use Activator.CreateInstance?
 					throw new InstantiationException( "Instantiation of " + Type.Name + " produced null", Type );
 				}
 			} else {

@@ -16,6 +16,9 @@ Doesn't compare order in lists, only presence
 List<Class> requires each item to have a Key
 
 
+// TO test:
+[IgnoreMap] on Class instead of Property
+
 
 // Done:
 // class to class

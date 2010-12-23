@@ -87,10 +87,15 @@ namespace MapDLib {
 				} catch (Exception ex) {
 					throw new MapFailureException( sourceProperty, Source, null, MapFailureReason.GetSourceFailure, ex );
 				}
-				try {
-					destinationPropertyValueOriginal = destinationProperty.GetValue( Destination, null );
-				} catch (Exception ex) {
-					throw new MapFailureException( destinationProperty, Destination, null, MapFailureReason.GetDestinationFailure, ex );
+				if ( destinationProperty.CanRead ) {
+					try {
+						destinationPropertyValueOriginal = destinationProperty.GetValue( Destination, null );
+					} catch ( Exception ex ) {
+						throw new MapFailureException( destinationProperty, Destination, null, MapFailureReason.GetDestinationFailure, ex );
+					}
+				} else {
+					// Can't read it
+					destinationPropertyValueOriginal = "Can't read original property";
 				}
 
 				if ( sourceProperty.IsListOfT() || destinationProperty.IsListOfT() ) {
@@ -251,7 +256,7 @@ namespace MapDLib {
 					}
 				}
 
-				if ( !object.Equals( destinationPropertyValue, destinationPropertyValueOriginal ) ) {
+				if ( !destinationProperty.CanRead || !object.Equals( destinationPropertyValue, destinationPropertyValueOriginal ) ) {
 					// It changed
 					changes.Add(
 						new PropertyChangedResults {

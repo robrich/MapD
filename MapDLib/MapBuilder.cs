@@ -59,6 +59,10 @@ namespace MapDLib {
 				//toType = toType.GetGenericBaseType();
 			}
 
+			IgnoreDirection ignoreDirectionBase = IgnoreDirection.None
+				| toType.GetIgnoreStatus()
+				| fromType.GetIgnoreStatus();
+
 			List<PropertyInfo> fromProperties = ReflectionHelper.GetProperties( fromType );
 			List<PropertyInfo> toProperties = ReflectionHelper.GetProperties( toType );
 
@@ -69,7 +73,7 @@ namespace MapDLib {
 			if ( toProperties != null && toProperties.Count != 0 ) {
 				foreach ( PropertyInfo toProperty in toProperties ) {
 
-					IgnoreDirection ignoreDirection = IgnoreDirection.None;
+					IgnoreDirection ignoreDirection = ignoreDirectionBase;
 
 					ignoreDirection |= toProperty.GetIgnoreStatus();
 					if ( ignoreDirection == ( IgnoreDirection.Map | IgnoreDirection.MapBack ) ) {
@@ -107,28 +111,36 @@ namespace MapDLib {
 						if ( ( ignorePropertiesIf & PropertyIs.ReadOnly ) == PropertyIs.ReadOnly ) {
 							continue;
 						}
-						throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantRead );
+						if ( ( ignoreDirection & IgnoreDirection.Map ) == IgnoreDirection.Map ) {
+							// If we can't read the source, we'll just write to dest and say "it changed from unknown can't read value"
+						} else {
+							throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantRead );
+						}
 					}
 					if ( !toProperty.CanRead ) {
 						if ( ( ignorePropertiesIf & PropertyIs.ReadOnly ) == PropertyIs.ReadOnly ) {
 							continue;
 						}
-						throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantRead );
+						if ( ( ignoreDirection & IgnoreDirection.MapBack ) == IgnoreDirection.MapBack ) {
+							// If we can't read the source, we'll just write to dest and say "it changed from unknown can't read value"
+						} else {
+							throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantRead );
+						}
 					}
 					if ( !fromProperty.CanWrite ) {
+						if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
+							continue;
+						}
 						if ( ( ignoreDirection & IgnoreDirection.MapBack ) != IgnoreDirection.MapBack ) {
 							// If we're ever called to map back, fromProperty.CanWrite is also important
-							if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
-								continue;
-							}
 							throw new InvalidPropertyException( fromProperty, InvalidPropertyReason.CantWrite );
 						}
 					}
 					if ( !toProperty.CanWrite ) {
+						if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
+							continue;
+						}
 						if ( ( ignoreDirection & IgnoreDirection.Map ) != IgnoreDirection.Map ) {
-							if ( ( ignorePropertiesIf & PropertyIs.WriteOnly ) == PropertyIs.WriteOnly ) {
-								continue;
-							}
 							throw new InvalidPropertyException( toProperty, InvalidPropertyReason.CantWrite );
 						}
 					}
