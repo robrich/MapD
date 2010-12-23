@@ -303,7 +303,7 @@
 			<!--arg value="/nologo" /-->
 			<arg value="/xml:${project::get-base-directory()}\NUnit-${FrameworkNoSpace}-results.xml" />
 			<arg value="/framework:${nant.settings.currentframework}" />
-			<arg value="MapDLib.Tests.dll" />
+			<arg value="MapD.Tests.dll" />
 		</exec>
 	</target>
 
