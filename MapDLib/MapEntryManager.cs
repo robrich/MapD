@@ -74,7 +74,7 @@ namespace MapDLib {
 		}
 
 		#region CreateMapsFromAllAssembliesInPath
-		public static void CreateMapsFromAllAssembliesInPath( string PathString, string FileFilterRegex = null ) {
+		public static void CreateMapsFromAllAssembliesInPath( string PathString, string FileFilterRegex ) {
 
 			if ( string.IsNullOrEmpty( PathString ) ) {
 				// Assume current directory
