@@ -18,7 +18,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void MapFromAttribute_Works() {
 
-			MapD.Config.CreateMaps();
+			MapD.Config.CreateMapsFromCallingAssembly();
 
 			Assert.AreEqual( MappedClassesCount, MapD.Assert.MapCount );
 
@@ -30,9 +30,22 @@ namespace MapDLib.Tests {
 			// TODO: Why do I have to use each assembly before this works?
 			MapFromAttributeResourceType t = new MapFromAttributeResourceType();
 
-			MapD.Config.CreateAllMaps();
+			MapD.Config.CreateMapsFromAllLoadedAssemblies();
+			
+			Assert.AreEqual( MappedClassesCount + MappedResourceClassesCount, MapD.Assert.MapCount );
+
+		}
+
+		[Test]
+		public void MapFromAttribute_AssemblyPath_Works() {
+
+			MapD.Config.CreateMapsFromAllAssembliesInPath( null, "^MapD" ); // meaning "the current directory"
 
 			Assert.AreEqual( MappedClassesCount + MappedResourceClassesCount, MapD.Assert.MapCount );
+
+			// Now use something and insure it also works as expected
+			MapFromAttributeResourceType t = new MapFromAttributeResourceType();
+			Assert.IsNotNull( t );
 
 		}
 
@@ -46,7 +59,7 @@ namespace MapDLib.Tests {
 			};
 
 			// TODO: Why do I have to use each assembly before this works?
-			MapD.Config.CreateAllMaps();
+			MapD.Config.CreateMapsFromAllLoadedAssemblies();
 
 			MapFromAttributeResourceType destination = MapD.Copy<MapFromAttributeResourceType, MapFromAttributeResourceType>( source );
 			source.AssertEqual( destination );
@@ -56,7 +69,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void Can_Map_SameType_Via_Attribute() {
 
-			MapD.Config.CreateMaps();
+			MapD.Config.CreateMapsFromCallingAssembly();
 
 			MapFromAttributeType source = new MapFromAttributeType {
 				Property1 = 1,
@@ -72,7 +85,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void Can_Map_FromSelf_Via_Attribute() {
 
-			MapD.Config.CreateMaps();
+			MapD.Config.CreateMapsFromCallingAssembly();
 
 			MapFromSelfAttributeType source = new MapFromSelfAttributeType {
 				Property1 = 1,
@@ -88,7 +101,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void Can_Map_SameType_Via_Passed_Assembly() {
 
-			MapD.Config.CreateMaps( Assembly.GetExecutingAssembly() );
+			MapD.Config.CreateMapsFromAssembly( Assembly.GetExecutingAssembly() );
 
 			MapFromAttributeType source = new MapFromAttributeType {
 				Property1 = 1,
@@ -104,7 +117,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void Can_Map_List_SameType_Via_Attribute() {
 
-			MapD.Config.CreateMaps();
+			MapD.Config.CreateMapsFromCallingAssembly();
 
 			List<MapFromAttributeType> source = new List<MapFromAttributeType> {
 				new MapFromAttributeType {
@@ -130,7 +143,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void Can_Map_List_Self_Via_Attribute() {
 
-			MapD.Config.CreateMaps();
+			MapD.Config.CreateMapsFromCallingAssembly();
 
 			List<MapFromSelfAttributeType> source = new List<MapFromSelfAttributeType> {
 				new MapFromSelfAttributeType {
@@ -188,7 +201,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void Can_Map_DifferentTypes_Via_Attribute() {
 
-			MapD.Config.CreateMaps();
+			MapD.Config.CreateMapsFromCallingAssembly();
 
 			MapFromAttributeType2 source = new MapFromAttributeType2 {
 				Property1 = 1,
@@ -204,7 +217,7 @@ namespace MapDLib.Tests {
 		[Test]
 		public void Can_Map_List_DifferentTypes_Via_Attribute() {
 
-			MapD.Config.CreateMaps();
+			MapD.Config.CreateMapsFromCallingAssembly();
 
 			List<MapFromAttributeType2> source = new List<MapFromAttributeType2> {
 				new MapFromAttributeType2 {

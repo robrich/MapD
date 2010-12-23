@@ -11,6 +11,7 @@ If you have Map of List<T> to List<U>, no need T to U
 
 Gotchas:
 .Create*Map*() only gets loaded assemblies -- use it first
+	.CreateMapsFromAllAssembliesInPath() doesn't suffer from this
 .Create*Map*() only gets public types because Assembly.GetExportedTypes() only exposes public types
 Doesn't compare order in lists, only presence
 List<Class> requires each item to have a Key

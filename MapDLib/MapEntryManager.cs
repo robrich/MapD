@@ -4,8 +4,11 @@ namespace MapDLib {
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 	using System.Reflection;
+	using System.Runtime.CompilerServices;
+	using System.Text.RegularExpressions;
 
 	#endregion
 
@@ -33,7 +36,7 @@ namespace MapDLib {
 			}
 		}
 
-		public static void CreateMaps( Assembly Assembly ) {
+		public static void CreateMapsFromAssembly( Assembly Assembly ) {
 
 			Type[] types = Assembly.GetExportedTypes();
 			foreach ( Type toType in types ) {
@@ -55,6 +58,101 @@ namespace MapDLib {
 			}
 
 		}
+
+		public static void CreateMapsFromAllLoadedAssemblies() {
+			Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+			if ( assemblies != null && assemblies.Length > 0 ) {
+				foreach ( Assembly assembly in assemblies ) {
+#if NET_4
+					if ( assembly.IsDynamic ) {
+						continue; // Can't reflect on dynamic-only assemblies
+					}
+#endif
+					CreateMapsFromAssembly( assembly );
+				}
+			}
+		}
+
+		#region CreateMapsFromAllAssembliesInPath
+		public static void CreateMapsFromAllAssembliesInPath( string PathString, string FileFilterRegex = null ) {
+
+			if ( string.IsNullOrEmpty( PathString ) ) {
+				// Assume current directory
+				string exeName = Assembly.GetExecutingAssembly().GetName().CodeBase.Substring( 8 ); // Get past file://
+				PathString = Path.GetDirectoryName( exeName );
+			}
+
+			Regex filter = null;
+			if ( !string.IsNullOrEmpty( FileFilterRegex ) ) {
+				filter = new Regex( FileFilterRegex, RegexOptions.IgnoreCase );
+			}
+
+			DirectoryInfo dir = new DirectoryInfo( PathString ); // If you have invalid chars in your path, it'll blow here
+			if ( !dir.Exists ) {
+				throw new FileNotFoundException( "Can't load maps because the source doesn't exist: " + PathString );
+			}
+
+			FileInfo[] files = dir.GetFiles();
+			List<FileInfo> filesToLoad = new List<FileInfo>();
+			foreach ( FileInfo file in files ) {
+
+				if ( !file.Exists ) {
+					continue;
+				}
+
+				if ( !string.Equals( file.Extension, ".dll", StringComparison.CurrentCultureIgnoreCase ) 
+					&& !string.Equals( file.Extension, ".exe", StringComparison.CurrentCultureIgnoreCase ) ) {
+					continue; // It isn't an assembly
+				}
+
+				if ( filter != null && !filter.IsMatch( file.Name ) ) {
+					continue; // Not a match
+				}
+				
+				filesToLoad.Add( file );
+			}
+
+			if ( filesToLoad.Count == 0 ) {
+				return; // Nothing to do
+			}
+
+
+			AppDomain tempDomain = null;
+			try {
+
+				tempDomain = AppDomain.CreateDomain(
+					"MapDTempDomain",
+					AppDomain.CurrentDomain.Evidence,
+					AppDomain.CurrentDomain.SetupInformation
+				);
+
+				List<Assembly> assemblies = new List<Assembly>();
+
+				foreach ( FileInfo file in filesToLoad ) {
+					Assembly assembly = tempDomain.Load( new AssemblyName { CodeBase = file.FullName } );
+#if NET_4
+					if ( assembly.IsDynamic ) {
+						continue; // Can't reflect on dynamic-only assemblies
+					}
+#endif
+					assemblies.Add( assembly );
+				}
+
+				foreach ( Assembly assembly in assemblies ) {
+					CreateMapsFromAssembly( assembly );
+				}
+
+			} finally {
+				if ( tempDomain != null ) {
+					try {
+						AppDomain.Unload( tempDomain );
+					} catch {
+					}
+				}
+			}
+
+		}
+		#endregion
 
 		public static void ResetMap() {
 			mapList.Clear();

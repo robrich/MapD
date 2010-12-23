@@ -88,41 +88,35 @@ namespace MapDLib {
 			/// Reflect on the current assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 			/// </summary>
 			[MethodImpl(MethodImplOptions.NoInlining)]
-			public static void CreateMaps() {
-				CreateMaps( Assembly.GetCallingAssembly() );
+			public static void CreateMapsFromCallingAssembly() {
+				MapEntryManager.CreateMapsFromAssembly( Assembly.GetCallingAssembly() );
 			}
 
 			/// <summary>
 			/// Reflect on all loaded assemblies to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 			/// </summary>
-			public static void CreateAllMaps() {
-				Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-				if ( assemblies != null && assemblies.Length > 0 ) {
-					foreach ( Assembly assembly in assemblies ) {
-#if NET_4
-						if ( assembly.IsDynamic ) {
-							continue; // Can't reflect on dynamic-only assemblies
-						}
-#endif
-						CreateMaps( assembly );
-					}
-				}
+			/// <remarks>
+			/// You have to use something in the assembly before running this or it won't be loaded
+			/// </remarks>
+			public static void CreateMapsFromAllLoadedAssemblies() {
+				MapEntryManager.CreateMapsFromAllLoadedAssemblies();
+			}
+
+			/// <summary>
+			/// Reflect on all assemblies found in the given path to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
+			/// </summary>
+			public static void CreateMapsFromAllAssembliesInPath( string Path, string FileFilterRegex = null ) {
+				MapEntryManager.CreateMapsFromAllAssembliesInPath( Path, FileFilterRegex );
 			}
 
 			/// <summary>
 			/// Reflect on the specified assembly to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 			/// </summary>
-			/// <param name="Assembly"></param>
-			[MethodImpl(MethodImplOptions.NoInlining)]
-			public static void CreateMaps( Assembly Assembly ) {
+			public static void CreateMapsFromAssembly( Assembly Assembly ) {
 				if ( Assembly == null ) {
-					Assembly = Assembly.GetCallingAssembly();
-					if ( Assembly == null ) {
-						throw new ArgumentNullException( "Assembly" );
-					}
+					throw new ArgumentNullException( "Assembly" );
 				}
-
-				MapEntryManager.CreateMaps( Assembly );
+				MapEntryManager.CreateMapsFromAssembly( Assembly );
 			}
 
 		}
