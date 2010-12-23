@@ -18,7 +18,6 @@ namespace MapDLib {
 	/// <summary>
 	/// This property should be ignored while mapping -- placed on either source or destination to take effect
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Property )]
 	public class IgnoreMapAttribute : Attribute {
 
 		private IgnoreDirection ignoreDirection;
@@ -70,7 +69,6 @@ namespace MapDLib {
 	/// <summary>
 	/// If the property is <see cref="PropertyIs"/>.ReadOnly or <see cref="PropertyIs"/>.WriteOnly, we can flag the class to ignore them while mapping
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Class | AttributeTargets.Property )]
 	public class IgnorePropertiesIfAttribute : Attribute {
 
 		private PropertyIs propertyIs;
@@ -108,7 +106,7 @@ namespace MapDLib {
 	/// <summary>
 	/// Map from the passed type to the current type when you call MapD.CreateMaps()
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Class )]
+	[AttributeUsage( AttributeTargets.All, AllowMultiple = true )]
 	public class MapFromAttribute : Attribute {
 
 		private Type type;
@@ -129,14 +127,13 @@ namespace MapDLib {
 	/// <summary>
 	/// Map from the current type to the current type when you call MapD.CreateMaps()
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Class )]
 	public class MapFromSelfAttribute : Attribute {
 	}
 
 	/// <summary>
 	/// Map a List&lt;&gt; from the passed type to a List&lt;&gt; of the current type when you call MapD.CreateMaps()
 	/// </summary>
-	[AttributeUsage( AttributeTargets.Class )]
+	[AttributeUsage( AttributeTargets.All, AllowMultiple = true )]
 	public class MapListFromListOfAttribute : Attribute {
 
 		private Type type;
