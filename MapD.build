@@ -12,7 +12,8 @@
 	<property name="MSBuildXmlLoggerPath" value="C:\ci\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll" />
 
 
-	<target name="Build_Release" depends="Release,Clean,RevertVersion,Build" />
+	<target name="Build_Release" depends="Release,CleanAndRevert,Build" />
+	<target name="CleanAndRevert" depends="Clean,SvnRevert,CleanUnversioned" />
 
 
 	<!-- Select the configuration: Debug or Release -->
@@ -30,8 +31,6 @@
 
 
 	<!-- Libs -->
-
-	<loadtasks assembly="ExternalReferences/SlnToProjects.dll" />
 
 	<target name="replacestring">
 		<!-- Pass in ${filename}, ${content-from}, ${content-to} (literal strings, not regexes -->
@@ -57,17 +56,6 @@
 	</script>
 
 
-	<!-- Interogate standard properties -->
-
-	<slntoprojects sln="${Solution}" delim=";" projectsproperty="ProjectList" type="all" />
-	<fileset id="AppConfigs" basedir=".">
-		<exclude name="**/-*-/**/*.config" />
-		<exclude name="build/**/*.config" />
-		<include name="**/App.config" />
-		<include name="**/app.config" />
-	</fileset>
-
-
 	<!-- Clean target will delete the current version -->
 	<target name="Clean"
 		description="remove generated files">
@@ -91,8 +79,34 @@
 				<include name="**/Debug/**" />
 				<include name="**/Release/**" />
 				<include name="**/*.tmp_*" />
+				<include name="**/*.cache" />
 			</fileset>
 		</delete>
+	</target>
+
+	<target name="SvnRevert">
+		<exec program="svn.exe" failonerror="true">
+			<arg value="revert" />
+			<arg value="-R" />
+			<arg value="." />
+		</exec>
+	</target>
+
+	<target name="CleanUnversioned">
+		<!-- A bunch of mayhem because exec can't output to a variable -->
+		<exec program="svn.exe" workingdir="${project::get-base-directory()}" output="unversioned.log" failonerror="true">
+			<arg value="status" />
+			<arg value="--xml" />
+			<arg value="--no-ignore" />
+		</exec>
+		<xmllist file="unversioned.log" property="DeleteList" delim=";" 
+			xpath="/status/target/entry[wc-status/@item='unversioned' or wc-status/@item='ignored']/@path" />
+		<echo message="Unversioned items to delete: ${DeleteList}" />
+		<delete file="unversioned.log" />
+		<foreach item="String" in="${DeleteList}" delim=";" property="DeleteItem">
+			<delete dir="${DeleteItem}" if="${directory::exists(DeleteItem)}" />
+			<delete file="${DeleteItem}" if="${file::exists(DeleteItem)}" />
+		</foreach>
 	</target>
 
 
