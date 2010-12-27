@@ -127,6 +127,10 @@ Create a method to "not copy anything and don't even try":
 	.Ignore<T,U>() that creates a map with properties set as resolved with no properties
 
 
+// To Test:
+// Reflect Tests assembly, find all classes with TestFixture attribute or a method with Test attribute
+	Insure derives from (or is) BaseTest
+	Insure all methods have Test attribute
 
 // When serializing / deserializing, if asked to add/strip namespaces, also add/strip <?xml[^>]*?>
 
