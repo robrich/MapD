@@ -3,10 +3,31 @@ namespace MapDLib {
 	#region using
 	using System;
 	using System.Collections.Generic;
-
+	using System.Linq;
 	#endregion
 
 	internal static class TypeExtensions {
+
+		// if ( !myList.IsNullOrEmpty() ) {  ===> ExtensionMethods.IsNullOrEmpty( myList );
+
+		public static bool IsNullOrEmpty<T>( this ICollection<T> List ) {
+			return ( List == null || List.Count < 1 );
+			// TODO: Enumerate through each one insuring the list isn't full of nulls?
+			// TODO: It'd insure we'd need where T : class, meaning you couldn't do it for value types such as List<int>
+		}
+
+		public static List<Attribute> GetAttributes( this Type Type, Type AttributeType ) {
+			List<Attribute> attributeList = ReflectionHelper.GetAttributes( Type );
+			return (
+				from a in attributeList
+				where AttributeType.IsAssignableFrom( a.GetType() )
+				select a
+			).ToList();
+		}
+
+		public static Attribute GetFirstAttribute( this Type Type, Type AttributeType ) {
+			return GetAttributes( Type, AttributeType ).FirstOrDefault();
+		}
 
 		public static bool IsClassType( this Type Type ) {
 			if ( Type == null ) {
@@ -56,7 +77,7 @@ namespace MapDLib {
 
 		public static IgnoreDirection GetIgnoreStatus( this Type Type ) {
 			IgnoreDirection results = IgnoreDirection.None;
-			IgnoreMapAttribute ignore = (IgnoreMapAttribute)Attribute.GetCustomAttribute( Type, typeof( IgnoreMapAttribute ) );
+			IgnoreMapAttribute ignore = (IgnoreMapAttribute)Type.GetFirstAttribute( typeof( IgnoreMapAttribute ) );
 			if ( ignore != null ) {
 				results |= ignore.IgnoreDirection;
 			}
@@ -65,7 +86,7 @@ namespace MapDLib {
 
 		public static PropertyIs GetIgnorePropertiesIf( this Type Type ) {
 			PropertyIs propertyIs = PropertyIs.NotSet;
-			IgnorePropertiesIfAttribute ignoreIf = (IgnorePropertiesIfAttribute)Attribute.GetCustomAttribute( Type, typeof( IgnorePropertiesIfAttribute ) );
+			IgnorePropertiesIfAttribute ignoreIf = (IgnorePropertiesIfAttribute)Type.GetFirstAttribute( typeof( IgnorePropertiesIfAttribute ) );
 			if ( ignoreIf != null ) {
 				propertyIs |= ignoreIf.PropertyIs;
 			}
@@ -74,11 +95,11 @@ namespace MapDLib {
 
 		public static Type GetMapFromType( this Type Type ) {
 			Type results = null;
-			MapFromAttribute attr = (MapFromAttribute)Attribute.GetCustomAttribute( Type, typeof( MapFromAttribute ) );
+			MapFromAttribute attr = (MapFromAttribute)Type.GetFirstAttribute( typeof( MapFromAttribute ) );
 			if ( attr != null ) {
 				results = attr.Type;
 			}
-			MapFromSelfAttribute selfAttr = (MapFromSelfAttribute)Attribute.GetCustomAttribute( Type, typeof( MapFromSelfAttribute ) );
+			MapFromSelfAttribute selfAttr = (MapFromSelfAttribute)Type.GetFirstAttribute( typeof( MapFromSelfAttribute ) );
 			if ( selfAttr != null ) {
 				results = Type;
 			}
@@ -87,16 +108,18 @@ namespace MapDLib {
 
 		public static Type GetMapListFromType( this Type Type ) {
 			Type results = null;
-			MapListFromListOfAttribute attr = (MapListFromListOfAttribute)Attribute.GetCustomAttribute( Type, typeof(MapListFromListOfAttribute) );
+			MapListFromListOfAttribute attr = (MapListFromListOfAttribute)Type.GetFirstAttribute( typeof( MapListFromListOfAttribute ) );
 			if ( attr != null ) {
 				results = attr.Type;
 			}
-			MapListFromListOfSelfAttribute listOfSelfAttr = (MapListFromListOfSelfAttribute)Attribute.GetCustomAttribute( Type, typeof( MapListFromListOfSelfAttribute ) );
+			MapListFromListOfSelfAttribute listOfSelfAttr = (MapListFromListOfSelfAttribute)Type.GetFirstAttribute( typeof( MapListFromListOfSelfAttribute ) );
 			if ( listOfSelfAttr != null ) {
 				results = Type;
 			}
 			return results;
 		}
+		
+		// List<T> ===> T
 
 		public static Type GetGenericBaseType( this Type Type ) {
 			if ( Type == null ) {
@@ -112,6 +135,8 @@ namespace MapDLib {
 			}
 			return args[0];
 		}
+		
+		// T ===> List<T>
 
 		public static Type GetListOfType( this Type Type ) {
 			if ( Type == null ) {
@@ -121,6 +146,8 @@ namespace MapDLib {
 				new Type[] { Type }
 			);
 		}
+		
+		// T? ===> T
 
 		public static Type GetNullableBaseType( this Type Type ) {
 			if ( Type == null ) {

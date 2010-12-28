@@ -85,7 +85,7 @@ namespace MapDLib {
 
 					string fromPropertyName = toProperty.Name;
 					// ColumnAttribute primary key
-					RemapPropertyAttribute remapProperty = (RemapPropertyAttribute)Attribute.GetCustomAttribute(toProperty, typeof( RemapPropertyAttribute ) );
+					RemapPropertyAttribute remapProperty = (RemapPropertyAttribute)toProperty.GetFirstAttribute( typeof( RemapPropertyAttribute ) );
 					if ( remapProperty != null ) {
 						fromPropertyName = remapProperty.MapPropertyName;
 					}

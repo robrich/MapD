@@ -4,7 +4,9 @@ namespace MapDLib {
 	using System;
 	using System.Collections.Generic;
 	using System.Data.Linq.Mapping;
+#if ENTITY_FRAMEWORK
 	using System.Data.Objects.DataClasses;
+#endif
 	using System.Reflection;
 	using System.Text;
 	#endregion
@@ -15,6 +17,8 @@ namespace MapDLib {
 			public Type Type { get; set; }
 			public List<PropertyInfo> PropertyInfo { get; set; }
 			public List<MethodInfo> MethodInfo { get; set; }
+			public List<Attribute> Attributes { get; set; }
+			public Dictionary<PropertyInfo, List<Attribute>> PropertyAttributes { get; set; }
 		}
 		private static Dictionary<Type, ReflectionCacheEntry> Entries { get; set; }
 
@@ -50,7 +54,7 @@ namespace MapDLib {
 					}
 				}
 			}
-			return e.PropertyInfo;
+			return new List<PropertyInfo>( e.PropertyInfo );
 		}
 
 		public static List<MethodInfo> GetMethods( Type type ) {
@@ -62,7 +66,55 @@ namespace MapDLib {
 					}
 				}
 			}
-			return e.MethodInfo;
+			return new List<MethodInfo>( e.MethodInfo );
+		}
+
+		public static List<Attribute> GetAttributes( Type type ) {
+			ReflectionCacheEntry e = FindEntry( type );
+			if ( e.Attributes == null ) {
+				lock ( Entries ) {
+					if ( e.Attributes == null ) {
+						object[] attributes = type.GetCustomAttributes(true);
+						e.Attributes = HarvestAttributes( attributes );
+					}
+				}
+			}
+			return new List<Attribute>( e.Attributes );
+		}
+
+		public static Dictionary<PropertyInfo, List<Attribute>> GetPropertyAttributes( Type type ) {
+			ReflectionCacheEntry e = FindEntry( type );
+			if ( e.PropertyAttributes == null ) {
+				lock ( Entries ) {
+					if ( e.PropertyAttributes == null ) {
+						e.PropertyAttributes = new Dictionary<PropertyInfo, List<Attribute>>();
+						List<PropertyInfo> properties = GetProperties( type );
+						if ( !properties.IsNullOrEmpty() ) {
+							foreach ( PropertyInfo property in properties ) {
+								object[] attributes = property.GetCustomAttributes( true );
+								List<Attribute> attrList = HarvestAttributes( attributes );
+								if ( !attrList.IsNullOrEmpty() ) {
+									e.PropertyAttributes.Add( property, attrList );
+								}
+							}
+						}
+					}
+				}
+			}
+			return e.PropertyAttributes;
+		}
+
+		private static List<Attribute> HarvestAttributes( object[] Source ) {
+			List<Attribute> results = new List<Attribute>();
+			if ( !Source.IsNullOrEmpty() ) {
+				foreach ( object aObj in Source ) {
+					Attribute a = aObj as Attribute;
+					if ( a != null ) {
+						results.Add( a );
+					}
+				}
+			}
+			return results;
 		}
 
 		public static string ObjectToString( object obj, bool ExcludeLinqAssociationProperties ) {
@@ -104,14 +156,18 @@ namespace MapDLib {
 						if ( property.PropertyType.IsLinqProperty() ) {
 							continue;
 						}
-						AssociationAttribute association = (AssociationAttribute)Attribute.GetCustomAttribute( property, typeof(AssociationAttribute) );
+						// LINQ to SQL
+						AssociationAttribute association = (AssociationAttribute)property.GetFirstAttribute( typeof(AssociationAttribute) );
 						if ( association != null && !string.IsNullOrEmpty( association.ThisKey ) ) {
 							continue;
 						}
-						EdmEntityTypeAttribute entity = (EdmEntityTypeAttribute)Attribute.GetCustomAttribute( property, typeof( EdmEntityTypeAttribute ) );
+#if ENTITY_FRAMEWORK
+						// Entity Framework
+						EdmEntityTypeAttribute entity = (EdmEntityTypeAttribute)property.GetFirstAttribute( typeof( EdmEntityTypeAttribute ) );
 						if ( entity != null ) {
 							continue;
 						}
+#endif
 						// TODO: Determine if this is a value type that's linked to an association and exclude that too
 					}
 

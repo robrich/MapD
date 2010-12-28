@@ -60,6 +60,7 @@
 			string results = string.Empty;
 
 			MemberInfo inf = T;
+			// TODO: Cache this
 			object[] attributes = inf.GetCustomAttributes( typeof( XmlRootAttribute ), false );
 
 			foreach ( Object attribute in attributes ) {

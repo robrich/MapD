@@ -16,7 +16,22 @@ namespace MapDLib {
 				from p in List
 				where string.Compare( p.Name, PropertyName, StringComparison.InvariantCultureIgnoreCase ) == 0
 				select p
-				).FirstOrDefault();
+			).FirstOrDefault();
+		}
+
+		public static List<Attribute> GetAttributes( this PropertyInfo Property, Type AttributeType ) {
+			Dictionary<PropertyInfo, List<Attribute>> attributeList = ReflectionHelper.GetPropertyAttributes( Property.DeclaringType );
+			return (
+				from a in attributeList
+				where a.Key.Name == Property.Name
+				from v in a.Value
+				where AttributeType.IsAssignableFrom( v.GetType() )
+				select v
+			).ToList();
+		}
+
+		public static Attribute GetFirstAttribute( this PropertyInfo Property, Type AttributeType ) {
+			return GetAttributes( Property, AttributeType ).FirstOrDefault();
 		}
 
 		public static bool IsListOfT( this PropertyInfo Property ) {
@@ -29,16 +44,16 @@ namespace MapDLib {
 				results = true;
 			}
 			// LinqToSql
-			AssociationAttribute association = (AssociationAttribute)Attribute.GetCustomAttribute( Property, typeof( AssociationAttribute ) );
+			AssociationAttribute association = (AssociationAttribute)GetFirstAttribute( Property, typeof( AssociationAttribute ) );
 			if ( association != null ) {
 				results = true;
 			}
 			// LinqToEntities
-			EdmEntityTypeAttribute entity = (EdmEntityTypeAttribute)Attribute.GetCustomAttribute( Property, typeof( EdmEntityTypeAttribute ) );
+			EdmEntityTypeAttribute entity = (EdmEntityTypeAttribute)GetFirstAttribute( Property, typeof( EdmEntityTypeAttribute ) );
 			if ( entity != null ) {
 				results = true;
 			}
-			EdmRelationshipNavigationPropertyAttribute dataMember = (EdmRelationshipNavigationPropertyAttribute)Attribute.GetCustomAttribute( Property, typeof( EdmRelationshipNavigationPropertyAttribute ) );
+			EdmRelationshipNavigationPropertyAttribute dataMember = (EdmRelationshipNavigationPropertyAttribute)GetFirstAttribute( Property, typeof( EdmRelationshipNavigationPropertyAttribute ) );
 			if ( dataMember != null ) {
 				results = true;
 			}
@@ -47,7 +62,7 @@ namespace MapDLib {
 
 		public static IgnoreDirection GetIgnoreStatus( this PropertyInfo Property ) {
 			IgnoreDirection results = IgnoreDirection.None;
-			IgnoreMapAttribute ignore = (IgnoreMapAttribute)Attribute.GetCustomAttribute( Property, typeof(IgnoreMapAttribute) );
+			IgnoreMapAttribute ignore = (IgnoreMapAttribute)GetFirstAttribute( Property, typeof(IgnoreMapAttribute) );
 			if ( ignore != null ) {
 				results |= ignore.IgnoreDirection;
 			}
@@ -58,7 +73,7 @@ namespace MapDLib {
 
 		public static PropertyIs GetIgnorePropertiesIf( this PropertyInfo Property ) {
 			PropertyIs propertyIs = PropertyIs.NotSet;
-			IgnorePropertiesIfAttribute ignoreIf = (IgnorePropertiesIfAttribute)Attribute.GetCustomAttribute( Property, typeof( IgnorePropertiesIfAttribute ) );
+			IgnorePropertiesIfAttribute ignoreIf = (IgnorePropertiesIfAttribute)GetFirstAttribute( Property, typeof( IgnorePropertiesIfAttribute ) );
 			if ( ignoreIf != null ) {
 				propertyIs |= ignoreIf.PropertyIs;
 			}
@@ -69,7 +84,7 @@ namespace MapDLib {
 
 		public static bool IsPrimaryKeyPropertyViaMapAttribute( this PropertyInfo Property ) {
 			bool results = false;
-			PrimaryKeyAttribute key = (PrimaryKeyAttribute)Attribute.GetCustomAttribute( Property, typeof( PrimaryKeyAttribute ) );
+			PrimaryKeyAttribute key = (PrimaryKeyAttribute)GetFirstAttribute( Property, typeof( PrimaryKeyAttribute ) );
 			if ( key != null ) {
 				results = true;
 			}
@@ -80,7 +95,7 @@ namespace MapDLib {
 			bool results = false;
 #if NET_4
 			// KeyAttribute primary key
-			System.ComponentModel.DataAnnotations.KeyAttribute key = (System.ComponentModel.DataAnnotations.KeyAttribute)Attribute.GetCustomAttribute( Property, typeof( System.ComponentModel.DataAnnotations.KeyAttribute ) );
+			System.ComponentModel.DataAnnotations.KeyAttribute key = (System.ComponentModel.DataAnnotations.KeyAttribute)GetFirstAttribute( Property, typeof( System.ComponentModel.DataAnnotations.KeyAttribute ) );
 			if ( key != null ) {
 				results = true;
 			}
@@ -92,13 +107,13 @@ namespace MapDLib {
 			bool results = false;
 			
 			// ColumnAttribute primary key
-			ColumnAttribute linqToSql = (ColumnAttribute)Attribute.GetCustomAttribute( Property, typeof( ColumnAttribute ) );
+			ColumnAttribute linqToSql = (ColumnAttribute)GetFirstAttribute( Property, typeof( ColumnAttribute ) );
 			if ( linqToSql != null && linqToSql.IsPrimaryKey ) {
 				results = true;
 			}
 
 			// EdmScalarPropertyAttribute primary key
-			EdmScalarPropertyAttribute linqToEntities = (EdmScalarPropertyAttribute)Attribute.GetCustomAttribute( Property, typeof( EdmScalarPropertyAttribute ) );
+			EdmScalarPropertyAttribute linqToEntities = (EdmScalarPropertyAttribute)GetFirstAttribute( Property, typeof( EdmScalarPropertyAttribute ) );
 			if ( linqToEntities != null && linqToEntities.EntityKeyProperty ) {
 				results = true;
 			}
