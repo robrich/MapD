@@ -14,7 +14,7 @@ namespace MapDLib {
 		public static PropertyInfo GetPropertyByName( this List<PropertyInfo> List, string PropertyName ) {
 			return (
 				from p in List
-				where string.Compare( p.Name, PropertyName, StringComparison.InvariantCultureIgnoreCase ) == 0
+				where string.Equals( p.Name, PropertyName, StringComparison.InvariantCultureIgnoreCase )
 				select p
 			).FirstOrDefault();
 		}
