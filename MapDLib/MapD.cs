@@ -105,7 +105,13 @@ namespace MapDLib {
 			/// <summary>
 			/// Reflect on all assemblies found in the given path to get the maps from all public <see cref="MapFromAttribute"/>-annotated classes and all public <see cref="MapListFromListOfAttribute"/>-annotated classes
 			/// </summary>
-			public static void CreateMapsFromAllAssembliesInPath( string Path, string FileFilterRegex
+			/// <param name="Path">Reflect all assemblies in the specified path, null for the current executing assembly's path</param>
+			/// <param name="FileFilterRegex">Only reflect in files whose filename (without path) matches this regex</param>
+			public static void CreateMapsFromAllAssembliesInPath( string Path
+#if NET_4
+				= null
+#endif
+				, string FileFilterRegex
 #if NET_4
 				= null
 #endif
