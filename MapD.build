@@ -12,7 +12,7 @@
 	<property name="MSBuildXmlLoggerPath" value="C:\ci\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll" />
 
 
-	<target name="Build_Release" depends="Release,CleanAndRevert,Build" />
+	<target name="Build_Release" depends="Release,CleanAndRevert,Build,NuPack" />
 	<target name="CleanAndRevert" depends="Clean,SvnRevert,CleanUnversioned" />
 
 
@@ -65,9 +65,14 @@
 				<include name="*results.xml" /><!-- NUnit results -->
 				<include name="*msbuild.xml" /><!-- MSBuild results -->
 				<include name="build/**" />
+				<include name="log/**" />
 				<include name="*.tmp" />
+				<include name="**/*.nupkg" />
+				<include name="MapDLib.NuGet*/lib/**" />
 			</fileset>
 		</delete>
+		<delete dir="build" if="${directory::exists('build')}" />
+		<delete dir="log" if="${directory::exists('log')}" />
 		<call target="CleanStep" />
 	</target>
 	<target name="CleanStep"
@@ -292,7 +297,7 @@
 		<property name="MSBuildLogger" value="" />
 		<property name="MSBuildConsoleLogger" value="" />
 		<if test="${file::exists(MSBuildXmlLoggerPath)}">
-			<property name="MSBuildLogger" value="/l:ThoughtWorks.CruiseControl.MsBuild.XmlLogger,${MSBuildXmlLoggerPath};${Solution}-${nant.settings.currentframework}-${Platform}.msbuild.xml" />
+			<property name="MSBuildLogger" value="/l:ThoughtWorks.CruiseControl.MsBuild.XmlLogger,${MSBuildXmlLoggerPath};log\${Solution}-${nant.settings.currentframework}-${Platform}.msbuild.xml" />
 			<property name="MSBuildConsoleLogger" value="/noconsolelogger" />
 		</if>
 
@@ -315,13 +320,13 @@
 		<exec program="nunit-console.exe" failonerror="true" workingdir="MapDLib.Tests/bin/${Configuration}/">
 			<arg value="/nodots" />
 			<!--arg value="/nologo" /-->
-			<arg value="/xml:${project::get-base-directory()}\NUnit-${FrameworkNoSpace}-results.xml" />
+			<arg value="/xml:${project::get-base-directory()}\log\${Solution}-${FrameworkNoSpace}.nunit.xml" />
 			<arg value="/framework:${nant.settings.currentframework}" />
 			<arg value="MapD.Tests.dll" />
 		</exec>
 	</target>
 
- 	<target name="CopyProject" descrption="Copy a project">
+ 	<target name="CopyProject" description="Copy a project">
 
 		<property name="ProjectPath" value="${path::get-directory-name(Project)}"/>
 		<property name="ProjectName" value="${path::get-file-name(ProjectPath)}"/>
@@ -337,6 +342,72 @@
 				<exclude name="**/*.pdb" if="${Debug != 'true'}" />
 				<include name="**/*.pdb" if="${Debug == 'true'}" />
 				<include name="**/**" />
+			</fileset>
+		</copy>
+
+	</target>
+
+	<target name="NuPack" depends="NuPack4,NuPack3" />
+	
+	<target name="NuPack4" description="Package MapD as a NuGet package"
+		depends="GetVersion">
+	
+		<copy	file="build/net4.0/MapD.dll"
+			todir="MapDLib.NuGet/lib"
+			overwrite="true" />
+
+		<!-- This isn't a regular expression: -->
+		<property name="content-from" value=".*&lt;" />
+		<property name="content-to" value=".${svn-version}&lt;" />
+		
+		<property name="file" value="MapDLib.NuGet/Package.nuspec" />
+
+		<loadfile file="${file}" property="filecontents">
+			<filterchain>
+				<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+			</filterchain>
+		</loadfile>
+		<echo file="${file}" message="${string::trim-end(filecontents)}"/>
+
+		<exec program="nuget" workingdir="MapDLib.NuGet" failonerror="true">
+			<arg value="pack" />
+		</exec>
+		
+		<copy todir="build" overwrite="true">
+			<fileset basedir="MapDLib.NuGet3">
+				<include name="*.nupkg" />
+			</fileset>
+		</copy>
+
+	</target>
+	
+	<target name="NuPack3" description="Package MapD as a NuGet package"
+		depends="GetVersion">
+	
+		<copy	file="build/net3.5/MapD.dll"
+			todir="MapDLib.NuGet3/lib"
+			overwrite="true" />
+
+		<!-- This isn't a regular expression: -->
+		<property name="content-from" value=".*&lt;" />
+		<property name="content-to" value=".${svn-version}&lt;" />
+		
+		<property name="file" value="MapDLib.NuGet3/Package.nuspec" />
+
+		<loadfile file="${file}" property="filecontents">
+			<filterchain>
+				<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+			</filterchain>
+		</loadfile>
+		<echo file="${file}" message="${string::trim-end(filecontents)}"/>
+
+		<exec program="nuget" workingdir="MapDLib.NuGet3" failonerror="true">
+			<arg value="pack" />
+		</exec>
+		
+		<copy todir="build" overwrite="true">
+			<fileset basedir="MapDLib.NuGet3">
+				<include name="*.nupkg" />
 			</fileset>
 		</copy>
 

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>MapD.net35</id>
+    <version>1.0.*</version>
+    <authors>Rob Richardson</authors>
+    <owners>Richardson &amp; Sons, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Convention based, Attribute-tuned objejct-to-object mapper, used to deep copy or deep compare two dissimilar objects in either direction, compiled for .net 3.5.</description>
+    <tags>MapD AutoMapper Attribute</tags>
+  </metadata>
+</package>
