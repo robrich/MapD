@@ -272,11 +272,12 @@
 
 	<target name="BuildAndTestSolution" description="Compiles 1 solution">
 
+		<property name="PlatformNoSpace" value="${string::replace(Platform,' ','')}" />
+		<property name="FrameworkNoSpace" value="${string::replace(string::replace(nant.settings.currentframework,'net-','net'),'.','')}" />
+		<property name="SolutionName" value="${string::replace(path::get-file-name(Solution),'.sln','')}" />
+
 		<call target="CleanStep" />
 		<call target="CompileSolution" />
-
-		<property name="PlatformNoSpace" value="${string::replace(Platform,' ','')}" />
-		<property name="FrameworkNoSpace" value="${string::replace(nant.settings.currentframework,'net-','net')}" />
 
 		<call target="NUnit" />
 
@@ -297,11 +298,13 @@
 		<property name="MSBuildLogger" value="" />
 		<property name="MSBuildConsoleLogger" value="" />
 		<if test="${file::exists(MSBuildXmlLoggerPath)}">
-			<property name="MSBuildLogger" value="/l:ThoughtWorks.CruiseControl.MsBuild.XmlLogger,${MSBuildXmlLoggerPath};log\${Solution}-${nant.settings.currentframework}-${Platform}.msbuild.xml" />
+			<property name="MSBuildLogger" value="/l:ThoughtWorks.CruiseControl.MsBuild.XmlLogger,${MSBuildXmlLoggerPath};log\${SolutionName}-${FrameworkNoSpace}-${PlatformNoSpace}-msbuild.xml" />
 			<property name="MSBuildConsoleLogger" value="/noconsolelogger" />
+			<mkdir dir="log" if="${not(directory::exists('log'))}" />
+			<echo message="MSBuildLogger: ${MSBuildLogger}" />
 		</if>
 
-		<echo message="Building ${Solution} for ${Platform}: ${nant.settings.currentframework} ${Configuration} ${DebugConditional}${FrameworkConditional}"/>
+		<echo message="Building ${SolutionName} for ${Platform}: ${FrameworkNoSpace} ${Configuration} ${DebugConditional}${FrameworkConditional}"/>
 		<msbuild
 			project="${Solution}"
 			verbosity="Normal"
@@ -320,7 +323,7 @@
 		<exec program="nunit-console.exe" failonerror="true" workingdir="MapDLib.Tests/bin/${Configuration}/">
 			<arg value="/nodots" />
 			<!--arg value="/nologo" /-->
-			<arg value="/xml:${project::get-base-directory()}\log\${Solution}-${FrameworkNoSpace}.nunit.xml" />
+			<arg value="/xml:${project::get-base-directory()}\log\${SolutionName}-${FrameworkNoSpace}-${PlatformNoSpace}-nunit.xml" />
 			<arg value="/framework:${nant.settings.currentframework}" />
 			<arg value="MapD.Tests.dll" />
 		</exec>
@@ -347,7 +350,7 @@
 
 	</target>
 
-	<target name="NuPack" depends="NuPack4,NuPack3" />
+	<target name="NuPack" depends="Build,NuPack4,NuPack3" />
 	
 	<target name="NuPack4" description="Package MapD as a NuGet package"
 		depends="GetVersion">
