@@ -355,7 +355,7 @@
 	<target name="NuPack4" description="Package MapD as a NuGet package"
 		depends="GetVersion">
 	
-		<copy	file="build/net4.0/MapD.dll"
+		<copy	file="build/net40/MapD.dll"
 			todir="MapDLib.NuGet/lib"
 			overwrite="true" />
 
@@ -387,7 +387,7 @@
 	<target name="NuPack3" description="Package MapD as a NuGet package"
 		depends="GetVersion">
 	
-		<copy	file="build/net3.5/MapD.dll"
+		<copy	file="build/net35/MapD.dll"
 			todir="MapDLib.NuGet3/lib"
 			overwrite="true" />
 
