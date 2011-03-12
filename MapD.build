@@ -377,7 +377,7 @@
 		</exec>
 		
 		<copy todir="build" overwrite="true">
-			<fileset basedir="MapDLib.NuGet3">
+			<fileset basedir="MapDLib.NuGet">
 				<include name="*.nupkg" />
 			</fileset>
 		</copy>
