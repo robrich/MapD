@@ -350,13 +350,14 @@
 
 	</target>
 
-	<target name="NuPack" depends="Build,NuPack4,NuPack3" />
-	
-	<target name="NuPack4" description="Package MapD as a NuGet package"
+	<target name="NuPack" depends="Build" description="Package MapD as a NuGet package"
 		depends="GetVersion">
 	
 		<copy	file="build/net40/MapD.dll"
-			todir="MapDLib.NuGet/lib"
+			todir="MapDLib.NuGet/lib/net40"
+			overwrite="true" />
+		<copy	file="build/net35/MapD.dll"
+			todir="MapDLib.NuGet/lib/net20"
 			overwrite="true" />
 
 		<!-- This isn't a regular expression: -->
@@ -372,47 +373,20 @@
 		</loadfile>
 		<echo file="${file}" message="${string::trim-end(filecontents)}"/>
 
-		<exec program="nuget" workingdir="MapDLib.NuGet" failonerror="true">
+		<exec program="nuget" failonerror="true">
 			<arg value="pack" />
+			<arg value="MapD.NuGet\Package.nuspec" />
+			<arg value="-OutputDirectory" />
+			<arg value="build" />
 		</exec>
 		
+		<!--
 		<copy todir="build" overwrite="true">
 			<fileset basedir="MapDLib.NuGet">
 				<include name="*.nupkg" />
 			</fileset>
 		</copy>
-
-	</target>
-	
-	<target name="NuPack3" description="Package MapD as a NuGet package"
-		depends="GetVersion">
-	
-		<copy	file="build/net35/MapD.dll"
-			todir="MapDLib.NuGet3/lib"
-			overwrite="true" />
-
-		<!-- This isn't a regular expression: -->
-		<property name="content-from" value=".*&lt;" />
-		<property name="content-to" value=".${svn-version}&lt;" />
-		
-		<property name="file" value="MapDLib.NuGet3/Package.nuspec" />
-
-		<loadfile file="${file}" property="filecontents">
-			<filterchain>
-				<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
-			</filterchain>
-		</loadfile>
-		<echo file="${file}" message="${string::trim-end(filecontents)}"/>
-
-		<exec program="nuget" workingdir="MapDLib.NuGet3" failonerror="true">
-			<arg value="pack" />
-		</exec>
-		
-		<copy todir="build" overwrite="true">
-			<fileset basedir="MapDLib.NuGet3">
-				<include name="*.nupkg" />
-			</fileset>
-		</copy>
+		-->
 
 	</target>
 
