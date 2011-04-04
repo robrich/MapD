@@ -375,7 +375,7 @@
 
 		<exec program="nuget" failonerror="true">
 			<arg value="pack" />
-			<arg value="MapD.NuGet\Package.nuspec" />
+			<arg value="MapDLib.NuGet\Package.nuspec" />
 			<arg value="-OutputDirectory" />
 			<arg value="build" />
 		</exec>
