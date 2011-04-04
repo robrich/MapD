@@ -350,8 +350,8 @@
 
 	</target>
 
-	<target name="NuPack" depends="Build" description="Package MapD as a NuGet package"
-		depends="GetVersion">
+	<target name="NuPack" depends="GetVersion,Build" 
+		description="Package MapD as a NuGet package">
 	
 		<copy	file="build/net40/MapD.dll"
 			todir="MapDLib.NuGet/lib/net40"
