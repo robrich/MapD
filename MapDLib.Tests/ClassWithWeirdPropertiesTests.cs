@@ -257,6 +257,61 @@ namespace MapDLib.Tests {
 
 		#endregion
 
+		#region ByteArrayProperties_Class
+
+		[Test]
+		public void ByteArrayProperties_Class() {
+
+			MapD.Config.CreateMap<ByteArrayProperties_Class_Type1, ByteArrayProperties_Class_Type2>();
+
+			byte[] bytes = new byte[] { 1, 2, 3, 4, 5 };
+			string str = Convert.ToBase64String( bytes );
+			ByteArrayProperties_Class_Type1 source = new ByteArrayProperties_Class_Type1 {
+				Prop1 = bytes,
+				Prop2 = str
+			};
+
+			ByteArrayProperties_Class_Type2 destination = MapD.Copy<ByteArrayProperties_Class_Type1, ByteArrayProperties_Class_Type2>( source );
+
+			source.AssertEqual( destination );
+
+		}
+
+		[Test]
+		public void ByteArrayProperties_Class_SetToNull() {
+
+			MapD.Config.CreateMap<ByteArrayProperties_Class_Type1, ByteArrayProperties_Class_Type2>();
+
+			ByteArrayProperties_Class_Type1 source = new ByteArrayProperties_Class_Type1();
+			ByteArrayProperties_Class_Type2 destination = MapD.Copy<ByteArrayProperties_Class_Type1, ByteArrayProperties_Class_Type2>( source );
+			source.AssertEqual( destination );
+
+		}
+
+		private class ByteArrayProperties_Class_Type1 {
+			public byte[] Prop1 { get; set; }
+			public string Prop2 { get; set; }
+
+			public void AssertEqual( ByteArrayProperties_Class_Type2 Actual ) {
+				Assert.AreEqual( this.Prop1 == null, Actual.Prop1 == null, string.Format( "Expected: {0}, Actual: {1}", this.Prop1, Actual.Prop1 ) );
+				Assert.AreEqual( this.Prop2 == null, Actual.Prop2 == null, string.Format( "Expected: {0}, Actual: {1}", this.Prop2, Actual.Prop2 ) );
+				if ( this.Prop1 != null ) {
+					string prop1str = Convert.ToBase64String( this.Prop1 );
+					Assert.AreEqual( prop1str, Actual.Prop1, string.Format( "Expected: {0}, Actual: {1}", prop1str, Actual.Prop1 ) );
+				}
+				if ( this.Prop2 != null ) {
+					byte[] prop2array = Convert.FromBase64String( this.Prop2 );
+					Assert.AreEqual( prop2array, Actual.Prop2, string.Format( "Expected: {0}, Actual: {1}", prop2array, Actual.Prop2 ) );
+				}
+			}
+		}
+		private class ByteArrayProperties_Class_Type2 {
+			public string Prop1 { get; set; }
+			public byte[] Prop2 { get; set; }
+		}
+
+		#endregion
+
 	}
 
 }

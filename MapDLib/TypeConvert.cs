@@ -1,8 +1,6 @@
 namespace MapDLib {
-
-	#region using
 	using System;
-	#endregion
+	using System.ComponentModel;
 
 	/// <summary>
 	/// Given a non-object, non-list, convert between types
@@ -98,11 +96,20 @@ namespace MapDLib {
 
 			try {
 				switch ( method ) {
-					case ConversionMethod.Serialize:
-						results = SerializationHelper.Deserialize( Value, Type );
-						break;
 					case ConversionMethod.ChangeType:
-						results = System.Convert.ChangeType( Value, Type );
+						try {
+							results = System.Convert.ChangeType( Value, Type );
+						} catch {
+							TypeConverter converter = TypeDescriptor.GetConverter( Type );
+							if ( converter != null && converter.CanConvertFrom( typeof(string) ) ) {
+								results = converter.ConvertFrom( Value );
+							} else {
+								throw;
+							}
+						}
+						break;
+					case ConversionMethod.ByteArray:
+						results = System.Convert.FromBase64String( Value );
 						break;
 					case ConversionMethod.Guid:
 						results = new Guid( Value );
@@ -171,24 +178,21 @@ namespace MapDLib {
 
 			try {
 				switch ( method ) {
-					case ConversionMethod.Serialize:
-						try {
-							results = SerializationHelper.Serialize( Value, true );
-						} catch ( InvalidOperationException ) {
-							// Serialization failed
-							if ( ToStringIfSerializeFails ) {
-								results = Value.ToString();
+					case ConversionMethod.ChangeType:
+						Type stringType = typeof(string);
+						if ( Value is IConvertible ) {
+							results = (string)System.Convert.ChangeType( Value, stringType );
+						} else {
+							TypeConverter converter = TypeDescriptor.GetConverter( Type );
+							if ( converter != null && converter.CanConvertTo( stringType ) ) {
+								results = (string)converter.ConvertTo( Value, stringType );
 							} else {
-								throw;
+								results = Value.ToString();
 							}
 						}
 						break;
-					case ConversionMethod.ChangeType:
-						if ( Value is IConvertible ) {
-							results = (string)System.Convert.ChangeType( Value, typeof(string) );
-						} else {
-							results = SerializationHelper.Serialize( Value, true );
-						}
+					case ConversionMethod.ByteArray:
+						results = System.Convert.ToBase64String( (byte[])Value );
 						break;
 					case ConversionMethod.Guid:
 					case ConversionMethod.TimeSpan:
@@ -218,82 +222,15 @@ namespace MapDLib {
 
 		#region GetDataType
 		private static Type GetDataType( string TypeName ) {
-			Type results = null;
-
-			if ( string.IsNullOrEmpty( TypeName ) ) {
-				return results; // You asked for nothing, you got it
-			}
-
-			switch ( TypeName ) {
-				case "bool":
-				case "System.Boolean":
-					results = typeof( bool );
-					break;
-				case "string":
-				case "System.String":
-					results = typeof( string );
-					break;
-				case "int":
-				case "System.Int32":
-					results = typeof( int );
-					break;
-				case "long":
-				case "System.Int64":
-					results = typeof( long );
-					break;
-				case "double":
-				case "System.Double":
-					results = typeof( double );
-					break;
-				case "DateTime":
-				case "System.DateTime":
-					results = typeof( DateTime );
-					break;
-				case "System.DBNull":
-				case "null":
-					results = null;
-					break;
-				case "System.UInt32":
-				case "uint":
-					results = typeof( uint );
-					break;
-				case "System.UInt64":
-				case "ulong":
-					results = typeof( ulong );
-					break;
-				case "System.Single":
-				case "Single":
-				case "single":
-					results = typeof( Single );
-					break;
-				case "System.TimeSpan":
-				case "TimeSpan":
-					results = typeof( TimeSpan );
-					break;
-				case "System.Char":
-				case "char":
-					results = typeof( char );
-					break;
-				case "System.Guid":
-				case "Guid":
-					results = typeof( Guid );
-					break;
-
-				default:
-					results = Type.GetType( TypeName, true, true );
-					break;
-
-			}
-
-			return results;
+			return Type.GetType( TypeName, true, true );
 		}
 
 		#endregion
 
 		#region GetConversionMethod
 		private enum ConversionMethod {
-			Serialize,
 			ChangeType,
+			ByteArray,
 			TimeSpan,
 			Guid,
 			Char,
@@ -301,7 +238,7 @@ namespace MapDLib {
 		}
 
 		private static ConversionMethod GetConversionMethod( Type Type ) {
-			ConversionMethod method = ConversionMethod.Serialize;
+			ConversionMethod method = ConversionMethod.ChangeType;
 
 			if ( Type.IsEnum ) {
 				return ConversionMethod.Enum;
@@ -341,6 +278,11 @@ namespace MapDLib {
 					method = ConversionMethod.ChangeType;
 					break;
 
+				case "System.Byte[]":
+				case "byte[]":
+					method = ConversionMethod.ByteArray;
+					break;
+
 				case "System.Guid":
 				case "Guid":
 					method = ConversionMethod.Guid;
@@ -363,7 +305,7 @@ namespace MapDLib {
 					break;
 
 				default:
-					method = ConversionMethod.Serialize;
+					method = ConversionMethod.ChangeType;
 					break;
 			}
 

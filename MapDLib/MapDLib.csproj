@@ -86,7 +86,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropertyInfoExtensions.cs" />
     <Compile Include="ReflectionHelper.cs" />
-    <Compile Include="SerializationHelper.cs" />
     <Compile Include="TypeConvert.cs" />
     <Compile Include="TypeExtensions.cs" />
   </ItemGroup>

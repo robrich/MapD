@@ -37,6 +37,9 @@ namespace MapDLib {
 				// Really what we're after is the base type, not the generic type
 				return Type.GetGenericBaseType().IsClassType();
 			}
+			if ( Type.IsArray ) {
+				return Type.GetElementType().IsClassType();
+			}
 			if ( Type == typeof(string) ) {
 				return false; // This says it's Type.IsClass == true, but we don't treat it that way
 			}
