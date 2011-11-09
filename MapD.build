@@ -44,17 +44,6 @@
 		<echo file="${filename}" message="${string::trim-end(filecontents)}"/>
 	</target>
 
-	<script language="CSHARP" prefix="regex" >
-		<code>
-			<![CDATA[
-			[Function("replace")]
-			public static string Replace( string Input, string Pattern, string Replace ) {
-				return Regex.Replace( Input, Pattern, Regex.Unescape(Replace), System.Text.RegularExpressions.RegexOptions.Multiline );
-			}
-			]]>
-		</code>
-	</script>
-
 
 	<!-- Clean target will delete the current version -->
 	<target name="Clean"
