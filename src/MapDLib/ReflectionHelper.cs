@@ -1,6 +1,4 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections.Generic;
 	using System.Data.Linq.Mapping;
@@ -9,7 +7,6 @@ namespace MapDLib {
 #endif
 	using System.Reflection;
 	using System.Text;
-	#endregion
 
 	internal static class ReflectionHelper {
 

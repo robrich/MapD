@@ -1,11 +1,7 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-
-	#endregion
 
 	internal class MapEntry {
 		public Type From { get; set; }

@@ -1,9 +1,5 @@
 namespace MapDLib {
-
-	#region using
 	using System;
-
-	#endregion
 
 	/// <summary>
 	/// This property/ies are the primary key when mapping lists

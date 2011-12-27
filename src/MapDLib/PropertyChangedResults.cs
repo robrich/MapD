@@ -1,9 +1,5 @@
 namespace MapDLib {
-
-	#region using
 	using System;
-
-	#endregion
 
 	public class PropertyChangedResults {
 

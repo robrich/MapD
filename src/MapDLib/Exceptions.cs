@@ -1,11 +1,7 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Reflection;
 	using System.Runtime.Serialization;
-
-	#endregion
 
 	public class MissingMapException : Exception {
 

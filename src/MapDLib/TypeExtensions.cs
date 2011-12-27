@@ -1,10 +1,7 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	#endregion
 
 	internal static class TypeExtensions {
 
@@ -225,6 +222,6 @@ namespace MapDLib {
 			}
 			return results;
 		}
-	}
 
+	}
 }

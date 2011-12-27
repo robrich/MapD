@@ -1,13 +1,10 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections.Generic;
 	using System.Data.Linq.Mapping;
 	using System.Data.Objects.DataClasses;
 	using System.Linq;
 	using System.Reflection;
-	#endregion
 
 	internal static class PropertyInfoExtensions {
 
@@ -157,5 +154,4 @@ namespace MapDLib {
 		}
 
 	}
-
 }

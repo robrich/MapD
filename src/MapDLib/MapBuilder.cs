@@ -1,10 +1,7 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
-	#endregion
 
 	internal static class MapBuilder {
 
@@ -171,7 +168,7 @@ namespace MapDLib {
 						) {
 						// Insure a map exists because you should've mapped them all before you use any of them
 						// This is redundant, but nice to know
-						var map = MapEntryManager.GetMapEntry( fromProperty.PropertyType, toProperty.PropertyType, MapDirection.SourceToDestination );
+						var map = MapEntryManager.GetMapEntry( fromProperty.PropertyType, toProperty.PropertyType );
 						if ( map == null ) {
 							throw new MissingMapException( fromProperty.PropertyType, toProperty.PropertyType );
 						}
@@ -264,5 +261,4 @@ namespace MapDLib {
 		}
 
 	}
-
 }
