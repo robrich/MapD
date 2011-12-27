@@ -1,13 +1,9 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
-
-	#endregion
 
 	internal class ListMapper {
 
@@ -28,6 +24,17 @@ namespace MapDLib {
 				throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.ListClassTypeToListNonClassType );
 			}
 
+			Type sourceType = FromType;
+			Type destinationType = ToType;
+			Type sourceInnerType = fromInnerType;
+			Type destinationInnerType = toInnerType;
+			if ( MapDirection == MapDirection.DestinationToSource ) {
+				sourceType = ToType;
+				destinationType = FromType;
+				sourceInnerType = toInnerType;
+				destinationInnerType = fromInnerType;
+			}
+
 			switch ( ExecutionType ) {
 				case ExecutionType.Copy:
 					if ( Source == null ) {
@@ -35,16 +42,16 @@ namespace MapDLib {
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = "this",
-									PropertyType = FromType,
+									PropertyType = sourceType,
 									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = "this",
-									PropertyType = ToType,
+									PropertyType = destinationType,
 									PropertyValue = Destination
 								}
 							} );
@@ -60,16 +67,16 @@ namespace MapDLib {
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = "this",
-									PropertyType = FromType,
+									PropertyType = sourceType,
 									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = "this",
-									PropertyType = ToType,
+									PropertyType = destinationType,
 									PropertyValue = Destination
 								}
 							} );
@@ -83,16 +90,16 @@ namespace MapDLib {
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = "this",
-									PropertyType = FromType,
+									PropertyType = sourceType,
 									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = "this",
-									PropertyType = ToType,
+									PropertyType = destinationType,
 									PropertyValue = Destination
 								}
 							} );
@@ -128,7 +135,7 @@ namespace MapDLib {
 
 				object to = null;
 				try {
-					to = TypeConvert.Convert( from, toInnerType );
+					to = TypeConvert.Convert( from, destinationInnerType );
 				} catch ( Exception ex ) {
 					throw new MapFailureException( null, Destination, from, MapFailureReason.ConvertTypeFailure, ex );
 				}
@@ -137,16 +144,16 @@ namespace MapDLib {
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
 								Object = Source,
-								ObjectType = FromType,
+								ObjectType = sourceType,
 								PropertyName = "index",
-								PropertyType = fromInnerType,
+								PropertyType = sourceInnerType,
 								PropertyValue = from
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
-								ObjectType = ToType,
+								ObjectType = destinationType,
 								PropertyName = "index",
-								PropertyType = toInnerType,
+								PropertyType = destinationInnerType,
 								PropertyValue = null // we created it
 							}
 						} );
@@ -176,16 +183,16 @@ namespace MapDLib {
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
 								Object = Source,
-								ObjectType = FromType,
+								ObjectType = sourceType,
 								PropertyName = "index",
-								PropertyType = fromInnerType,
+								PropertyType = sourceInnerType,
 								PropertyValue = null
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
-								ObjectType = ToType,
+								ObjectType = destinationType,
 								PropertyName = "index",
-								PropertyType = toInnerType,
+								PropertyType = destinationInnerType,
 								PropertyValue = destEntry
 							}
 						} );
@@ -213,8 +220,19 @@ namespace MapDLib {
 
 			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
-			Type toInnerType = ToType.GetGenericBaseType();
 			Type fromInnerType = FromType.GetGenericBaseType();
+			Type toInnerType = ToType.GetGenericBaseType();
+
+			Type sourceType = FromType;
+			Type destinationType = ToType;
+			Type sourceInnerType = fromInnerType;
+			Type destinationInnerType = toInnerType;
+			if ( MapDirection == MapDirection.DestinationToSource ) {
+				sourceType = ToType;
+				destinationType = FromType;
+				sourceInnerType = toInnerType;
+				destinationInnerType = fromInnerType;
+			}
 
 			if ( !toInnerType.IsClassType() ) {
 				throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.ListClassTypeToListNonClassType );
@@ -223,7 +241,7 @@ namespace MapDLib {
 				throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.ListNonClassTypeToListClassType );
 			}
 
-			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType, MapDirection );
+			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType );
 			if ( map == null ) {
 				throw new MissingMapException( FromType, ToType );
 			}
@@ -268,16 +286,16 @@ namespace MapDLib {
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = "this",
-									PropertyType = FromType,
+									PropertyType = sourceType,
 									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = "this",
-									PropertyType = ToType,
+									PropertyType = destinationType,
 									PropertyValue = Destination
 								}
 							} );
@@ -293,25 +311,25 @@ namespace MapDLib {
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = "this",
-									PropertyType = FromType,
+									PropertyType = sourceType,
 									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = "this",
-									PropertyType = ToType,
+									PropertyType = destinationType,
 									PropertyValue = Destination
 								}
 							} );
-						Destination = (IList)Instantiator.CreateInstance( ToType );
+						Destination = (IList)Instantiator.CreateInstance( destinationType );
 					}
 					/* Easier, but defeats accurate tracking of changes
 					if ( Source.Count == 0 ) {
 						if ( MapDirection != MapDirection.DestinationToSource ) {
-							Destination = (IList)Instantiator.CreateInstance( ToType ); // Easier than emptying the list
+							Destination = (IList)Instantiator.CreateInstance( destinationType ); // Easier than emptying the list
 						} else {
 							// Leave it be
 						}
@@ -326,16 +344,16 @@ namespace MapDLib {
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = "this",
-									PropertyType = FromType,
+									PropertyType = sourceType,
 									PropertyValue = Source
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = "this",
-									PropertyType = ToType,
+									PropertyType = destinationType,
 									PropertyValue = Destination
 								}
 							} );
@@ -354,11 +372,11 @@ namespace MapDLib {
 				( fromKey, index, sourcePrimaryKey ) => {
 					object convertedKey = TypeConvert.Convert( fromKey, destinationPrimaryKeys[index].PropertyType );
 					if ( convertedKey == null ) {
-						throw new InvalidTypeConversionException( FromType, ToType, InvalidPropertyReason.FromPrimaryKeyConversionFailure, sourcePrimaryKey );
+						throw new InvalidTypeConversionException( sourceType, destinationType, InvalidPropertyReason.FromPrimaryKeyConversionFailure, sourcePrimaryKey );
 					}
 					return convertedKey;
 				},
-				FromType, ToType );
+				sourceType, destinationType );
 
 			Dictionary<List<object>, object> destinationMap = MapListOfObject( Destination, destinationPrimaryKeys, InvalidPropertyReason.ToPrimaryKeyBlank, MapFailureReason.DuplicateToPrimaryKey, ( keyObj, i, key ) => keyObj, FromType, ToType );
 
@@ -391,23 +409,23 @@ namespace MapDLib {
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
 								Object = Source,
-								ObjectType = FromType,
+								ObjectType = sourceType,
 								PropertyName = "index",
-								PropertyType = fromInnerType,
+								PropertyType = sourceInnerType,
 								PropertyValue = from
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
-								ObjectType = ToType,
+								ObjectType = destinationType,
 								PropertyName = "index",
-								PropertyType = toInnerType,
+								PropertyType = destinationInnerType,
 								PropertyValue = null // We created it, it didn't exist yet
 							}
 						} );
 
 					switch ( ExecutionType ) {
 						case ExecutionType.Copy:
-							to = Instantiator.CreateInstance( toInnerType );
+							to = Instantiator.CreateInstance( destinationInnerType );
 							Destination.Add( to );
 							break;
 						case ExecutionType.Compare:
@@ -448,16 +466,16 @@ namespace MapDLib {
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
 								Object = Source,
-								ObjectType = FromType,
+								ObjectType = sourceType,
 								PropertyName = "index",
-								PropertyType = fromInnerType,
+								PropertyType = sourceInnerType,
 								PropertyValue = null
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
-								ObjectType = ToType,
+								ObjectType = destinationType,
 								PropertyName = "index",
-								PropertyType = toInnerType,
+								PropertyType = destinationInnerType,
 								PropertyValue = destEntry.Value
 							}
 						} );
@@ -527,5 +545,4 @@ namespace MapDLib {
 		}
 
 	}
-
 }

@@ -1,12 +1,8 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
-
-	#endregion
 
 	internal static class PropertyMapper {
 		
@@ -15,7 +11,7 @@ namespace MapDLib {
 
 			List<PropertyChangedResults> changes = new List<PropertyChangedResults>();
 
-			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType, MapDirection );
+			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType );
 			if ( map == null ) {
 				throw new MissingMapException( FromType, ToType );
 			}
@@ -53,11 +49,24 @@ namespace MapDLib {
 				//        FromType.Name, FromType.GetGenericBaseType().Name, ToType.Name, ToType.GetGenericBaseType().Name
 				//        ) );
 			}
+
+
+			Type sourceType = FromType;
+			Type destinationType = ToType;
+			if ( MapDirection == MapDirection.DestinationToSource ) {
+				sourceType = ToType;
+				destinationType = FromType;
+			}
+
 			
 			foreach ( var mapEntry in map.Properties ) {
 
 				PropertyInfo sourceProperty = mapEntry.Source;
 				PropertyInfo destinationProperty = mapEntry.Destination;
+
+				Type fromPropertyType = sourceProperty.PropertyType;
+				Type toPropertyType = destinationProperty.PropertyType;
+
 				if ( MapDirection == MapDirection.DestinationToSource ) {
 					sourceProperty = mapEntry.Destination;
 					destinationProperty = mapEntry.Source;
@@ -125,9 +134,9 @@ namespace MapDLib {
 					// the below won't change what destination points to out from under Destination because Destination isn't null
 					// FRAGILE: Only check source property, assuming dest property is also the same .IsClassType()
 					if ( sourceProperty.PropertyType.GetGenericBaseType().IsClassType() ) {
-						changesStep = ListMapper.CopyListOfClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection, ExecutionType );
+						changesStep = ListMapper.CopyListOfClass( fromPropertyType, toPropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection, ExecutionType );
 					} else {
-						changesStep = ListMapper.CopyListOfNonClass( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection, ExecutionType );
+						changesStep = ListMapper.CopyListOfNonClass( fromPropertyType, toPropertyType, sourcePropertyValueList, ref destinationPropertyValueList, MapDirection, ExecutionType );
 					}
 					
 					// if references aren't to the same object, note that
@@ -136,14 +145,14 @@ namespace MapDLib {
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = sourceProperty.Name,
 									PropertyType =  sourceProperty.PropertyType,
 									PropertyValue = sourcePropertyValue
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = destinationProperty.Name,
 									PropertyType = destinationProperty.PropertyType,
 									PropertyValue = destinationPropertyValueOriginal
@@ -181,21 +190,21 @@ namespace MapDLib {
 						throw new InvalidTypeConversionException( sourceProperty.PropertyType, destinationProperty.PropertyType, InvalidPropertyReason.ClassTypeToNonClassType, destinationProperty );
 					}
 					destinationPropertyValue = destinationPropertyValueOriginal;
-					List<PropertyChangedResults> changesStep = PropertyMapper.CopyProperties( sourceProperty.PropertyType, destinationProperty.PropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection, ExecutionType ); // Recurse
+					List<PropertyChangedResults> changesStep = PropertyMapper.CopyProperties( fromPropertyType, toPropertyType, sourcePropertyValue, ref destinationPropertyValue, MapDirection, ExecutionType ); // Recurse
 					// if references aren't to the same object, note that
 					if ( destinationPropertyValue != destinationPropertyValueOriginal ) {
 						changes.Add(
 							new PropertyChangedResults {
 								Source = new PropertyChangedResult {
 									Object = Source,
-									ObjectType = FromType,
+									ObjectType = sourceType,
 									PropertyName = sourceProperty.Name,
 									PropertyType =  sourceProperty.PropertyType,
 									PropertyValue = sourcePropertyValue
 								},
 								Destination = new PropertyChangedResult {
 									Object = Destination,
-									ObjectType = ToType,
+									ObjectType = destinationType,
 									PropertyName = destinationProperty.Name,
 									PropertyType = destinationProperty.PropertyType,
 									PropertyValue = destinationPropertyValueOriginal
@@ -262,14 +271,14 @@ namespace MapDLib {
 						new PropertyChangedResults {
 							Source = new PropertyChangedResult {
 								Object = Source,
-								ObjectType = FromType,
+								ObjectType = sourceType,
 								PropertyName = sourceProperty.Name,
 								PropertyType =  sourceProperty.PropertyType,
 								PropertyValue = sourcePropertyValue
 							},
 							Destination = new PropertyChangedResult {
 								Object = Destination,
-								ObjectType = ToType,
+								ObjectType = destinationType,
 								PropertyName = destinationProperty.Name,
 								PropertyType = destinationProperty.PropertyType,
 								PropertyValue = destinationPropertyValueOriginal
@@ -300,5 +309,4 @@ namespace MapDLib {
 
 
 	}
-
 }

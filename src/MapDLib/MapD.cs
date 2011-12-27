@@ -1,13 +1,9 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
-
-	#endregion
 
 	public static class MapD {
 
@@ -276,7 +272,7 @@ namespace MapDLib {
 			}
 
 			object destinationObject = Destination;
-			List<PropertyChangedResults> changesStep = ExecuteMap( toType, fromType, Source, ref destinationObject, MapDirection.DestinationToSource, ExecutionType.Copy );
+			List<PropertyChangedResults> changesStep = ExecuteMap( fromType, toType, Source, ref destinationObject, MapDirection.DestinationToSource, ExecutionType.Copy );
 			changes.AddRange( changesStep );
 			return changes;
 		}
@@ -354,5 +350,4 @@ namespace MapDLib {
 		}
 
 	}
-
 }

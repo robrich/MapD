@@ -1,6 +1,4 @@
 namespace MapDLib {
-
-	#region using
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -9,8 +7,6 @@ namespace MapDLib {
 	using System.Reflection;
 	using System.Runtime.CompilerServices;
 	using System.Text.RegularExpressions;
-
-	#endregion
 
 	internal class MapEntryManager {
 
@@ -159,7 +155,7 @@ namespace MapDLib {
 		}
 
 		#region GetMapEntry
-		private static MapEntry GetMapEntry( Type FromType, Type ToType ) {
+		public static MapEntry GetMapEntry( Type FromType, Type ToType ) {
 
 			MapEntry m = (
 				from mm in mapList
@@ -204,20 +200,6 @@ namespace MapDLib {
 			}
 
 			return m;
-		}
-		public static MapEntry GetMapEntry( Type FromType, Type ToType, MapDirection MapDirection ) {
-			MapEntry map = null;
-			switch ( MapDirection ) {
-				case MapDirection.SourceToDestination:
-					map = MapEntryManager.GetMapEntry( FromType, ToType );
-					break;
-				case MapDirection.DestinationToSource:
-					map = MapEntryManager.GetMapEntry( ToType, FromType );
-					break;
-				default:
-					throw new ArgumentOutOfRangeException( "MapDirection" );
-			}
-			return map;
 		}
 		#endregion
 
@@ -273,7 +255,7 @@ namespace MapDLib {
 
 				// Can't use MapD.Copy<>() because source and destination aren't strongly typed
 				MapD.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.SourceToDestination, ExecutionType.Copy ); // If this errors, it should tell you why
-				MapD.ExecuteMap( m.From, m.To, source, ref destination, MapDirection.DestinationToSource, ExecutionType.Copy ); // If this errors, it should tell you why
+				MapD.ExecuteMap( m.From, m.To, destination, ref source, MapDirection.DestinationToSource, ExecutionType.Copy ); // If this errors, it should tell you why
 			}
 		}
 
@@ -281,7 +263,7 @@ namespace MapDLib {
 		private static void FillObjectWithDefaults( Type FromType, Type ToType, object Source, object Destination ) {
 
 			MapEntryManager.AssertTypesCanMap(FromType, ToType);
-			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType, MapDirection.SourceToDestination );
+			MapEntry map = MapEntryManager.GetMapEntry( FromType, ToType );
 			if ( map == null ) {
 				throw new MissingMapException( FromType, ToType );
 			}
