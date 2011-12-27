@@ -338,9 +338,10 @@
 		</copy>
 
 	</target>
+	
+	<target name="NuPack" depends="NuPackMapD,NuPackMapDMVC" />
 
-	<target name="NuPack" depends="GetVersion,Build" 
-		description="Package MapD as a NuGet package">
+	<target name="NuPackMapD" depends="GetVersion,Build">
 	
 		<copy	file="build/net40/MapD.dll"
 			todir="MapDLib.NuGet/lib/net40"
@@ -369,14 +370,30 @@
 			<arg value="build" />
 		</exec>
 		
-		<!--
-		<copy todir="build" overwrite="true">
-			<fileset basedir="MapDLib.NuGet">
-				<include name="*.nupkg" />
-			</fileset>
-		</copy>
-		-->
+	</target>
+	
+	<target name="NuPackMapDMVC">
 
+		<!-- This isn't a regular expression: -->
+		<property name="content-from" value=".*&lt;" />
+		<property name="content-to" value=".${svn-version}&lt;" />
+		
+		<property name="file" value="MapDLib.MVC.NuGet/Package.nuspec" />
+
+		<loadfile file="${file}" property="filecontents">
+			<filterchain>
+				<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+			</filterchain>
+		</loadfile>
+		<echo file="${file}" message="${string::trim-end(filecontents)}"/>
+
+		<exec program="nuget" failonerror="true">
+			<arg value="pack" />
+			<arg value="MapDLib.MVC.NuGet\Package.nuspec" />
+			<arg value="-OutputDirectory" />
+			<arg value="build" />
+		</exec>
+		
 	</target>
 
 </project>
