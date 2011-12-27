@@ -1,0 +1,1 @@
+﻿This project is an example of how to use MapD.  Though the demonstration medium is ASP.NET MVC, it isn't limited to MVC or even to ASP.NET.  The only dependency is .NET

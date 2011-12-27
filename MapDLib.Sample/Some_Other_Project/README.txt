@@ -1,0 +1,1 @@
+﻿These classes would likely be in another project, and represent the Data Access and Domain Objects of your solution
