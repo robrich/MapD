@@ -2,7 +2,7 @@
 <project name="Build" default="Build" basedir="." xmlns="http://nant.sf.net/release/0.85/nant.xsd">
 
 	<!-- Global varialbes and defaults -->
-	<property name="Solution" value="MapD.sln" />
+	<property name="Solution" value="src/MapD.sln" />
 	<property name="Platform" value="Any CPU" />
 
 	<property name="Configuration" value="Release" overwrite="false" />
@@ -50,18 +50,16 @@
 		description="remove generated files">
 		<delete failonerror="false">
 			<fileset basedir=".">
-				<include name="*.log" />
-				<include name="*results.xml" /><!-- NUnit results -->
-				<include name="*msbuild.xml" /><!-- MSBuild results -->
 				<include name="build/**" />
 				<include name="log/**" />
-				<include name="*.tmp" />
+				<include name="tmp/**" />
 				<include name="**/*.nupkg" />
-				<include name="MapDLib.*NuGet/lib/**" />
+				<include name="src/MapDLib.*NuGet/lib/**" />
 			</fileset>
 		</delete>
 		<delete dir="build" if="${directory::exists('build')}" />
 		<delete dir="log" if="${directory::exists('log')}" />
+		<delete dir="tmp" if="${directory::exists('tmp')}" />
 		<call target="CleanStep" />
 	</target>
 	<target name="CleanStep"
@@ -270,7 +268,7 @@
 
 		<call target="NUnit" />
 
-		<property name="Project" value="MapDLib/MapD.csproj" />
+		<property name="Project" value="src/MapDLib/MapD.csproj" />
 		<call target="CopyProject" />
 
 		<zip zipfile="build/MapD-${FrameworkNoSpace}.zip">
@@ -309,7 +307,7 @@
 	</target>
 
 	<target name="NUnit">
-		<exec program="nunit-console.exe" failonerror="true" workingdir="MapDLib.Tests/bin/${Configuration}/">
+		<exec program="nunit-console.exe" failonerror="true" workingdir="src/MapDLib.Tests/bin/${Configuration}/">
 			<arg value="/nodots" />
 			<!--arg value="/nologo" /-->
 			<arg value="/xml:${project::get-base-directory()}\log\${SolutionName}-${FrameworkNoSpace}-${PlatformNoSpace}-nunit.xml" />
@@ -344,17 +342,17 @@
 	<target name="NuPackMapD" depends="GetVersion,Build">
 	
 		<copy	file="build/net40/MapD.dll"
-			todir="MapDLib.NuGet/lib/net40"
+			todir="src/MapDLib.NuGet/lib/net40"
 			overwrite="true" />
 		<copy	file="build/net35/MapD.dll"
-			todir="MapDLib.NuGet/lib/net20"
+			todir="src/MapDLib.NuGet/lib/net20"
 			overwrite="true" />
 
 		<!-- This isn't a regular expression: -->
 		<property name="content-from" value=".*&lt;" />
 		<property name="content-to" value=".${svn-version}&lt;" />
 		
-		<property name="file" value="MapDLib.NuGet/Package.nuspec" />
+		<property name="file" value="src/MapDLib.NuGet/Package.nuspec" />
 
 		<loadfile file="${file}" property="filecontents">
 			<filterchain>
@@ -365,7 +363,7 @@
 
 		<exec program="nuget" failonerror="true">
 			<arg value="pack" />
-			<arg value="MapDLib.NuGet\Package.nuspec" />
+			<arg value="src\MapDLib.NuGet\Package.nuspec" />
 			<arg value="-OutputDirectory" />
 			<arg value="build" />
 		</exec>
@@ -378,7 +376,7 @@
 		<property name="content-from" value=".*&lt;" />
 		<property name="content-to" value=".${svn-version}&lt;" />
 		
-		<property name="file" value="MapDLib.MVC.NuGet/Package.nuspec" />
+		<property name="file" value="src/MapDLib.MVC.NuGet/Package.nuspec" />
 
 		<loadfile file="${file}" property="filecontents">
 			<filterchain>
@@ -389,7 +387,7 @@
 
 		<exec program="nuget" failonerror="true">
 			<arg value="pack" />
-			<arg value="MapDLib.MVC.NuGet\Package.nuspec" />
+			<arg value="src\MapDLib.MVC.NuGet\Package.nuspec" />
 			<arg value="-OutputDirectory" />
 			<arg value="build" />
 		</exec>

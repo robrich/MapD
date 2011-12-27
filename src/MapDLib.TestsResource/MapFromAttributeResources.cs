@@ -1,9 +1,6 @@
 ﻿namespace MapDLib.TestsResource {
-
-	#region using
 	using MapDLib;
 	using NUnit.Framework;
-	#endregion
 
 	[MapFrom( typeof( MapFromAttributeResourceType ) )]
 	[MapListFromListOf( typeof( MapFromAttributeResourceType ) )]
@@ -19,6 +16,6 @@
 			Assert.AreEqual( this.Property2, Actual.Property2 );
 			Assert.AreEqual( this.Property3, Actual.Property3 );
 		}
-	}
 
+	}
 }
