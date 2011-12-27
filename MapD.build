@@ -57,7 +57,7 @@
 				<include name="log/**" />
 				<include name="*.tmp" />
 				<include name="**/*.nupkg" />
-				<include name="MapDLib.NuGet*/lib/**" />
+				<include name="MapDLib.*NuGet/lib/**" />
 			</fileset>
 		</delete>
 		<delete dir="build" if="${directory::exists('build')}" />
