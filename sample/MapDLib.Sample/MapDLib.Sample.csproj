@@ -106,9 +106,11 @@
     </Compile>
     <Compile Include="Models\SomeClass1ViewModel.cs" />
     <Compile Include="Models\SomeListClass1ViewModel.cs" />
+    <Compile Include="Models\SomeOneWayClass1ViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Some_Other_Project\SomeClass1.cs" />
     <Compile Include="Some_Other_Project\SomeListClass1.cs" />
+    <Compile Include="Some_Other_Project\SomeOneWayClass1.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
