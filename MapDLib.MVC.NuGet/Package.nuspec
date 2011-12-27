@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<package xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <id>MapD.MVC</id>
+    <version>1.0.*</version>
+    <authors>Rob Richardson</authors>
+    <owners>Richardson &amp; Sons, LLC</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Extension for MapD for integration into ASP.NET MVC3.</description>
+    <tags>MapD AutoMapper Attribute</tags>
+    <dependencies>
+      <dependency id="MapD" version="[1.0,1.1)" />
+      <dependency id="WebActivator" version="1.4" />
+    </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="Microsoft.Web.Infrastructure" targetFramework="net40" />
+    </frameworkAssemblies>
+  </metadata>
+</package>

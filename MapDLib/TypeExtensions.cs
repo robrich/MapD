@@ -131,7 +131,6 @@ namespace MapDLib {
 			if ( !Type.IsGenericType ) {
 				throw new ArgumentOutOfRangeException( "Type", Type.FullName + " isn't Generic" );
 			}
-			Type genericType = Type.GetGenericTypeDefinition();
 			Type[] args = Type.GetGenericArguments();
 			if ( args.Length != 1 ) {
 				throw new ArgumentOutOfRangeException( "Type", Type.FullName + " isn't List<T>" );
