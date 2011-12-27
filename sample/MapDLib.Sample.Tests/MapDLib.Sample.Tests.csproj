@@ -50,8 +50,9 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MapD">
-      <HintPath>..\packages\MapD.1.0.57\lib\net40\MapD.dll</HintPath>
+    <Reference Include="MapD, Version=1.0.66.0, Culture=neutral, PublicKeyToken=120c13b5dbd6da11, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MapD.1.0.66\lib\net40\MapD.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.5.10.11092\lib\nunit.framework.dll</HintPath>
