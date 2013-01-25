@@ -9,8 +9,6 @@ namespace MapDLib {
 
 		public static bool IsNullOrEmpty<T>( this ICollection<T> List ) {
 			return ( List == null || List.Count < 1 );
-			// TODO: Enumerate through each one insuring the list isn't full of nulls?
-			// TODO: It'd insure we'd need where T : class, meaning you couldn't do it for value types such as List<int>
 		}
 
 		public static List<Attribute> GetAttributes( this Type Type, Type AttributeType ) {
@@ -23,7 +21,12 @@ namespace MapDLib {
 		}
 
 		public static Attribute GetFirstAttribute( this Type Type, Type AttributeType ) {
-			return GetAttributes( Type, AttributeType ).FirstOrDefault();
+			try {
+				return GetAttributes( Type, AttributeType ).FirstOrDefault();
+			} catch {
+				// Perhaps an irrelevant attribute failed to instantiate, try looking directly for the attribute in question
+				return Type.GetCustomAttributes( AttributeType, true ).FirstOrDefault() as Attribute;
+			}
 		}
 
 		public static bool IsClassType( this Type Type ) {

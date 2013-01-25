@@ -28,7 +28,12 @@ namespace MapDLib {
 		}
 
 		public static Attribute GetFirstAttribute( this PropertyInfo Property, Type AttributeType ) {
-			return GetAttributes( Property, AttributeType ).FirstOrDefault();
+			try {
+				return GetAttributes( Property, AttributeType ).FirstOrDefault();
+			} catch {
+				// Perhaps an irrelevant attribute failed to instantiate, try looking directly for the attribute in question
+				return Property.GetCustomAttributes( AttributeType, true ).FirstOrDefault() as Attribute;
+			}
 		}
 
 		public static bool IsListOfT( this PropertyInfo Property ) {

@@ -208,26 +208,6 @@ namespace MapDLib {
 
 			MapEntry.Properties = new List<MapEntryProperty>();
 
-			// Look to source for primary keys
-
-			fromPrimaryKeys = fromProperties.GetPrimaryKeys();
-			if ( fromPrimaryKeys != null && fromPrimaryKeys.Count > 0 ) {
-				// Look to destination for matching properties
-
-				foreach ( PropertyInfo fromPrimaryKey in fromPrimaryKeys ) {
-					PropertyInfo toProperty = toProperties.GetPropertyByName( fromPrimaryKey.Name );
-					if ( toProperty == null ) {
-						throw new InvalidTypeConversionException( fromType, toType, InvalidPropertyReason.MissingToPrimaryKey, fromPrimaryKey );
-					}
-					MapEntry.Properties.Add( new MapEntryProperty {
-						Source = fromPrimaryKey,
-						Destination = toProperty
-					} );
-				}
-
-				return;
-			}
-
 			// Look to destination for primary keys
 
 			toPrimaryKeys = toProperties.GetPrimaryKeys();
@@ -245,6 +225,26 @@ namespace MapDLib {
 							Destination = toPrimaryKey,
 							IgnoreDirection = IgnoreDirection.None
 						} );
+				}
+
+				return;
+			}
+
+			// Look to source for primary keys
+
+			fromPrimaryKeys = fromProperties.GetPrimaryKeys();
+			if ( fromPrimaryKeys != null && fromPrimaryKeys.Count > 0 ) {
+				// Look to destination for matching properties
+
+				foreach ( PropertyInfo fromPrimaryKey in fromPrimaryKeys ) {
+					PropertyInfo toProperty = toProperties.GetPropertyByName( fromPrimaryKey.Name );
+					if ( toProperty == null ) {
+						throw new InvalidTypeConversionException( fromType, toType, InvalidPropertyReason.MissingToPrimaryKey, fromPrimaryKey );
+					}
+					MapEntry.Properties.Add( new MapEntryProperty {
+						Source = fromPrimaryKey,
+						Destination = toProperty
+					} );
 				}
 
 				return;
