@@ -9,11 +9,11 @@
 	<property name="Debug" value="false" />
 	<property name="DebugConditional" value="" />
 	<property name="FrameworkConditional" value="" />
-	<property name="MSBuildXmlLoggerPath" value="C:\ci\CruiseControl.NET\server\ThoughtWorks.CruiseControl.MsBuild.dll" />
+	<property name="MSBuildVerbosity" value="Minimal" overwrite="false" />
 
 
 	<target name="Build_Release" depends="Release,CleanAndRevert,Build,NuPack" />
-	<target name="CleanAndRevert" depends="Clean,SvnRevert,CleanUnversioned" />
+	<target name="CleanAndRevert" depends="Clean,CleanVersioned,CleanUnversioned" />
 
 
 	<!-- Select the configuration: Debug or Release -->
@@ -31,6 +31,12 @@
 
 
 	<!-- Libs -->
+
+	<fileset id="AssemblyInfos" basedir=".">
+		<exclude name="**/-*-/**/AssemblyInfo.cs" />
+		<include name="**/AssemblyInfo.cs" />
+		<include name="GlobalAssemblyInfo.cs" />
+	</fileset>
 
 	<target name="replacestring">
 		<!-- Pass in ${filename}, ${content-from}, ${content-to} (literal strings, not regexes -->
@@ -50,6 +56,7 @@
 		description="remove generated files">
 		<delete failonerror="false">
 			<fileset basedir=".">
+				<exclude name="src/packages" />
 				<include name="build/**" />
 				<include name="log/**" />
 				<include name="tmp/**" />
@@ -76,89 +83,171 @@
 		</delete>
 	</target>
 
-	<target name="SvnRevert">
-		<exec program="svn.exe" failonerror="true">
-			<arg value="revert" />
-			<arg value="-R" />
-			<arg value="." />
-		</exec>
+	<target name="CleanVersioned">
+		<if test="${directory::exists('.svn')}">
+			<exec program="svn.exe" failonerror="true">
+				<arg value="revert" />
+				<arg value="-R" />
+				<arg value="." />
+			</exec>
+		</if>
+		<if test="${directory::exists('.hg')}">
+			<exec program="hg.exe" failonerror="true">
+				<arg value="revert" />
+				<arg value="--all" />
+				<arg value="--no-backup" />
+			</exec>
+		</if>
+		<if test="${directory::exists('.git')}">
+			<exec program="git.exe" failonerror="false">
+				<arg value="reset" />
+				<arg value="--hard" />
+			</exec>
+		</if>
 	</target>
 
 	<target name="CleanUnversioned">
-		<!-- A bunch of mayhem because exec can't output to a variable -->
-		<exec program="svn.exe" workingdir="${project::get-base-directory()}" output="unversioned.log" failonerror="true">
-			<arg value="status" />
-			<arg value="--xml" />
-			<arg value="--no-ignore" />
-		</exec>
-		<xmllist file="unversioned.log" property="DeleteList" delim=";" 
-			xpath="/status/target/entry[wc-status/@item='unversioned' or wc-status/@item='ignored']/@path" />
-		<echo message="Unversioned items to delete: ${DeleteList}" />
-		<delete file="unversioned.log" />
-		<foreach item="String" in="${DeleteList}" delim=";" property="DeleteItem">
-			<delete dir="${DeleteItem}" if="${directory::exists(DeleteItem)}" />
-			<delete file="${DeleteItem}" if="${file::exists(DeleteItem)}" />
-		</foreach>
+		<if test="${directory::exists('.svn')}">
+			<!-- A bunch of mayhem because exec can't output to a variable -->
+			<exec program="svn.exe" workingdir="${project::get-base-directory()}" output="unversioned.log" failonerror="true">
+				<arg value="status" />
+				<arg value="--xml" />
+				<arg value="--no-ignore" />
+			</exec>
+			<xmllist file="unversioned.log" property="DeleteList" delim=";" 
+				xpath="/status/target/entry[wc-status/@item='unversioned' or wc-status/@item='ignored']/@path" />
+			<echo message="Unversioned items to delete: ${DeleteList}" />
+			<delete file="unversioned.log" />
+			<foreach item="String" in="${DeleteList}" delim=";" property="DeleteItem">
+				<delete dir="${DeleteItem}" if="${directory::exists(DeleteItem)}" />
+				<delete file="${DeleteItem}" if="${file::exists(DeleteItem)}" />
+			</foreach>
+		</if>
+		<if test="${directory::exists('.hg')}">
+			<!-- uses purge extension -->
+			<exec program="hg.exe" failonerror="true">
+				<arg value="purge" />
+				<arg value="--all" />
+			</exec>
+		</if>
+		<if test="${directory::exists('.git')}">
+			<exec program="git.exe" failonerror="false">
+				<arg value="clean" />
+				<arg value="--force" />
+				<arg value="-x" /><!-- including content ignored by .gitignore -->
+			</exec>
+		</if>
 	</target>
 
 
-	<!-- Get the current SVN version -->
-	<target name="GetVersion" description="Get the version from svn">
+	<!-- Get the current version -->
+	<target name="GetVersion">
+		<mkdir dir="log" if="${not(directory::exists('log'))}" />
 
-		<!-- A bunch of mayhem because exec can't output to a variable -->
-		<exec program="svn.exe" workingdir="${project::get-base-directory()}" output="version.log" failonerror="true">
-			<arg value="info" />
-			<arg value="--xml" />
-		</exec>
-		<xmlpeek file="version.log"
-				 property="svn-version"
-				 xpath="/info/entry/commit/@revision" />
-		<delete file="version.log" />
+		<if test="${directory::exists('.svn')}">
+			<!-- A bunch of mayhem because exec can't output to a variable -->
+			<exec program="svn.exe" workingdir="${project::get-base-directory()}" output="log/version.log" failonerror="true">
+				<arg value="info" />
+				<arg value="--xml" />
+			</exec>
+			<xmlpeek file="log/version.log"
+					 property="version-id"
+					 xpath="/info/entry/commit/@revision" />
+			<property name="version-name" value="svn-${version-id}" />
 
-		<echo>Current version from Subversion is ${svn-version}</echo>
+			<echo>Current version from Subversion is ${version-id}</echo>
+		</if>
+
+		<if test="${directory::exists('.hg')}">
+			<!-- A bunch of mayhem because exec can't output to a variable -->
+			<exec program="hg.exe" workingdir="${project::get-base-directory()}" output="log/version.log" failonerror="true">
+				<arg value="log" />
+				<arg value="--limit=1" />
+				<arg value="--style=xml" />
+			</exec>
+			<xmlpeek file="log/version.log"
+					 property="version-id"
+					 xpath="/log/logentry/@revision" />
+			<xmlpeek file="log/version.log"
+					 property="version-name"
+					 xpath="/log/logentry/@node" />
+
+			<echo>Current version from Mercurial is ${version-id}, node is ${version-name}</echo>
+		</if>
+
+		<if test="${directory::exists('.git')}">
+			<!-- A bunch of mayhem because exec can't output to a variable -->
+			<exec program="git.exe" output="log/version.log" failonerror="false">
+				<arg value="log" />
+				<arg value="-1" />
+				<arg value="--format=%h" /><!-- %H is full hash, %h is short hash -->
+			</exec>
+			<loadfile file="log/version.log" property="version-name" />
+
+			<![CDATA[-- in git, version-id could be '# of commits' from "git log --format=%h | wc -l | sed 's/ //g'" but it doesn't seem that helpful --]]>
+			<property name="version-id" value="*" />
+
+			<echo>Current version from Git is ${version-id}, node is ${version-name}</echo>
+		</if>
+
+		<property name="version-name" value="${string::trim(version-name)}" />
+		<fail if="${version-id==''}" message="Can't determine version id" />
+		<fail if="${version-name==''}" message="Can't determine version name" />
 	</target>
 
 	<target name="SetVersion" depends="GetVersion,RevertVersion">
 
 		<!-- This isn't a regular expression, this is a hard-coded major/minor: -->
-		<property name="content-from" value=".*&quot;" />
-		<property name="content-to" value=".${svn-version}&quot;" />
+		<property name="version-id-from" value=".*&quot;" />
+		<property name="version-id-to" value=".${version-id}&quot;" />
+		<property name="version-name-from" value="AssemblyDescription&#40; &quot;&quot;" />
+		<property name="version-name-to" value="AssemblyDescription&#40; &quot;${version-name}&quot;" />
 
-		<echo message="Changing from ${content-from} to ${content-to} in AssemblyInfo files" />
+		<echo message="Changing from ${version-id-from} to ${version-id-to} and ${version-name-from} to ${version-name-to} in AssemblyInfo files" />
 
 		<foreach item="File" property="file">
 			<in>
 				<items refid="AssemblyInfos" />
 			</in>
 			<do>
-
 				<loadfile file="${file}" property="filecontents">
 					<filterchain>
-						<replacestring from="${content-from}" to="${content-to}" ignorecase="true" />
+						<replacestring from="${version-id-from}" to="${version-id-to}" ignorecase="true" />
+						<replacestring from="${version-name-from}" to="${version-name-to}" ignorecase="true" />
 					</filterchain>
 				</loadfile>
-				<echo file="${file}" message="${string::trim-end(filecontents)}"/>
+				<echo file="${file}" message="${filecontents}"/>
 			</do>
 		</foreach>
 
 	</target>
 
-	<target name="RevertVersion" descripiton="Put the files back so svn can change it next time">
-
-		<fileset id="AssemblyInfos" basedir=".">
-			<exclude name="**/-*-/**/AssemblyInfo.cs" />
-			<include name="**/AssemblyInfo.cs" />
-		</fileset>
+	<target name="RevertVersion" descripiton="Put the files back so next build can change it">
 
 		<foreach item="File" property="file">
 			<in>
 				<items refid="AssemblyInfos" />
 			</in>
 			<do>
-				<exec program="svn.exe" failonerror="true">
-					<arg value="revert" />
-					<arg value="${file}" />
-				</exec>
+				<if test="${directory::exists('.svn')}">
+					<exec program="svn.exe" failonerror="true">
+						<arg value="revert" />
+						<arg value="${file}" />
+					</exec>
+				</if>
+				<if test="${directory::exists('.hg')}">
+					<exec program="hg.exe" failonerror="true">
+						<arg value="revert" />
+						<arg value="--no-backup" />
+						<arg value="${file}" />
+					</exec>
+				</if>
+				<if test="${directory::exists('.git')}">
+					<exec program="git.exe" failonerror="false">
+						<arg value="checkout" />
+						<arg value="${file}" />
+					</exec>
+				</if>
 			</do>
 		</foreach>
 
@@ -200,10 +289,25 @@
 				<items refid="Csprojs" />
 			</in>
 			<do>
-				<exec program="svn.exe" failonerror="true">
-					<arg value="revert" />
-					<arg value="${file}" />
-				</exec>
+				<if test="${directory::exists('.svn')}">
+					<exec program="svn.exe" failonerror="true">
+						<arg value="revert" />
+						<arg value="${file}" />
+					</exec>
+				</if>
+				<if test="${directory::exists('.hg')}">
+					<exec program="hg.exe" failonerror="true">
+						<arg value="revert" />
+						<arg value="--no-backup" />
+						<arg value="${file}" />
+					</exec>
+				</if>
+				<if test="${directory::exists('.git')}">
+					<exec program="git.exe" failonerror="false">
+						<arg value="checkout" />
+						<arg value="${file}" />
+					</exec>
+				</if>
 			</do>
 		</foreach>
 
@@ -282,31 +386,22 @@
 
 	<target name="CompileSolution" description="Compiles 1 solution using msbuild">
 
-		<property name="MSBuildLogger" value="" />
-		<property name="MSBuildConsoleLogger" value="" />
-		<if test="${file::exists(MSBuildXmlLoggerPath)}">
-			<property name="MSBuildLogger" value="/l:ThoughtWorks.CruiseControl.MsBuild.XmlLogger,${MSBuildXmlLoggerPath};log\${SolutionName}-${FrameworkNoSpace}-${PlatformNoSpace}-msbuild.xml" />
-			<property name="MSBuildConsoleLogger" value="/noconsolelogger" />
-			<mkdir dir="log" if="${not(directory::exists('log'))}" />
-			<echo message="MSBuildLogger: ${MSBuildLogger}" />
-		</if>
-
 		<echo message="Building ${SolutionName} for ${Platform}: ${FrameworkNoSpace} ${Configuration} ${DebugConditional}${FrameworkConditional}"/>
 		<msbuild
 			project="${Solution}"
-			verbosity="Normal"
+			verbosity="${MSBuildVerbosity}"
 			failonerror="true">
 			<property name="Configuration" value="${Configuration}" />
 			<property name="Platform" value="${Platform}" />
 			<property name="debug" value="${Debug}" />
 			<property name="trace" value="${Debug}" />
+			<arg value='/m' />
 			<arg value='/p:DefineConstants="${DebugConditional}${FrameworkConditional}"' />
-			<arg value='${MSBuildLogger}' />
-			<arg value='${MSBuildConsoleLogger}' />
 		</msbuild>
 	</target>
 
 	<target name="NUnit">
+		<mkdir dir="log" if="${not(directory::exists('log'))}" />
 		<exec program="nunit-console.exe" failonerror="true" workingdir="src/MapDLib.Tests/bin/${Configuration}/">
 			<arg value="/nodots" />
 			<!--arg value="/nologo" /-->
@@ -337,9 +432,14 @@
 
 	</target>
 	
-	<target name="NuPack" depends="NuPackMapD,NuPackMapDMVC" />
+	<target name="NuPack" depends="GetVersion,Build,NuPackGetVersion,NuPackMapD,NuPackMapDMVC" />
 
-	<target name="NuPackMapD" depends="GetVersion,Build">
+	<target name="NuPackGetVersion" if="${property::exists('version-id')==false or version-id=='' or version-id=='*'}">
+		<property name="version-id" value="${version::get-build(assemblyname::get-version(assemblyname::get-assembly-name('build/net40/MapD.dll')))}" />
+		<echo message="build/net40/MapD.dll has version ${version-id}" />
+	</target>
+
+	<target name="NuPackMapD">
 	
 		<copy	file="build/net40/MapD.dll"
 			todir="src/MapDLib.NuGet/lib/net40"
@@ -350,7 +450,7 @@
 
 		<!-- This isn't a regular expression: -->
 		<property name="content-from" value=".*&lt;" />
-		<property name="content-to" value=".${svn-version}&lt;" />
+		<property name="content-to" value=".${version-id}&lt;" />
 		
 		<property name="file" value="src/MapDLib.NuGet/Package.nuspec" />
 
@@ -374,7 +474,7 @@
 
 		<!-- This isn't a regular expression: -->
 		<property name="content-from" value=".*&lt;" />
-		<property name="content-to" value=".${svn-version}&lt;" />
+		<property name="content-to" value=".${version-id}&lt;" />
 		
 		<property name="file" value="src/MapDLib.MVC.NuGet/Package.nuspec" />
 
